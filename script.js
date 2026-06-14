@@ -420,7 +420,7 @@ async function carregarAvaliacoes() {
                 <div class="nota-media">
                     <span class="nota-numero">${media}</span>
                     <div class="nota-estrelas">${'★'.repeat(mediaInteira)}${'☆'.repeat(5 - mediaInteira)}</div>
-                    <span class="nota-total">baseado em ${docs.length} avaliação${docs.length !== 1 ? 'ões' : ''}</span>
+                    <span class="nota-total">baseado em ${docs.length} avaliaçõe${docs.length !== 1 ? 's' : ''}</span>
                 </div>
             `;
         }
