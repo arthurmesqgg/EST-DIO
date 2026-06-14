@@ -6,6 +6,8 @@
     <title>ESTÚDIO DA PRAÇA</title>
     <link href="https://fonts.googleapis.com/css?family=Anton" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Bungee&family=Imperial+Script&family=Unifraktu" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&family=Bungee&family=Imperial+Script&family=UnifrakturCook:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 
@@ -47,19 +49,23 @@ if (localStorage.getItem('tema') === 'dark') {
     </div>
   </div>
 
-  <div class="nav-center">
-    <a href="#footer">CONTATO</a>    
+  <div class="nav-center">    
     <a href="#tatuadores">TATUADORES</a>
-    <a href="#inicio">INÍCIO</a>    
-    <a href="#avaliacoes">AVALIAÇÕES</a>
-    <a href="#recentes">RECENTES</a>    
+    <a href="#recentes">TRABALHOS RECENTES</a>
+    <a href="#avaliacoes">AVALIAÇÕES</a>   
+    <a href="#footer">CONTATO</a>     
   </div>
 
-  <div class="nav-right">
-    <img src="logo-clara.png" class="logo-clara" alt="Logo">
-    <img src="logo-escura.png" class="logo-escura" alt="Logo">
-  </div>
+
+<div class="nav-right">
+    <a href="#">
+        <img src="logo-clara.png" class="logo-clara" alt="Logo">
+        <img src="logo-escura.png" class="logo-escura" alt="Logo">
+    </a>
+</div>
+
 </nav>
+
 
 <br><br><br><br>
 
@@ -78,13 +84,13 @@ if (localStorage.getItem('tema') === 'dark') {
 <div class="container">
   <div class="card" id="tatuadores">
     <section>
-      <h1>𓂃🖊 TATUADORES 𓂃🖊</h1>
-      <h3>✞ HENRIPSY ✞</h3>
-      <p>➣ A mais de 10 anos como tatuador, porém uma vida toda rabiscando esboços. Foco principal em trabalho em sketch, que seria um estilo com linhas soltas, e traços caóticos simulando rascunho, com muita hachura, rastelados, boldline e fine line.</p>
-      <p>➣ Trazendo o sketch para temas religiosos de umbanda candomblé, com desenhos únicos e feitos exclusivamente para cada cliente.</p>
+      <h1 class=tat-h1 >☯  TATUADORES  ☯</h1>
+      <h3 class=tat-h3 >♱ HENRIPSY ♱</h3>
+      <p class=tat-p >➣ A mais de 10 anos como tatuador, porém uma vida toda rabiscando esboços. Foco principal em trabalho em sketch, que seria um estilo com linhas soltas, e traços caóticos simulando rascunho, com muita hachura, rastelados, boldline e fine line.</p>
+      <p class=tat-p >➣ Trazendo o sketch para temas religiosos de umbanda candomblé, com desenhos únicos e feitos exclusivamente para cada cliente.</p>
     </section>
     <section>
-      <h3>⋇⊶⊰ TRABALHOS ⊱⊷⋇</h3>
+      <h3 class=tat-h3 >꧁ঔৣ TRABALHOS ঔৣ꧂</h3>
       <div class="galeria">
         <img src="trab1.png" loading="lazy">
         <img src="trab2.png" loading="lazy">
@@ -96,7 +102,7 @@ if (localStorage.getItem('tema') === 'dark') {
     </section>
     <br>
     <section>
-      <h2>≪ FORMAS DE CONTATO ≫</h2>
+      <h2 class="tat-h2">≪ FORMAS DE CONTATO ≫</h2>
       <div class="redes-card">
         <a href="https://www.instagram.com/henripsy/" target="_blank">
           <img src="insta.png" class="insta-icon" alt="Instagram" loading="lazy">
@@ -107,12 +113,12 @@ if (localStorage.getItem('tema') === 'dark') {
     <br><br>
 
     <section>
-      <h3>ツ ALEATÓRIA ARTE ツ</h3>
-      <p>➣ Trabalho a 5 anos com tatuagem e uma vida toda com arte. Trabalho com diversos estilos, como blackwork, preto e cinza, colorido e tatuagens de pets, sempre criando peças personalizadas para cada cliente.</p>
-      <p>➣ Atendo com foco nos detalhes, na qualidade e na experiência, seja sua primeira tattoo ou mais uma na coleção. Minha missão é simples: criar uma arte que faça sentido pra você e que você tenha orgulho de carregar.</p>
+      <h3 class=tat-h3 >☪ ALEATÓRIA ARTE ☪</h3>
+      <p class=tat-p >➣ Trabalho a 5 anos com tatuagem e uma vida toda com arte. Trabalho com diversos estilos, como blackwork, preto e cinza, colorido e tatuagens de pets, sempre criando peças personalizadas para cada cliente.</p>
+      <p class=tat-p >➣ Atendo com foco nos detalhes, na qualidade e na experiência, seja sua primeira tattoo ou mais uma na coleção. Minha missão é simples: criar uma arte que faça sentido pra você e que você tenha orgulho de carregar.</p>
     </section>
     <section>
-      <h3>⋇⊶⊰ TRABALHOS ⊱⊷⋇</h3>
+      <h3 class=tat-h3 >꧁ঔৣ TRABALHOS ঔৣ꧂</h3>
       <div class="galeria">
         <img src="trab7.png" loading="lazy">
         <img src="trab8.png" loading="lazy">
@@ -122,7 +128,7 @@ if (localStorage.getItem('tema') === 'dark') {
     </section>
     <br>
     <section>
-      <h2>≪ FORMAS DE CONTATO ≫</h2>
+      <h2 class="tat-h2">≪ FORMAS DE CONTATO ≫</h2>
       <div class="redes-card">
         <a href="https://www.instagram.com/aleatoriaartee" target="_blank">
           <img src="insta.png" class="insta-icon" alt="Instagram" loading="lazy">
@@ -140,7 +146,7 @@ if (localStorage.getItem('tema') === 'dark') {
 <div class="container container-pequeno">
   <div class="card" id="recentes">
     <section>
-      <h1>-TRABALHOS RECENTES-</h1> <br>
+      <h1>-TRABALHOS RECENTES-</h1> 
       <div class="galeria">
         <img src="img7.png" loading="lazy">
         <img src="img6.png" loading="lazy">
@@ -185,8 +191,9 @@ if (localStorage.getItem('tema') === 'dark') {
 <div class="container">
   <div class="card" id="avaliacoes">
     <section>
-      <h1>★ AVALIAÇÕES ★</h1>
+      <h1 class="tat-h1">⛧ AVALIAÇÕES ⛧</h1>
       <h3>-O que nossos clientes dizem-</h3>
+      <div id="resumo-avaliacoes"></div>
 
       <div id="auth-area">
         <div id="login-box" class="auth-box">
