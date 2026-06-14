@@ -1,7 +1,7 @@
 // ===== FIREBASE SETUP =====
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-import { getFirestore, collection, addDoc, getDocs, doc, deleteDoc, updateDoc, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getFirestore, collection, addDoc, getDocs, doc, deleteDoc, updateDoc, query, orderBy, where, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyATn1yWqgYFj0c_9ShfEN_QFIM0a79LG6E",
@@ -29,6 +29,27 @@ if (menuBtn) {
 document.addEventListener('click', () => {
     if (dropdown) dropdown.classList.remove('aberto');
 });
+
+// ===== CARROSSEL =====
+let index = 0;
+const slides = document.querySelector('.slides');
+const totalSlides = document.querySelectorAll('.slides img').length;
+
+document.querySelector('.next').onclick = () => {
+    index = (index + 1) % totalSlides;
+    updateSlide();
+};
+document.querySelector('.prev').onclick = () => {
+    index = (index - 1 + totalSlides) % totalSlides;
+    updateSlide();
+};
+function updateSlide() {
+    slides.style.transform = `translateX(-${index * 100}%)`;
+}
+setInterval(() => {
+    index = (index + 1) % totalSlides;
+    updateSlide();
+}, 3000);
 
 // ===== MODO ESCURO / CLARO =====
 let trilho = document.getElementById('trilho');
@@ -187,7 +208,50 @@ document.addEventListener('keydown', (e) => {
 // ===== AVALIAÇÕES (FIREBASE) =====
 let usuarioAtual       = null;
 let estrelaSelecionada = 5;
-let idxParaExcluir     = null; // vai guardar o docId agora, não mais o índice
+let idxParaExcluir     = null;
+let modoAviso          = false; // controla se o modal está em modo aviso ou exclusão
+
+// ----- MODAL DE AVISO (reutiliza o modal de exclusão) -----
+function mostrarAviso(mensagem) {
+    modoAviso = true;
+    document.querySelector('#modal-excluir .modal-texto').textContent = mensagem;
+    document.getElementById('modal-confirmar').style.display = 'none';
+    document.getElementById('modal-cancelar').textContent = 'OK';
+    document.getElementById('modal-excluir').classList.add('aberto');
+}
+
+function fecharModal() {
+    document.getElementById('modal-excluir').classList.remove('aberto');
+
+    if (modoAviso) {
+        // Restaura o modal para o modo exclusão
+        modoAviso = false;
+        document.getElementById('modal-confirmar').style.display = '';
+        document.getElementById('modal-cancelar').textContent = 'Cancelar';
+        document.querySelector('#modal-excluir .modal-texto').textContent = 'Excluir esta avaliação?';
+        idxParaExcluir = null;
+    } else {
+        idxParaExcluir = null;
+    }
+}
+
+// ----- BOTÕES DO MODAL -----
+document.getElementById('modal-confirmar').onclick = async () => {
+    if (!idxParaExcluir) return;
+    try {
+        await deleteDoc(doc(db, 'avaliacoes', idxParaExcluir));
+    } catch (e) {
+        mostrarAviso('Erro ao excluir avaliação.');
+    }
+    fecharModal();
+    carregarAvaliacoes();
+};
+
+document.getElementById('modal-cancelar').onclick = fecharModal;
+
+document.getElementById('modal-excluir').addEventListener('click', (e) => {
+    if (e.target === document.getElementById('modal-excluir')) fecharModal();
+});
 
 // ----- AUTH STATE -----
 onAuthStateChanged(auth, (user) => {
@@ -292,6 +356,16 @@ document.getElementById('btn-enviar-comentario').onclick = async () => {
     btn.textContent = 'Publicando...';
 
     try {
+        const jaExiste = await getDocs(
+            query(collection(db, 'avaliacoes'), where('uid', '==', usuarioAtual.uid))
+        );
+        if (!jaExiste.empty) {
+            mostrarAviso('Você já possui uma avaliação, edite a existente se quiser alterar');
+            btn.disabled = false;
+            btn.textContent = 'Publicar avaliação';
+            return;
+        }
+
         await addDoc(collection(db, 'avaliacoes'), {
             uid:      usuarioAtual.uid,
             nome:     usuarioAtual.nome,
@@ -301,14 +375,13 @@ document.getElementById('btn-enviar-comentario').onclick = async () => {
             createdAt: serverTimestamp()
         });
         document.getElementById('novo-comentario').value = '';
-        // Resetar estrelas para 5
         estrelaSelecionada = 5;
-        document.querySelectorAll('#estrelas-input .estrela-sel').forEach((e, i) => {
-            e.classList.toggle('ativa', true);
+        document.querySelectorAll('#estrelas-input .estrela-sel').forEach((e) => {
+            e.classList.add('ativa');
         });
         carregarAvaliacoes();
     } catch (e) {
-        alert('Erro ao publicar avaliação. Tente novamente.');
+        mostrarAviso('Erro ao publicar avaliação. Tente novamente.');
     }
 
     btn.disabled = false;
@@ -330,7 +403,29 @@ async function carregarAvaliacoes() {
         }
 
         lista.innerHTML = '';
+
+        // ----- NOTA MÉDIA -----
+        let totalEstrelas = 0;
+        const docs = [];
         snapshot.forEach(docSnap => {
+            docs.push(docSnap);
+            totalEstrelas += docSnap.data().estrelas || 0;
+        });
+        const media = (totalEstrelas / docs.length).toFixed(1);
+        const mediaInteira = Math.round(totalEstrelas / docs.length);
+
+        const resumo = document.getElementById('resumo-avaliacoes');
+        if (resumo) {
+            resumo.innerHTML = `
+                <div class="nota-media">
+                    <span class="nota-numero">${media}</span>
+                    <div class="nota-estrelas">${'★'.repeat(mediaInteira)}${'☆'.repeat(5 - mediaInteira)}</div>
+                    <span class="nota-total">baseado em ${docs.length} avaliação${docs.length !== 1 ? 'ões' : ''}</span>
+                </div>
+            `;
+        }
+
+        docs.forEach(docSnap => {
             const av    = docSnap.data();
             const docId = docSnap.id;
             const ehDono = usuarioAtual && usuarioAtual.uid === av.uid;
@@ -372,7 +467,6 @@ async function carregarAvaliacoes() {
             lista.appendChild(item);
         });
 
-        // Eventos delegados (evita problema de referência após re-render)
         lista.querySelectorAll('.av-opcoes-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 e.stopPropagation();
@@ -441,13 +535,13 @@ async function salvarEdicao(docId) {
 
     try {
         await updateDoc(doc(db, 'avaliacoes', docId), {
-            texto:   novoTexto,
+            texto:    novoTexto,
             estrelas: estrelasAtivas || 5,
-            editado: true
+            editado:  true
         });
         carregarAvaliacoes();
     } catch (e) {
-        alert('Erro ao salvar edição.');
+        mostrarAviso('Erro ao salvar edição.');
     }
 }
 
@@ -455,29 +549,9 @@ async function salvarEdicao(docId) {
 function excluirAvaliacao(docId) {
     fecharTodosMenus();
     idxParaExcluir = docId;
+    modoAviso = false;
+    document.querySelector('#modal-excluir .modal-texto').textContent = 'Excluir esta avaliação?';
+    document.getElementById('modal-confirmar').style.display = '';
+    document.getElementById('modal-cancelar').textContent = 'Cancelar';
     document.getElementById('modal-excluir').classList.add('aberto');
 }
-
-document.getElementById('modal-confirmar').onclick = async () => {
-    if (!idxParaExcluir) return;
-    try {
-        await deleteDoc(doc(db, 'avaliacoes', idxParaExcluir));
-    } catch (e) {
-        alert('Erro ao excluir avaliação.');
-    }
-    idxParaExcluir = null;
-    document.getElementById('modal-excluir').classList.remove('aberto');
-    carregarAvaliacoes();
-};
-
-document.getElementById('modal-cancelar').onclick = () => {
-    idxParaExcluir = null;
-    document.getElementById('modal-excluir').classList.remove('aberto');
-};
-
-document.getElementById('modal-excluir').addEventListener('click', (e) => {
-    if (e.target === document.getElementById('modal-excluir')) {
-        idxParaExcluir = null;
-        document.getElementById('modal-excluir').classList.remove('aberto');
-    }
-});
