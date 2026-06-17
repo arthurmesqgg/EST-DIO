@@ -6,6 +6,9 @@
     scroll-margin-top: 80px;
 }
 
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200;400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Anton&family=Bungee&family=Imperial+Script&family=Unifraktu');
+
 html {
     scroll-behavior: smooth;
 }
@@ -65,6 +68,7 @@ body {
 }
 
 .nav-center a {
+    filter: drop-shadow(0 0 18px rgba(255, 255, 255, 0.85));
     justify-content: center;
     justify-items: center;
     font-size: 14px;
@@ -88,6 +92,7 @@ body {
 }
 
 .nav-right img {
+    filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.85));
     height: 85px;
     width: auto;
     transition: height 0.3s ease;
@@ -115,6 +120,7 @@ body {
 
 /* Botão engrenagem */
 .menu-btn {
+    filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.85));
     background: transparent;
     border: none;
     font-size: 32px;
@@ -368,6 +374,15 @@ p {
     transform: scale(1.02);
 }
 
+/* ===== REDES NO CARD ===== */
+
+.redes-card {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    margin: 16px 0;
+}
+
 .card img {
     max-width: 100%;
     height: auto;
@@ -375,50 +390,32 @@ p {
     margin-top: 10px;
 }
 
-/* ===== REDES NO CARD ===== */
-.redes-card {
-    filter: brightness(1) invert(0);
-    display: flex;
-    justify-content: center;
-    gap: 16px;
-    margin: 16px 0;
-}
-
 .card section a img {
     width: 150px;
     height: auto;
-    transition: transform 0.2s;
+    transition: transform 0.2s, filter 0.2s;
 }
 
-.card section a img:hover {   
+/* Modo claro — imagem escura, sombra escura */
+body:not(.dark) .card section a img {
+    filter: brightness(1) invert(0) drop-shadow(0 0 8px rgb(255, 255, 255));
+}
+
+body:not(.dark) .card section a img:hover {
+    filter: brightness(1) invert(0) drop-shadow(0 0 18px rgb(255, 255, 255));
     transform: scale(1.1);
 }
 
-/* ===== REDES SOCIAIS FIXAS ===== */
-.redes-fixas {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    z-index: 999;
+/* Modo escuro — inverte a imagem para branco, sombra branca */
+body.dark .card section a img {
+    filter: brightness(0) invert(1) drop-shadow(0 0 8px rgba(255, 255, 255, 0.3));
 }
 
-.redes-fixas img {
-    width: 100px;
-    cursor: pointer;
-    transition: transform 0.2s ease;
+body.dark .card section a img:hover {
+    filter: brightness(0) invert(1) drop-shadow(0 0 18px rgba(165, 165, 165, 0.85));
+    transform: scale(1.1);
 }
 
-.redes-fixas img:hover {
-    transform: scale(1.2);
-}
-
-body.dark .insta-icon,
-body.dark .face-icon {
-    filter: brightness(0) invert(1);
-}
 
 
 /* ===== LIGHTBOX ===== */
@@ -532,7 +529,7 @@ body.dark .logo-escura {
 }
 
 :root {
-    --bg: #bebebe;
+    --bg: linear-gradient(180deg, #c2c2c2, #c9c7c7);
     --text: #000000;
     --card: #ffffff;
     --accent: #000000;
@@ -565,7 +562,7 @@ body.dark {
     padding: 12px 16px;
     border-radius: 8px;
     border: 2px solid var(--accent);
-    background: rgb(20, 20, 20);
+    background: var(--card);
     color: var(--text);
     font-size: 15px;
     outline: none;
@@ -589,31 +586,31 @@ body.dark {
 .btn-auth {
     gap: 8px;
     padding: 11px 28px;
-    border: none;
+    border: 2px solid #444;
     border-radius: 8px;
-    background: #222;
-    color: #fff;
-    font-size: 14px;
-    font-family: 'Anton', sans-serif;
+    background: var(--background);
+    color: var(--text);
+    font-size: 15px;
+    font-family: 'Unifraktu';
     letter-spacing: 1px;
     cursor: pointer;
     transition: 0.2s;
 }
 
-.btn-auth:hover {
-    background: #444;
-    transform: translateY(-2px);
+.btn-secondary {
+    background: var(--background);
+    border: 2px solid #444;
+    color: var(--text);
 }
 
-.btn-secondary {
-    background: transparent;
-    border: 2px solid var(--accent);
-    color: var(--text);
+.btn-auth:hover {
+    background: rgba(0,0,0,0.1);
+    transform: translateY(+2px);
 }
 
 .btn-secondary:hover {
     background: rgba(0,0,0,0.1);
-    transform: translateY(-2px);
+    transform: translateY(+2px);
 }
 
 .auth-erro {
@@ -637,8 +634,8 @@ body.dark {
     min-height: 100px;
     padding: 12px 16px;
     border-radius: 8px;
-    border: 2px solid var(--accent);
-    background: rgb(20, 20, 20);
+    border: 2px solid #444;
+    background: var(--card);
     color: var(--text);
     font-size: 15px;
     font-family: 'Roboto', sans-serif;
@@ -684,9 +681,10 @@ body.dark {
 
 .avaliacao-item {
     border-radius: 10px;
-    background: rgb(20, 20, 20);
+    background: var(--background);
     padding: 16px 20px;
     transition: background 0.3s;
+    border: 2px solid #444;
 }
 
 .av-header {
@@ -698,6 +696,7 @@ body.dark {
 }
 
 .av-nome {
+    filter: drop-shadow(0 0 18px rgba(255, 255, 255, 0.85));
     font-family: 'Anton', sans-serif;
     letter-spacing: 1px;
     font-size: 16px;
@@ -711,17 +710,17 @@ body.dark {
 
 .av-data {
     font-size: 12px;
-    color: #888;
+    color: #6b6b6b;
 }
 
 .av-texto {
     font-size: 15px;
     line-height: 1.6;
     margin: 0;
-    color: var(--text);
+    color: var(--text) !important;
     border: none;
     padding: 0;
-}
+} 
 
 .sem-avaliacoes {
     text-align: center;
@@ -741,11 +740,12 @@ body.dark {
     margin: 16px auto;
     max-width: 260px;
     border-radius: 12px;
-    background: rgb(20, 20, 20);
-    border: 2px solid var(--accent);
+    background: var(--background);
+    border: 2px solid #444;
 }
 
 .nota-numero {
+    filter: drop-shadow(0 0 18px rgba(255, 255, 255, 0.85));
     font-family: 'Anton', sans-serif;
     font-size: 52px;
     letter-spacing: 2px;
@@ -1006,6 +1006,10 @@ footer p {
 /* ===== CELULAR (galaxy e xr) ===== */
 @media (max-width: 414px) {
 
+    .body {
+        font-family: 'Unifraktu';
+    }
+
     .navbar {
         flex-wrap: wrap;
         height: auto;
@@ -1056,6 +1060,10 @@ footer p {
     }
 
     /* TIPOGRAFIA  */  
+
+    h1, h2, h3 {
+    font-family: 'swap';
+    }
 
     .ava-h1 {
         font-size: 20px;
@@ -1176,6 +1184,10 @@ footer p {
 /* ===== CELULAR (apple) ===== */
 @media (max-width: 375px) {
 
+    .body {
+        font-family: 'Unifraktu';
+    }
+
     .navbar {
         flex-wrap: wrap;
         height: auto;
@@ -1226,6 +1238,11 @@ footer p {
     }
 
     /* TIPOGRAFIA  */  
+
+    h1, h2, h3 {
+    font-family: 'swap';
+    }
+
 
     .tat-h1 {
         font-size: 33px;
@@ -1346,6 +1363,10 @@ footer p {
 /* ===== CELULAR (galaxy e xr) ===== */
 @media (max-width: 402px) {
 
+    .body {
+        font-family: 'Unifraktu';
+    }
+
     .navbar {
         flex-wrap: wrap;
         height: auto;
@@ -1395,6 +1416,10 @@ footer p {
     }
 
     /* TIPOGRAFIA  */  
+
+    h1, h2, h3 {
+    font-family: 'swap';
+    }
 
     .tat-h1 {
         font-size: 35px;
@@ -1511,6 +1536,10 @@ footer p {
 /* ===== CELULAR (galaxys10, iphone SE iOS) ===== */
 @media (max-width: 360px), (max-width: 375px) {
 
+    .body {
+        font-family: 'Unifraktu';
+    }
+
     .navbar {
         flex-wrap: wrap;
         height: auto;
@@ -1562,6 +1591,10 @@ footer p {
 
     /* TIPOGRAFIA  */  
 
+    h1, h2, h3 {
+    font-family: 'swap';
+    }
+
     .tat-h1 {
         font-size: 31px;
     }
@@ -1591,12 +1624,7 @@ footer p {
         width: 100%;
         aspect-ratio: 1 / 1;
         height: 260px;
-        object-fit: cover;
-        border-radius: 10px;        
-    }
-
-    .card img {
-        border-radius: 5px;
+        object-fit: cover;      
     }
 
     .slides img {
