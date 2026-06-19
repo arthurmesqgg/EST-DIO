@@ -9,13 +9,18 @@
 @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200;400;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Anton&family=Bungee&family=Imperial+Script&family=Unifraktu');
 
+@font-face {
+    font-family: 'Unifraktu';
+    src: url('https://fonts.googleapis.com/css2?family=Anton&family=Bungee&family=Imperial+Script&family=Unifraktu') format('truetype');
+}
+
 html {
     scroll-behavior: smooth;
 }
 
 body {
     margin: 0;
-    font-family: 'Unifraktu';
+    font-family: 'Unifraktu'; /* Fonte para títulos */
     letter-spacing: 0.5px;
     color: var(--text);
     text-align: center;
@@ -71,7 +76,7 @@ body {
     filter: drop-shadow(0 0 18px rgba(255, 255, 255, 0.85));
     justify-content: center;
     justify-items: center;
-    font-size: 14px;
+    font-size: 17px;
     color: var(--text);
     text-decoration: none;
     transition: 0.3s;
@@ -82,7 +87,7 @@ body {
 }
 
 .navbar.shrink .nav-center a {
-    font-size: 10px;
+    font-size: 12px;
 }
 
 /* DIREITA */
@@ -157,7 +162,7 @@ body {
 
 /* ===== TIPOGRAFIA ===== */
 h1, h2, h3 {
-    font-family: 'swap';
+    font-family: 'swap'; /* Fonte para textos */
     color: var(--text);
     transition: all 0.5s ease;
     letter-spacing: 1px;
@@ -187,6 +192,20 @@ h1 { font-size: 65px; margin-bottom: 20px; letter-spacing: 2px; }
     transition: color 0.5s ease;
 }
 
+.tat-h1 {
+    filter: brightness(1) invert(0) drop-shadow(0 0 8px rgb(255, 255, 255));
+    filter: brightness(1) invert(0) drop-shadow(0 0 18px rgb(255, 255, 255));
+}
+
+.trabre-h1 {
+    filter: brightness(1) invert(0) drop-shadow(0 0 8px rgb(255, 255, 255));
+    filter: brightness(1) invert(0) drop-shadow(0 0 18px rgb(255, 255, 255));
+}
+
+.ava-h1 {
+    filter: brightness(1) invert(0) drop-shadow(0 0 8px rgb(255, 255, 255));
+    filter: brightness(1) invert(0) drop-shadow(0 0 18px rgb(255, 255, 255));
+}
 
 /* ===== CONTAINER ===== */
 .container {
@@ -430,14 +449,15 @@ body.dark .card section a img:hover {
 }
 
 .lightbox-img {
+    display: block;
+    justify-content: center;
+    justify-self: center;
     max-width: 90%;
     max-height: 90%;
     border-radius: 10px;
-    animation: zoom 0.3s ease;
-    transition: transform 0.2s ease;
     cursor: zoom-in;
     transform-origin: center;
-    touch-action: pan-y;
+    touch-action: none;
 }
 
 .fechar {
@@ -451,10 +471,7 @@ body.dark .card section a img:hover {
     display: none;
 }
 
-@keyframes zoom {
-    from { transform: scale(0.8); }
-    to   { transform: scale(1); }
-}
+
 
 .prev-img, .next-img {
     position: absolute;
