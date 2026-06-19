@@ -553,9 +553,9 @@ body.dark .logo-escura {
 }
 
 body.dark {
-    --bg: linear-gradient(180deg, #0f0f0f, #1a1a1a);
+    --bg: linear-gradient(180deg, #050505, #111111);
     --text: #e0e0e0;
-    --card: #1e1e1e;
+    --card: #141414;
     --accent: #ffffff;
 }
 
