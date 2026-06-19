@@ -714,9 +714,9 @@ body.dark {
 
 .av-nome {
     filter: drop-shadow(0 0 18px rgba(255, 255, 255, 0.85));
-    font-family: 'Anton', sans-serif;
+    font-family: 'swap';
     letter-spacing: 1px;
-    font-size: 16px;
+    font-size: 21px;
     color: var(--text);
 }
 
@@ -731,6 +731,7 @@ body.dark {
 }
 
 .av-texto {
+    font-family: 'swap';
     font-size: 15px;
     line-height: 1.6;
     margin: 0;
@@ -1022,6 +1023,21 @@ footer p {
 
 /* ===== CELULAR (galaxy e xr) ===== */
 @media (max-width: 414px) {
+    
+    :root {
+    --bg: linear-gradient(180deg, #eeeeee, #eeeeee);
+    --text: #000000;
+    --card: #ffffff;
+    --accent: #000000;
+}
+
+body.dark {
+    --bg: linear-gradient(180deg, #0f0f0f, #1a1a1a);
+    --text: #e0e0e0;
+    --card: #1e1e1e;
+    --accent: #ffffff;
+}
+
 
     .body {
         font-family: 'Unifraktu';
@@ -1200,6 +1216,21 @@ footer p {
 
 /* ===== CELULAR (apple) ===== */
 @media (max-width: 375px) {
+
+        :root {
+    --bg: linear-gradient(180deg, #eeeeee, #eeeeee);
+    --text: #000000;
+    --card: #ffffff;
+    --accent: #000000;
+}
+
+body.dark {
+    --bg: linear-gradient(180deg, #0f0f0f, #1a1a1a);
+    --text: #e0e0e0;
+    --card: #1e1e1e;
+    --accent: #ffffff;
+}
+
 
     .body {
         font-family: 'Unifraktu';
@@ -1380,6 +1411,22 @@ footer p {
 /* ===== CELULAR (galaxy e xr) ===== */
 @media (max-width: 402px) {
 
+        :root {
+    --bg: linear-gradient(180deg, #eeeeee, #eeeeee);
+    --text: #000000;
+    --card: #ffffff;
+    --accent: #000000;
+}
+
+body.dark {
+    --bg: linear-gradient(180deg, #0f0f0f, #1a1a1a);
+    --text: #e0e0e0;
+    --card: #1e1e1e;
+    --accent: #ffffff;
+}
+
+
+
     .body {
         font-family: 'Unifraktu';
     }
@@ -1552,6 +1599,21 @@ footer p {
 
 /* ===== CELULAR (galaxys10, iphone SE iOS) ===== */
 @media (max-width: 360px), (max-width: 375px) {
+
+    :root {
+    --bg: linear-gradient(180deg, #eeeeee, #eeeeee);
+    --text: #000000;
+    --card: #ffffff;
+    --accent: #000000;
+}
+
+body.dark {
+    --bg: linear-gradient(180deg, #0f0f0f, #1a1a1a);
+    --text: #e0e0e0;
+    --card: #1e1e1e;
+    --accent: #ffffff;
+}
+
 
     .body {
         font-family: 'Unifraktu';
