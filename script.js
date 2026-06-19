@@ -83,55 +83,90 @@ const fechar      = document.querySelector('.fechar');
 const nextBtn     = document.querySelector('.next-img');
 const prevBtn     = document.querySelector('.prev-img');
 
-let indexAtual     = 0;
-let listaImagens   = [];
-let scale          = 1;
-let isDragging     = false;
-let startX         = 0;
-let moveX          = 0;
-let scrollCooldown = false;
+let indexAtual      = 0;
+let listaImagens    = [];
+let scrollCooldown  = false;
+let panzoomInstance = null;
 
 galerias.forEach(galeria => {
     const imgs = galeria.querySelectorAll('img');
-    imgs.forEach((img, index) => {
+    imgs.forEach((img, i) => {
         img.addEventListener('click', () => {
-            listaImagens = Array.from(imgs).map(i => i.src);
-            indexAtual   = index;
+            listaImagens = Array.from(imgs).map(im => im.src);
+            indexAtual   = i;
             abrirImagem();
         });
     });
 });
 
-function abrirImagem(direcao = 'direita') {
+// ===== PANZOOM =====
+function iniciarPanzoom() {
+    if (typeof Panzoom === 'undefined') {
+        console.error('Panzoom não carregou. Verifique a tag <script> do CDN no index.html.');
+        return;
+    }
+    if (panzoomInstance) panzoomInstance.destroy();
+    panzoomInstance = Panzoom(lightboxImg, {
+        maxScale: 4,
+        minScale: 1,
+        contain: 'outside',
+        canvas: true
+    });
+    lightboxImg.parentElement.addEventListener('wheel', panzoomInstance.zoomWithWheel);
+}
+
+function destruirPanzoom() {
+    if (panzoomInstance) {
+        panzoomInstance.destroy();
+        panzoomInstance = null;
+    }
+    // Limpa qualquer transform residual deixado pelo Panzoom
+    lightboxImg.style.transform = '';
+}
+
+// ===== ABRIR / FECHAR IMAGEM =====
+function abrirImagem() {
+    destruirPanzoom();
+
     lightboxImg.style.transition = 'none';
-    lightboxImg.style.transform  = direcao === 'direita'
-        ? 'translateX(20%) scale(1)'
-        : 'translateX(-20%) scale(1)';
+    lightboxImg.style.opacity    = '0';
+    lightboxImg.style.transform  = 'scale(0.92)';
 
     lightbox.style.display = 'flex';
     fechar.style.display   = 'block';
-    lightboxImg.src        = listaImagens[indexAtual];
-    scale = 1;
 
-    setTimeout(() => {
-        lightboxImg.style.transition = 'transform 0.3s ease';
-        lightboxImg.style.transform  = 'translateX(0) scale(1)';
-    }, 10);
+    // Só anima e inicia o Panzoom depois que a imagem REALMENTE carregou.
+    // Isso evita medir um elemento com dimensões ainda incorretas,
+    // que era a causa do "pulo" para a direita.
+    lightboxImg.onload = () => {
+        requestAnimationFrame(() => {
+            lightboxImg.style.transition = 'opacity 0.25s ease, transform 0.25s ease';
+            lightboxImg.style.opacity    = '1';
+            lightboxImg.style.transform  = 'scale(1)';
+
+            setTimeout(() => {
+                iniciarPanzoom();
+            }, 260);
+        });
+    };
+
+    lightboxImg.src = listaImagens[indexAtual];
 }
 
 function fecharImagem() {
     lightbox.style.display = 'none';
     fechar.style.display   = 'none';
+    destruirPanzoom();
 }
 
 function proximaImagem() {
     indexAtual = (indexAtual + 1) % listaImagens.length;
-    abrirImagem('direita');
+    abrirImagem();
 }
 
 function imagemAnterior() {
     indexAtual = (indexAtual - 1 + listaImagens.length) % listaImagens.length;
-    abrirImagem('esquerda');
+    abrirImagem();
 }
 
 if (fechar)  fechar.addEventListener('click', fecharImagem);
@@ -156,45 +191,6 @@ if (lightbox) {
         e.deltaY > 0 ? proximaImagem() : imagemAnterior();
         setTimeout(() => { scrollCooldown = false; }, 400);
     });
-
-    lightbox.addEventListener('touchstart', (e) => {
-        isDragging = true;
-        startX     = e.touches[0].clientX;
-        lightboxImg.style.transition = 'none';
-    });
-
-    lightbox.addEventListener('touchmove', (e) => {
-        if (!isDragging) return;
-        moveX = e.touches[0].clientX - startX;
-        lightboxImg.style.transform = `translateX(${moveX}px) scale(${scale})`;
-    });
-
-    lightbox.addEventListener('touchend', () => {
-        isDragging = false;
-        lightboxImg.style.transition = 'transform 0.3s ease';
-        if      (moveX >  80) imagemAnterior();
-        else if (moveX < -80) proximaImagem();
-        else lightboxImg.style.transform = `translateX(0) scale(${scale})`;
-        moveX = 0;
-    });
-}
-
-if (lightboxImg) {
-    lightboxImg.addEventListener('wheel', (e) => {
-        e.preventDefault();
-        const rect    = lightboxImg.getBoundingClientRect();
-        const originX = ((e.clientX - rect.left) / rect.width)  * 100;
-        const originY = ((e.clientY - rect.top)  / rect.height) * 100;
-        lightboxImg.style.transformOrigin = `${originX}% ${originY}%`;
-        scale += e.deltaY < 0 ? 0.2 : -0.2;
-        scale  = Math.min(Math.max(1, scale), 3);
-        lightboxImg.style.transform = `scale(${scale})`;
-    });
-
-    lightboxImg.addEventListener('click', () => {
-        scale = 1;
-        lightboxImg.style.transform = 'scale(1)';
-    });
 }
 
 document.addEventListener('keydown', (e) => {
@@ -209,9 +205,9 @@ document.addEventListener('keydown', (e) => {
 let usuarioAtual       = null;
 let estrelaSelecionada = 5;
 let idxParaExcluir     = null;
-let modoAviso          = false; // controla se o modal está em modo aviso ou exclusão
+let modoAviso          = false;
 
-// ----- MODAL DE AVISO (reutiliza o modal de exclusão) -----
+// ----- MODAL DE AVISO -----
 function mostrarAviso(mensagem) {
     modoAviso = true;
     document.querySelector('#modal-excluir .modal-texto').textContent = mensagem;
@@ -222,9 +218,7 @@ function mostrarAviso(mensagem) {
 
 function fecharModal() {
     document.getElementById('modal-excluir').classList.remove('aberto');
-
     if (modoAviso) {
-        // Restaura o modal para o modo exclusão
         modoAviso = false;
         document.getElementById('modal-confirmar').style.display = '';
         document.getElementById('modal-cancelar').textContent = 'Cancelar';
@@ -360,7 +354,7 @@ document.getElementById('btn-enviar-comentario').onclick = async () => {
             query(collection(db, 'avaliacoes'), where('uid', '==', usuarioAtual.uid))
         );
         if (!jaExiste.empty) {
-            mostrarAviso('Você já possui uma avaliação, edite a existente se quiser alterar');
+            mostrarAviso('Você já possui uma avaliação. Edite a existente se quiser alterar.');
             btn.disabled = false;
             btn.textContent = 'Publicar avaliação';
             return;
@@ -420,7 +414,7 @@ async function carregarAvaliacoes() {
                 <div class="nota-media">
                     <span class="nota-numero">${media}</span>
                     <div class="nota-estrelas">${'★'.repeat(mediaInteira)}${'☆'.repeat(5 - mediaInteira)}</div>
-                    <span class="nota-total">baseado em ${docs.length} avaliaçõe${docs.length !== 1 ? 's' : ''}</span>
+                    <span class="nota-total">baseado em ${docs.length} avaliação${docs.length !== 1 ? 'ões' : ''}</span>
                 </div>
             `;
         }
@@ -481,19 +475,15 @@ async function carregarAvaliacoes() {
         lista.querySelectorAll('[data-editar]').forEach(btn => {
             btn.addEventListener('click', () => editarAvaliacao(btn.dataset.editar));
         });
-
         lista.querySelectorAll('[data-excluir]').forEach(btn => {
             btn.addEventListener('click', () => excluirAvaliacao(btn.dataset.excluir));
         });
-
         lista.querySelectorAll('[data-salvar]').forEach(btn => {
             btn.addEventListener('click', () => salvarEdicao(btn.dataset.salvar));
         });
-
         lista.querySelectorAll('[data-cancelar]').forEach(btn => {
             btn.addEventListener('click', () => cancelarEdicao(btn.dataset.cancelar));
         });
-
         lista.querySelectorAll('.av-edit-estrelas .estrela-sel').forEach(el => {
             el.addEventListener('click', () => {
                 const idx = el.dataset.idx;
