@@ -99,20 +99,22 @@ galerias.forEach(galeria => {
     });
 });
 
-// ===== PANZOOM =====
+// ===== PANZOOM (só mobile/touch) =====
+const isTouchDevice = () => window.matchMedia('(hover: none) and (pointer: coarse)').matches;
+
 function iniciarPanzoom() {
-    if (typeof Panzoom === 'undefined') {
-        console.error('Panzoom não carregou. Verifique a tag <script> do CDN no index.html.');
-        return;
-    }
+    if (!isTouchDevice()) return; // desktop usa zoom manual com scroll
+    if (typeof Panzoom === 'undefined') return;
     if (panzoomInstance) panzoomInstance.destroy();
     panzoomInstance = Panzoom(lightboxImg, {
         maxScale: 4,
         minScale: 1,
-        contain: 'outside',
-        canvas: true
+        contain: 'inside',
+        startScale: 1,
+        startX: 0,
+        startY: 0,
     });
-    lightboxImg.parentElement.addEventListener('wheel', panzoomInstance.zoomWithWheel);
+    panzoomInstance.reset({ animate: false });
 }
 
 function destruirPanzoom() {
@@ -120,17 +122,41 @@ function destruirPanzoom() {
         panzoomInstance.destroy();
         panzoomInstance = null;
     }
-    // Limpa qualquer transform residual deixado pelo Panzoom
     lightboxImg.style.transform = '';
+}
+
+// ===== ZOOM MANUAL COM SCROLL (só desktop) =====
+let scaleAtual = 1;
+
+if (lightboxImg) {
+    lightboxImg.addEventListener('wheel', (e) => {
+        if (isTouchDevice()) return;
+        e.preventDefault();
+        const rect    = lightboxImg.getBoundingClientRect();
+        const originX = ((e.clientX - rect.left) / rect.width)  * 100;
+        const originY = ((e.clientY - rect.top)  / rect.height) * 100;
+        lightboxImg.style.transformOrigin = `${originX}% ${originY}%`;
+        scaleAtual += e.deltaY < 0 ? 0.15 : -0.15;
+        scaleAtual  = Math.min(Math.max(1, scaleAtual), 4);
+        lightboxImg.style.transform = `scale(${scaleAtual})`;
+    });
+
+    lightboxImg.addEventListener('click', () => {
+        scaleAtual = 1;
+        lightboxImg.style.transformOrigin = 'center';
+        lightboxImg.style.transform = 'scale(1)';
+    });
 }
 
 // ===== ABRIR / FECHAR IMAGEM =====
 function abrirImagem() {
     destruirPanzoom();
+    scaleAtual = 1;
 
     lightboxImg.style.transition = 'none';
     lightboxImg.style.opacity    = '0';
     lightboxImg.style.transform  = 'scale(0.92)';
+    lightboxImg.style.transformOrigin = 'center';
 
     lightbox.style.display = 'flex';
     fechar.style.display   = 'block';
@@ -156,6 +182,7 @@ function abrirImagem() {
 function fecharImagem() {
     lightbox.style.display = 'none';
     fechar.style.display   = 'none';
+    scaleAtual = 1;
     destruirPanzoom();
 }
 
