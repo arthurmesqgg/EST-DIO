@@ -1,10 +1,13 @@
 *, *::before, *::after {
     box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
 }
 
 [id] {
     scroll-margin-top: 80px;
 }
+
 
 @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200;400;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Anton&family=Bungee&family=Imperial+Script&family=Unifraktu');
@@ -233,10 +236,9 @@ p {
 /* ===== CARROSSEL ===== */
 .carousel {
     position: relative;
-    max-width: 1400px;
+    max-width: 2000px;
     margin: 20px auto;
     overflow: hidden;
-    border-radius: 12px;
 }
 
 
@@ -247,7 +249,7 @@ p {
 
 .slides img {
     width: 100%;
-    height: clamp(740px, 45vw, 700px);
+    height: clamp(940px, 45vw, 700px);
     object-fit: cover;
     object-position: center;
     flex-shrink: 0;
@@ -376,6 +378,7 @@ p {
     grid-template-columns: repeat(2, 1fr);
     gap: 8px;
     margin-top: 10px;
+    cursor: pointer;    
 }
 
 .galeria img {
@@ -385,7 +388,7 @@ p {
     height: 200px;
     object-fit: cover;
     border-radius: 10px;
-    cursor: pointer;
+    cursor: zoom-in;
     transition: transform 0.2s;
 }
 
@@ -1331,7 +1334,6 @@ body.dark {
 
     .slides img {
         height: 320px;
-        border-radius: 0;
     }
 
     .redes-card {
@@ -1707,8 +1709,7 @@ body.dark {
     }
 
     .slides img {
-        height: 320px;
-        border-radius: 0;
+        height: 400px;
     }
 
     .redes-card {
