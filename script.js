@@ -83,10 +83,9 @@ const fechar      = document.querySelector('.fechar');
 const nextBtn     = document.querySelector('.next-img');
 const prevBtn     = document.querySelector('.prev-img');
 
-let indexAtual      = 0;
-let listaImagens    = [];
-let scrollCooldown  = false;
-let panzoomInstance = null;
+let indexAtual     = 0;
+let listaImagens   = [];
+let scrollCooldown = false;
 
 galerias.forEach(galeria => {
     const imgs = galeria.querySelectorAll('img');
@@ -99,36 +98,27 @@ galerias.forEach(galeria => {
     });
 });
 
-// ===== PANZOOM (só mobile/touch) =====
+// ===== ZOOM (desktop: scroll | mobile: pinça) =====
 const isTouchDevice = () => window.matchMedia('(hover: none) and (pointer: coarse)').matches;
 
-function iniciarPanzoom() {
-    if (!isTouchDevice()) return; // desktop usa zoom manual com scroll
-    if (typeof Panzoom === 'undefined') return;
-    if (panzoomInstance) panzoomInstance.destroy();
-    panzoomInstance = Panzoom(lightboxImg, {
-        maxScale: 4,
-        minScale: 1,
-        contain: 'inside',
-        startScale: 1,
-        startX: 0,
-        startY: 0,
-    });
-    panzoomInstance.reset({ animate: false });
-}
+let scaleAtual = 1;
+let pinchDist  = null;
 
 function destruirPanzoom() {
-    if (panzoomInstance) {
-        panzoomInstance.destroy();
-        panzoomInstance = null;
-    }
-    lightboxImg.style.transform = '';
+    scaleAtual = 1;
+    pinchDist  = null;
+    lightboxImg.style.transform       = 'scale(1)';
+    lightboxImg.style.transformOrigin = 'center';
 }
 
-// ===== ZOOM MANUAL COM SCROLL (só desktop) =====
-let scaleAtual = 1;
+function getDistancia(touches) {
+    const dx = touches[0].clientX - touches[1].clientX;
+    const dy = touches[0].clientY - touches[1].clientY;
+    return Math.sqrt(dx * dx + dy * dy);
+}
 
 if (lightboxImg) {
+    // ----- SCROLL (desktop) -----
     lightboxImg.addEventListener('wheel', (e) => {
         if (isTouchDevice()) return;
         e.preventDefault();
@@ -142,9 +132,43 @@ if (lightboxImg) {
     });
 
     lightboxImg.addEventListener('click', () => {
+        if (isTouchDevice()) return;
         scaleAtual = 1;
         lightboxImg.style.transformOrigin = 'center';
         lightboxImg.style.transform = 'scale(1)';
+    });
+
+    // ----- PINÇA (mobile) -----
+    lightboxImg.addEventListener('touchstart', (e) => {
+        if (e.touches.length === 2) {
+            e.preventDefault();
+            pinchDist = getDistancia(e.touches);
+        }
+    }, { passive: false });
+
+    lightboxImg.addEventListener('touchmove', (e) => {
+        if (e.touches.length === 2 && pinchDist !== null) {
+            e.preventDefault();
+            const novaDist  = getDistancia(e.touches);
+            const novoScale = Math.min(Math.max(scaleAtual * (novaDist / pinchDist), 1), 5);
+
+            const cx = (e.touches[0].clientX + e.touches[1].clientX) / 2;
+            const cy = (e.touches[0].clientY + e.touches[1].clientY) / 2;
+            const rect    = lightboxImg.getBoundingClientRect();
+            const originX = ((cx - rect.left) / rect.width)  * 100;
+            const originY = ((cy - rect.top)  / rect.height) * 100;
+
+            lightboxImg.style.transformOrigin = `${originX}% ${originY}%`;
+            lightboxImg.style.transform = `scale(${novoScale})`;
+        }
+    }, { passive: false });
+
+    lightboxImg.addEventListener('touchend', (e) => {
+        if (pinchDist !== null && e.touches.length < 2) {
+            const match = lightboxImg.style.transform.match(/scale\(([^)]+)\)/);
+            scaleAtual = match ? parseFloat(match[1]) : 1;
+            pinchDist  = null;
+        }
     });
 }
 
@@ -161,18 +185,12 @@ function abrirImagem() {
     lightbox.style.display = 'flex';
     fechar.style.display   = 'block';
 
-    // Só anima e inicia o Panzoom depois que a imagem REALMENTE carregou.
-    // Isso evita medir um elemento com dimensões ainda incorretas,
-    // que era a causa do "pulo" para a direita.
+
     lightboxImg.onload = () => {
         requestAnimationFrame(() => {
             lightboxImg.style.transition = 'opacity 0.25s ease, transform 0.25s ease';
             lightboxImg.style.opacity    = '1';
             lightboxImg.style.transform  = 'scale(1)';
-
-            setTimeout(() => {
-                iniciarPanzoom();
-            }, 260);
         });
     };
 
