@@ -34,14 +34,17 @@
 <body>
 
 
-
 <script>
 if (localStorage.getItem('tema') === 'dark') {
     document.documentElement.classList.add('dark');
 }
 </script>
 
+
+<!-- NAVBAR -->
+
 <nav class="navbar">
+  
   <div class="nav-left">
     <button class="menu-btn" id="menu-btn">⏣</button>
     <div class="dropdown" id="dropdown">
@@ -70,7 +73,7 @@ if (localStorage.getItem('tema') === 'dark') {
 </nav>
 
 
-<br><br><br><br>
+<!-- CARROSSEL -->
 
 <div class="carousel">
   <div class="slides">
@@ -251,7 +254,6 @@ if (localStorage.getItem('tema') === 'dark') {
 
 <br><br><br>
 
-<script src="https://unpkg.com/@panzoom/panzoom/dist/panzoom.min.js" defer></script>
 <script src="script.js" type="module" defer></script>
 
 <footer id="footer">
