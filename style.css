@@ -33,27 +33,44 @@ body {
     transition: background 0.5s ease, color 0.5s ease;
     padding-top: 60px;
     overflow-x: hidden;
+    padding-top: 0;
 }
 
 /* ===== NAVBAR ===== */
 .navbar {
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);    
     position: fixed;
-    top: 0; left: 0;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 110px;
-    background: var(--navbar-bg, var(--card));
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 0 24px;
     z-index: 1000;
-    transition: height 0.3s ease, padding 0.3s ease;
+    background: rgba(0,0,0,0);
+    box-shadow: 0 0 0 rgba(0,0,0,0);
+
+    transition:
+        background-color .45s ease,
+        backdrop-filter .45s ease,
+        -webkit-backdrop-filter .45s ease,
+        box-shadow .45s ease,
+        height .35s ease,
+        padding .35s ease;
 }
 
 .navbar.shrink {
-    height: 60px;
+    height: 70px;
     padding: 0 16px;
+    box-shadow: 0 4px 20px rgba(0,0,0,.3);
+}
+
+.navbar.scrolled {
+    background: var(--navbar-bg, var(--card));
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    box-shadow: 0 10px 35px rgba(0,0,0,.35);
 }
 
 /* ESQUERDA */
@@ -73,6 +90,7 @@ body {
     align-items: center;
     letter-spacing: 2px;
     transition: font-size 0.3s ease;
+    max-height: 95px;    
 }
 
 .nav-center a {
@@ -83,6 +101,7 @@ body {
     color: var(--text);
     text-decoration: none;
     transition: 0.3s;
+    height: 30px; 
 }
 
 .nav-center a:hover {
@@ -90,7 +109,8 @@ body {
 }
 
 .navbar.shrink .nav-center a {
-    font-size: 12px;
+    font-size: 14px;
+    height: 15px;    
 }
 
 /* DIREITA */
@@ -178,10 +198,10 @@ h1 { font-size: 65px; margin-bottom: 20px; letter-spacing: 2px; }
 
 /* ===== CARDS ===== */
 .card { 
-    max-width: 1600px;
+    max-width: 100%;
     background: var(--card);
     padding: 30px 40px;
-    border-radius: 12px;
+    border-radius: 15px;
     margin-bottom: 20px;
     box-shadow: 0 4px 10px rgba(0,0,0,0.1);
     transition: background 0.5s ease, color 0.5s ease;
@@ -213,15 +233,16 @@ h1 { font-size: 65px; margin-bottom: 20px; letter-spacing: 2px; }
 /* ===== CONTAINER ===== */
 .container {
     padding: 30px 40px;
-    max-width: 1600px;
+    width: min(96vw, 1900px);
+    margin: 0 auto;
     margin: auto;
     min-height: 60vh;
 }
 
-/* ===== CONTAINER P ===== */
+/* ===== CONTAINER PEQUENO (trab recentes) ===== */
 
 .container-pequeno {
-    max-width: 1400px;
+    max-width: 1700px;
 }
 
 
@@ -237,7 +258,7 @@ p {
 .carousel {
     position: relative;
     max-width: 2000px;
-    margin: 20px auto;
+    margin: 0 auto;
     overflow: hidden;
 }
 
@@ -248,8 +269,9 @@ p {
 }
 
 .slides img {
+    margin: 0 auto;    
     width: 100%;
-    height: clamp(940px, 45vw, 700px);
+    height: clamp(950px, 45vw, 700px);
     object-fit: cover;
     object-position: center;
     flex-shrink: 0;
@@ -461,6 +483,10 @@ body.dark .card section a img:hover {
     cursor: zoom-in;
     transform-origin: center;
     touch-action: none;
+
+    user-select: none;
+    -webkit-user-drag: none;
+    pointer-events: auto;
 }
 
 .fechar {
@@ -1102,11 +1128,11 @@ body.dark {
     }
 
     .ava-h1 {
-        font-size: 20px;
+        font-size: 36px;
     }
 
     .tat-h1 {
-        font-size: 38px;
+        font-size: 36px;
     }
 
     .tat-h3 {
@@ -1117,8 +1143,11 @@ body.dark {
         font-size: 16px;
         letter-spacing: normal;
     }
-  
 
+    .trabre-h1{
+        font-size: 38px;
+    }
+  
     .card {
         padding: 15px 16px;
     }
@@ -1150,9 +1179,6 @@ body.dark {
         width: 100%;
     }
 
-    .ava-h1 {
-        font-size: 40px;
-    }
 
     /* Footer */
     
@@ -1311,7 +1337,9 @@ body.dark {
         font-size: 16px;
         letter-spacing: normal;
     }
-  
+    .ava-h1{
+        font-size: 16px;
+    }
 
     .card {
         padding: 15px 16px;
@@ -1343,9 +1371,6 @@ body.dark {
         width: 100%;
     }
 
-    .ava-h1 {
-        font-size: 40px;
-    }
 
     /* Footer */
     
@@ -1533,7 +1558,7 @@ body.dark {
     }
 
     .ava-h1 {
-        font-size: 40px;
+        font-size: 30px;
     }
 
     /* Footer */
@@ -1677,15 +1702,19 @@ body.dark {
     }
 
     .tat-h1 {
-        font-size: 31px;
+        font-size: 30px;
     }
 
     .tat-h2 {
-        font-size: 22px;
+        font-size: 21px;
     }
 
     .tat-h3 {
         font-size: 22px;
+    }
+
+    .trabre-h1{
+        font-size: 32px;
     }
 
     .tat-p {
@@ -1693,6 +1722,9 @@ body.dark {
         letter-spacing: normal;
     }
   
+    .ava-h1 {
+        font-size: 30px;
+    }
 
     .card {
         padding: 15px 16px;
@@ -1719,8 +1751,194 @@ body.dark {
         width: 100%;
     }
 
+    /* Footer */
+    
+    footer p {
+    border-left: none;
+}
+
+    .ft-grid {
+        grid-template-columns: 1fr;
+        gap: 24px;
+        text-align: center;
+    }
+
+    .ft-bottom {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    footer {
+        padding: 32px 20px 20px;
+    }
+
+
+    .container {
+        padding: 10px;
+        max-width: 100%;
+    }
+
+    .card {
+        padding: 15px 16px;
+    }
+
+    .galeria {
+        border-radius: 5px;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+    }
+
+    .lightbox-img {
+        border-radius: 5px;
+        max-width: 95%;
+        max-height: 80%;
+    }
+
+    .fechar {
+        top: 10px;
+        right: 15px;
+        font-size: 30px;
+    }
+
+    .prev-img,
+    .next-img {
+        display: none;
+    }
+}
+
+@media (max-width: 600px) {
+    h1 { font-size: 30px; }
+    h2 { font-size: 24px; }
+    h3 { font-size: 17px; }
+    p  { font-size: 15px; }
+}
+
+/* ===== CELULAR (iphone 14, 15, 16 iOS) ===== */
+@media (max-width: 393px) {
+
+    :root {
+    --bg: linear-gradient(180deg, #eeeeee, #eeeeee);
+    --text: #000000;
+    --card: #ffffff;
+    --accent: #000000;
+}
+
+body.dark {
+    --bg: linear-gradient(180deg, #0f0f0f, #1a1a1a);
+    --text: #e0e0e0;
+    --card: #1e1e1e;
+    --accent: #ffffff;
+}
+
+
+    .body {
+        font-family: 'Unifraktu';
+    }
+
+    .navbar {
+        flex-wrap: wrap;
+        height: auto;
+        padding: 10px 16px;
+        gap: 4px;
+        align-items: center;
+    }
+
+    .navbar.shrink {
+        height: auto;
+        padding: 8px 16px;
+    }
+
+    .nav-left  { order: 1; flex-shrink: 0; }
+    .nav-right { order: 2; flex-shrink: 0; }
+
+    .nav-center {
+        order: 3;
+        position: static;
+        transform: none;
+        width: 100%;
+        justify-items: center;
+        justify-content: center;
+        gap: 18px;
+        flex-wrap: wrap;
+        padding: 4px 0 6px;
+    }
+
+    .nav-center a {
+        font-size: 13px;
+    }
+
+    .dropdown {
+        order: 4;
+        position: static;
+        width: 100%;
+        border-radius: 8px;
+        box-shadow: none;
+        padding: 10px 0;
+        justify-content: center;
+    }
+
+    .dropdown.aberto {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+    }
+
+    /* TIPOGRAFIA  */  
+
+    h1, h2, h3 {
+    font-family: 'swap';
+    }
+
+    .tat-h1 {
+        font-size: 34px;
+    }
+
+    .tat-h2 {
+        font-size: 23px;
+    }
+
+    .tat-h3 {
+        font-size: 22px;
+    }
+
+    .trabre-h1{
+        font-size: 35px;
+    }
+
+    .tat-p {
+        font-size: 16px;
+        letter-spacing: normal;
+    }
+  
     .ava-h1 {
-        font-size: 40px;
+        font-size: 34px;
+    }
+
+    .card {
+        padding: 15px 16px;
+    }
+    
+    /* GALERIA E CARROSSEL */
+
+
+    .galeria img {
+        width: 100%;
+        aspect-ratio: 1 / 1;
+        height: 260px;
+        object-fit: cover;      
+    }
+
+    .slides img {
+        height: 400px;
+    }
+
+    .redes-card {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
     }
 
     /* Footer */
