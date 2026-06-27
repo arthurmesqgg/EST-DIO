@@ -40,13 +40,11 @@ if (localStorage.getItem('tema') === 'dark') {
 }
 </script>
 
-
-<!-- NAVBAR -->
-
 <nav class="navbar">
-  
+
+  <!-- DESKTOP: esquerda (menu ☰) -->
   <div class="nav-left">
-    <button class="menu-btn" id="menu-btn">⏣</button>
+    <button class="menu-btn" id="menu-btn">☰</button>
     <div class="dropdown" id="dropdown">
       <div class="trilho" id="trilho">
         <div class="indicador"></div>
@@ -55,6 +53,7 @@ if (localStorage.getItem('tema') === 'dark') {
     </div>
   </div>
 
+  <!-- DESKTOP: centro (links a href) -->
   <div class="nav-center">    
     <a href="#tatuadores">TATUADORES</a>
     <a href="#recentes">TRABALHOS RECENTES</a>
@@ -62,15 +61,59 @@ if (localStorage.getItem('tema') === 'dark') {
     <a href="#footer">CONTATO</a>     
   </div>
 
-
-<div class="nav-right">
+  <!-- DESKTOP: direita (logo) -->
+  <div class="nav-right">
     <a href="#">
-        <img src="logo-clara.png" class="logo-clara" alt="Logo">
-        <img src="logo-escura.png" class="logo-escura" alt="Logo">
+      <img src="logo-clara.png" class="logo-clara" alt="Logo">
+      <img src="logo-escura.png" class="logo-escura" alt="Logo">
     </a>
-</div>
+  </div>
+
+  <!-- MOBILE: barra fixa (☰ + logo + ícone user) -->
+  <div class="mobile-navbar">
+    <button class="mobile-menu-btn" id="mobile-menu-btn">☰</button>
+    <a href="#" class="mobile-logo">
+      <img src="logo-clara.png" class="logo-clara" alt="Logo">
+      <img src="logo-escura.png" class="logo-escura" alt="Logo">
+    </a>
+    <button class="mobile-user-btn" id="mobile-user-btn">
+      <!-- Ícone SVG de usuário -->
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="8" r="4"/>
+        <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
+      </svg>
+    </button>
+  </div>
+
+  <!-- MOBILE: gaveta lateral esquerda (links + modo escuro) -->
+  <div class="mobile-drawer" id="mobile-drawer">
+    <div class="mobile-drawer-inner">
+      <a href="#tatuadores" class="drawer-link">TATUADORES</a>
+      <a href="#recentes"   class="drawer-link">TRABALHOS RECENTES</a>
+      <a href="#avaliacoes" class="drawer-link">AVALIAÇÕES</a>
+      <a href="#footer"     class="drawer-link">CONTATO</a>
+      <div class="drawer-tema">
+        <div class="trilho" id="trilho-mobile">
+          <div class="indicador"></div>
+        </div>
+        <span>Modo escuro/claro</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- MOBILE: gaveta lateral direita (user) -->
+  <div class="mobile-user-drawer" id="mobile-user-drawer">
+    <div class="mobile-drawer-inner">
+      <button class="drawer-link drawer-user-link" id="drawer-ir-login">ENTRAR</button> <img src="arrow-up-right-svgrepo-com.svg" class="entrarsvg" id="entrarsvg" >
+      <button class="drawer-link drawer-user-link" id="drawer-ir-cadastro">CRIAR CONTA</button> <img src="exit-svgrepo-com.svg" class="criarcontasvg" id="criarcontasvg" >
+    </div>
+  </div>
+
+  <!-- Overlay único compartilhado -->
+  <div class="mobile-drawer-overlay" id="mobile-drawer-overlay"></div>
 
 </nav>
+
 
 
 <!-- CARROSSEL -->
@@ -282,6 +325,8 @@ if (localStorage.getItem('tema') === 'dark') {
 
 <script src="script.js" type="module" defer></script>
 
+
+<img src="bannerpretoebranco.png" class="banner" id="banner" >
 <footer id="footer">
   <div class="ft-grid">
 
@@ -297,9 +342,9 @@ if (localStorage.getItem('tema') === 'dark') {
     <div>
       <p class="ft-label">Contato</p>
       <p class="ft-sub">
-      @henripsy<br><br>
-      @aleatoriaartee<br><br>
-      arthurmesq.gg@gmail.com
+      @henripsy <br>
+      @aleatoriaartee <br>
+      @betty.tattoo
       </p>
     </div>
 
@@ -312,7 +357,8 @@ if (localStorage.getItem('tema') === 'dark') {
       </div>
       <p class="ft-sub" style="margin-top:14px;">
         Desenvolvido por<br>
-        <strong class="ft-strong">Arthur Mesquita</strong>
+        <strong class="ft-strong">Arthur Mesquita</strong> <br>
+              <strong class="ft-strong">arthurmesq.gg@gmail.com</strong>
       </p>
     </div>
 
