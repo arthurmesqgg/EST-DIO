@@ -30,6 +30,104 @@ document.addEventListener('click', () => {
     if (dropdown) dropdown.classList.remove('aberto');
 });
 
+// ===== MOBILE NAVBAR =====
+const mobileMenuBtn    = document.getElementById('mobile-menu-btn');
+const mobileUserBtn    = document.getElementById('mobile-user-btn');
+const mobileDrawer     = document.getElementById('mobile-drawer');
+const mobileUserDrawer = document.getElementById('mobile-user-drawer');
+const mobileOverlay    = document.getElementById('mobile-drawer-overlay');
+const drawerLinks      = document.querySelectorAll('.drawer-link');
+const trilhoMobile     = document.getElementById('trilho-mobile');
+
+// ----- Abrir/fechar gavetas -----
+function fecharTodasGavetas() {
+    mobileDrawer?.classList.remove('aberto');
+    mobileUserDrawer?.classList.remove('aberto');
+    mobileOverlay?.classList.remove('aberto');
+    document.body.style.overflow = '';
+}
+
+function abrirGaveta(gaveta) {
+    fecharTodasGavetas();
+    gaveta.classList.add('aberto');
+    mobileOverlay.classList.add('aberto');
+    document.body.style.overflow = 'hidden';
+}
+
+mobileMenuBtn?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    mobileDrawer.classList.contains('aberto')
+        ? fecharTodasGavetas()
+        : abrirGaveta(mobileDrawer);
+});
+
+mobileUserBtn?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    mobileUserDrawer.classList.contains('aberto')
+        ? fecharTodasGavetas()
+        : abrirGaveta(mobileUserDrawer);
+});
+
+// Overlay fecha qualquer gaveta
+mobileOverlay?.addEventListener('click', fecharTodasGavetas);
+
+// Links fecham a gaveta e navegam
+drawerLinks.forEach(link => {
+    link.addEventListener('click', fecharTodasGavetas);
+});
+
+// ----- Botões de login/cadastro na gaveta user -----
+document.getElementById('drawer-ir-login')?.addEventListener('click', () => {
+    fecharTodasGavetas();
+    // Garante que a caixa de login está visível
+    const loginBox    = document.getElementById('login-box');
+    const cadastroBox = document.getElementById('cadastro-box');
+    if (loginBox)    loginBox.style.display    = 'flex';
+    if (cadastroBox) cadastroBox.style.display = 'none';
+    // Rola até avaliações
+    document.getElementById('avaliacoes')?.scrollIntoView({ behavior: 'smooth' });
+});
+
+document.getElementById('drawer-ir-cadastro')?.addEventListener('click', () => {
+    fecharTodasGavetas();
+    // Garante que a caixa de cadastro está visível
+    const loginBox    = document.getElementById('login-box');
+    const cadastroBox = document.getElementById('cadastro-box');
+    if (loginBox)    loginBox.style.display    = 'none';
+    if (cadastroBox) cadastroBox.style.display = 'flex';
+    // Rola até avaliações
+    document.getElementById('avaliacoes')?.scrollIntoView({ behavior: 'smooth' });
+});
+
+// ----- Trilho mobile (modo escuro) -----
+if (trilhoMobile) {
+    if (localStorage.getItem('tema') === 'dark') {
+        trilhoMobile.classList.add('dark');
+    }
+    trilhoMobile.addEventListener('click', () => {
+        const isDark = document.body.classList.toggle('dark');
+        trilhoMobile.classList.toggle('dark', isDark);
+        // Sincroniza trilho desktop
+        const trilhoDesktop = document.getElementById('trilho');
+        trilhoDesktop?.classList.toggle('dark', isDark);
+        localStorage.setItem('tema', isDark ? 'dark' : 'light');
+    });
+}
+
+// ----- Navbar: transparente no topo, com fundo ao rolar -----
+// (só aplica em mobile — a classe .scrolled é adicionada pelo scroll)
+const navbarEl = document.querySelector('.navbar');
+function atualizarNavbarScroll() {
+    if (window.innerWidth <= 768) {
+        navbarEl?.classList.toggle('scrolled', window.scrollY > 10);
+    } else {
+        navbarEl?.classList.remove('scrolled');
+    }
+}
+window.addEventListener('scroll', atualizarNavbarScroll, { passive: true });
+window.addEventListener('resize', atualizarNavbarScroll);
+atualizarNavbarScroll(); // roda na carga
+
 // ===== CARROSSEL =====
 let index = 0;
 const slides = document.querySelector('.slides');
