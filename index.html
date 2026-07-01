@@ -5,14 +5,15 @@
     <meta charset="UTF-8">
     <title>ESTÚDIO DA PRAÇA</title>
     <link rel="icon" type="image/png" href="favicon.png">
-    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Bungee&family=Imperial+Script&family=Unifraktu" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&family=Bungee&family=Imperial+Script&family=UnifrakturCook:wght@700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 
 <!-- LIGHTBOX GLOBAL -->
 <div id="lightbox" class="lightbox">
-  <span class="fechar">&times;</span>
+  <span class="fechar" id="fechar-lightbox">&times;</span>
   <button class="prev-img">&#10094;</button>
   <img class="lightbox-img" id="lightbox-img">
   <button class="next-img">&#10095;</button>
@@ -42,7 +43,7 @@ if (localStorage.getItem('tema') === 'dark') {
 
 <nav class="navbar">
 
-  <!-- DESKTOP: esquerda (menu ☰) -->
+  <!-- PC: esquerda (menu ☰) -->
   <div class="nav-left">
     <button class="menu-btn" id="menu-btn">☰</button>
     <div class="dropdown" id="dropdown">
@@ -53,15 +54,16 @@ if (localStorage.getItem('tema') === 'dark') {
     </div>
   </div>
 
-  <!-- DESKTOP: centro (links a href) -->
-  <div class="nav-center">    
-    <a href="#tatuadores">TATUADORES</a>
-    <a href="#recentes">TRABALHOS RECENTES</a>
-    <a href="#avaliacoes">AVALIAÇÕES</a>   
-    <a href="#footer">CONTATO</a>     
+  <!-- PC: centro (links a href) -->
+  <div class="nav-center">   
+    <a href="#">Localização</a>       
+    <a href="#tatuadores">Tatuadores</a>
+    <a href="#recentes">Trabalhos Recentes</a>
+    <a href="#avaliacoes">Avaliações</a>   
+    <a href="#footer">Contato</a>     
   </div>
 
-  <!-- DESKTOP: direita (logo) -->
+  <!-- PC: direita (logo) -->
   <div class="nav-right">
     <a href="#">
       <img src="logo-clara.png" class="logo-clara" alt="Logo">
@@ -85,29 +87,57 @@ if (localStorage.getItem('tema') === 'dark') {
     </button>
   </div>
 
-  <!-- MOBILE: gaveta lateral esquerda (links + modo escuro) -->
-  <div class="mobile-drawer" id="mobile-drawer">
+<div class="mobile-drawer" id="mobile-drawer">
     <div class="mobile-drawer-inner">
-      <a href="#tatuadores" class="drawer-link">TATUADORES</a>
-      <a href="#recentes"   class="drawer-link">TRABALHOS RECENTES</a>
-      <a href="#avaliacoes" class="drawer-link">AVALIAÇÕES</a>
-      <a href="#footer"     class="drawer-link">CONTATO</a>
-      <div class="drawer-tema">
-        <div class="trilho" id="trilho-mobile">
-          <div class="indicador"></div>
+
+        <a href="#tatuadores" class="drawer-link">
+            <img class="drawer-icon" src="arrow-up-right-svgrepo-com.svg" alt="">
+            Tatuadores
+        </a>
+        <a href="#recentes" class="drawer-link">
+            <img class="drawer-icon" src="arrow-up-right-svgrepo-com.svg" alt="">
+          Trabalhos Recentes
+        </a>
+        <a href="#avaliacoes" class="drawer-link">
+            <img class="drawer-icon" src="arrow-up-right-svgrepo-com.svg" alt="">
+            Avaliações
+        </a>
+        <a href="#footer" class="drawer-link">
+            <img class="drawer-icon" src="arrow-up-right-svgrepo-com.svg" alt="">
+            Contato
+        </a>
+
+        <div class="drawer-tema">
+            <div class="trilho" id="trilho-mobile">
+                <div class="indicador"></div>
+            </div>
+            <span>Modo escuro/claro</span>
         </div>
-        <span>Modo escuro/claro</span>
-      </div>
+
     </div>
-  </div>
+</div>
 
   <!-- MOBILE: gaveta lateral direita (user) -->
-  <div class="mobile-user-drawer" id="mobile-user-drawer">
+<div class="mobile-user-drawer" id="mobile-user-drawer">
     <div class="mobile-drawer-inner">
-      <button class="drawer-link drawer-user-link" id="drawer-ir-login">ENTRAR</button> <img src="arrow-up-right-svgrepo-com.svg" class="entrarsvg" id="entrarsvg" >
-      <button class="drawer-link drawer-user-link" id="drawer-ir-cadastro">CRIAR CONTA</button> <img src="exit-svgrepo-com.svg" class="criarcontasvg" id="criarcontasvg" >
+
+        <button class="drawer-link drawer-user-link" id="drawer-ir-login">
+            <img class="entrarsvg" src="arrow-up-right-svgrepo-com.svg" alt="">
+            Entrar
+        </button>
+
+        <button class="drawer-link drawer-user-link" id="drawer-ir-cadastro">
+            <img class="criarcontasvg" src="arrow-right-from-bracket-svgrepo-com.svg" alt="">
+            Criar Conta
+        </button>
+
+        <button class="drawer-link drawer-user-link" id="drawer-sair">
+          <img class="entrarsvg" src="exit-door-svgrepo-com.svg" alt="">
+          Sair
+        </button>
+        
     </div>
-  </div>
+</div>
 
   <!-- Overlay único compartilhado -->
   <div class="mobile-drawer-overlay" id="mobile-drawer-overlay"></div>
@@ -133,13 +163,13 @@ if (localStorage.getItem('tema') === 'dark') {
 <div class="container">
   <div class="card" id="tatuadores">
     <section>
-      <h1 class=tat-h1 >☯  TATUADORES  ☯</h1>
-      <h3 class=tat-h3 >♱ HENRIPSY ♱</h3>
+      <h1 class=tat-h1 >☯ Tatuadores ☯</h1>
+      <h3 class=tat-h2 >♱ Henripsy ♱</h3>
       <p class=tat-p >➣ A mais de 10 anos como tatuador, porém uma vida toda rabiscando esboços. Foco principal em trabalho em sketch, que seria um estilo com linhas soltas, e traços caóticos simulando rascunho, com muita hachura, rastelados, boldline e fine line.</p>
       <p class=tat-p >➣ Trazendo o sketch para temas religiosos de umbanda candomblé, com desenhos únicos e feitos exclusivamente para cada cliente.</p>
-    </section>
+    </section> <br>
     <section>
-      <h3 class=tat-h3 >꧁ঔৣ TRABALHOS ঔৣ꧂</h3>
+      <h3 class=tat-h3 >꧁ঔৣTrabalhosঔৣ꧂</h3>
       <div class="galeria">
         <img src="trab1.png" loading="lazy">
         <img src="trab2.png" loading="lazy">
@@ -151,7 +181,7 @@ if (localStorage.getItem('tema') === 'dark') {
     </section>
     <br>
     <section>
-      <h2 class="tat-h2">≪ FORMAS DE CONTATO ≫</h2>
+      <h2 class="tat-h4">≪ Formas de Contato ≫</h2>
       <div class="redes-card">
         <a href="https://www.instagram.com/henripsy/" target="_blank">
           <img src="insta.png" class="insta-icon" alt="Instagram" loading="lazy">
@@ -162,12 +192,12 @@ if (localStorage.getItem('tema') === 'dark') {
     <br><br>
 
     <section>
-      <h3 class=tat-h3 >☪ ALEATÓRIA ARTE ☪</h3>
+      <h3 class=tat-h2 >☪ 𝓐leatória 𝓐rte ☪</h3>
       <p class=tat-p >➣ Trabalho a 5 anos com tatuagem e uma vida toda com arte. Trabalho com diversos estilos, como blackwork, preto e cinza, colorido e tatuagens de pets, sempre criando peças personalizadas para cada cliente.</p>
       <p class=tat-p >➣ Atendo com foco nos detalhes, na qualidade e na experiência, seja sua primeira tattoo ou mais uma na coleção. Minha missão é simples: criar uma arte que faça sentido pra você e que você tenha orgulho de carregar.</p>
     </section>
     <section>
-      <h3 class=tat-h3 >꧁ঔৣ TRABALHOS ঔৣ꧂</h3>
+      <h3 class=tat-h3 >꧁ঔৣTrabalhosঔৣ꧂</h3>
       <div class="galeria">
         <img src="trab7.png" loading="lazy">
         <img src="trab8.png" loading="lazy">
@@ -177,21 +207,21 @@ if (localStorage.getItem('tema') === 'dark') {
     </section>
     <br>
     <section>
-      <h2 class="tat-h2">≪ FORMAS DE CONTATO ≫</h2>
+      <h2 class="tat-h4">≪ Formas de Contato ≫</h2>
       <div class="redes-card">
         <a href="https://www.instagram.com/aleatoriaartee" target="_blank">
-          <img src="insta.png" class="insta-icon" alt="Instagram" loading="lazy"> <br>
+          <img src="insta.png" class="insta-icon" alt="Instagram" loading="lazy"> <br><br>
         </a>
       </div>
     </section>
 
       <section>
-      <h3 class=tat-h3 >❀ BETTY TATTOO ❀</h3>
-      <p class=tat-p >➣ Trabalho a 5 anos com tatuagem e uma vida toda com arte. Trabalho com diversos estilos, como blackwork, preto e cinza, colorido e tatuagens de pets, sempre criando peças personalizadas para cada cliente.</p>
-      <p class=tat-p >➣ Atendo com foco nos detalhes, na qualidade e na experiência, seja sua primeira tattoo ou mais uma na coleção. Minha missão é simples: criar uma arte que faça sentido pra você e que você tenha orgulho de carregar.</p>
+      <h3 class=tat-h2 >❀ ℬett𝓎 Tattoo ❀</h3>
+      <p class=tat-p > </p>
+      <p class=tat-p > </p>
     </section>
     <section>
-      <h3 class=tat-h3 >꧁ঔৣ TRABALHOS ঔৣ꧂</h3>
+      <h3 class=tat-h3 >꧁ঔৣTrabalhosঔৣ꧂</h3>
       <div class="galeria">
         <img src="trab11.png" loading="lazy">
         <img src="trab12.png" loading="lazy">
@@ -201,7 +231,7 @@ if (localStorage.getItem('tema') === 'dark') {
     </section>
     <br>
     <section>
-      <h2 class="tat-h2">≪ FORMAS DE CONTATO ≫</h2>
+      <h2 class="tat-h4">≪ Formas de Contato ≫</h2>
       <div class="redes-card">
         <a href="https://www.instagram.com/betty.tattoo/" target="_blank">
           <img src="insta.png" class="insta-icon" alt="Instagram" loading="lazy"> <br>
@@ -219,7 +249,7 @@ if (localStorage.getItem('tema') === 'dark') {
 <div class="container container-pequeno">
   <div class="card" id="recentes">
     <section>
-      <h1 class="trabre-h1">-TRABALHOS RECENTES-</h1> 
+      <h1 class="trabre-h1">-Trabalhos Recentes-</h1> <br>
       <div class="galeria">
         <img src="img7.png" loading="lazy">
         <img src="img6.png" loading="lazy">
@@ -266,7 +296,7 @@ if (localStorage.getItem('tema') === 'dark') {
 <div class="container">
   <div class="card" id="avaliacoes">
     <section>
-      <h1 class="ava-h1">⛧ AVALIAÇÕES ⛧</h1>
+      <h1 class="ava-h1">⛧𝓐valiações⛧</h1>
       <h3>-O que nossos clientes dizem-</h3>
       <div id="resumo-avaliacoes"></div>
 
@@ -325,6 +355,7 @@ if (localStorage.getItem('tema') === 'dark') {
 
 <script src="script.js" type="module" defer></script>
 
+<!-- FOOTER -->
 
 <img src="bannerpretoebranco.png" class="banner" id="banner" >
 <footer id="footer">
@@ -356,7 +387,7 @@ if (localStorage.getItem('tema') === 'dark') {
         <span class="ft-pill">JavaScript</span>
       </div>
       <p class="ft-sub" style="margin-top:14px;">
-        Desenvolvido por<br>
+        Criado por<br>
         <strong class="ft-strong">Arthur Mesquita</strong> <br>
               <strong class="ft-strong">arthurmesq.gg@gmail.com</strong>
       </p>
