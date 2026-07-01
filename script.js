@@ -39,6 +39,7 @@ const mobileOverlay    = document.getElementById('mobile-drawer-overlay');
 const drawerLinks      = document.querySelectorAll('.drawer-link');
 const trilhoMobile     = document.getElementById('trilho-mobile');
 
+
 // ----- Abrir/fechar gavetas -----
 function fecharTodasGavetas() {
     mobileDrawer?.classList.remove('aberto');
@@ -79,6 +80,10 @@ drawerLinks.forEach(link => {
 // ----- Botões de login/cadastro na gaveta user -----
 document.getElementById('drawer-ir-login')?.addEventListener('click', () => {
     fecharTodasGavetas();
+document.getElementById('drawer-sair')?.addEventListener('click', async () => {
+    fecharTodasGavetas();
+    await signOut(auth);
+});
     // Garante que a caixa de login está visível
     const loginBox    = document.getElementById('login-box');
     const cadastroBox = document.getElementById('cadastro-box');
@@ -690,7 +695,7 @@ async function carregarAvaliacoes() {
                 <div class="nota-media">
                     <span class="nota-numero">${media}</span>
                     <div class="nota-estrelas">${'★'.repeat(mediaInteira)}${'☆'.repeat(5 - mediaInteira)}</div>
-                    <span class="nota-total">baseado em ${docs.length} avaliação${docs.length !== 1 ? 'ões' : ''}</span>
+                    <span class="nota-total">baseado em ${docs.length} avaliações</span>
                 </div>
             `;
         }
