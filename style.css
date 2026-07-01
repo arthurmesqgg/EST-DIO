@@ -8,13 +8,10 @@
     scroll-margin-top: 80px;
 }
 
-
-@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200;400;700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Anton&family=Bungee&family=Imperial+Script&family=Unifraktu');
-
 @font-face {
-    font-family: 'Unifraktu';
-    src: url('https://fonts.googleapis.com/css2?family=Anton&family=Bungee&family=Imperial+Script&family=Unifraktu') format('truetype');
+    font-family: 'UnifrakturMaguntia';
+    src: url('https://fonts.google.com/specimen/UnifrakturMaguntia?preview.script=Latn') format('truetype');
+    font-display: swap; /* melhora performance no celular */
 }
 
 html {
@@ -23,7 +20,7 @@ html {
 
 body {
     margin: 0;
-    font-family: 'Unifraktu'; /* Fonte para títulos */
+    font-family: 'UnifraktuMaguntia', serif;
     letter-spacing: 0.5px;
     color: var(--text);
     text-align: center;
@@ -48,7 +45,7 @@ body {
     justify-content: space-between;
     padding: 0 24px;
     z-index: 1000;
-    background: rgba(0,0,0,0);
+    background: var(--navbar-bg, var(--card)); 
     box-shadow: 0 0 0 rgba(0,0,0,0);
 
     transition:
@@ -64,12 +61,10 @@ body {
     height: 70px;
     padding: 0 16px;
     box-shadow: 0 4px 20px rgba(0,0,0,.3);
+    background: var(--navbar-bg, var(--card));    
 }
 
 .navbar.scrolled {
-    background: var(--navbar-bg, var(--card));
-    backdrop-filter: blur(18px);
-    -webkit-backdrop-filter: blur(18px);
     box-shadow: 0 10px 35px rgba(0,0,0,.35);
 }
 
@@ -86,7 +81,7 @@ body {
     left: 50%;
     transform: translateX(-50%);
     display: flex;
-    gap: 24px;
+    gap: 25px;
     align-items: center;
     letter-spacing: 2px;
     transition: font-size 0.3s ease;
@@ -97,11 +92,13 @@ body {
     filter: drop-shadow(0 0 18px rgba(255, 255, 255, 0.85));
     justify-content: center;
     justify-items: center;
-    font-size: 17px;
+    font-size: 18px;
     color: var(--text);
     text-decoration: none;
+    font-family: 'UnifrakturMaguntia', serif;
+    font-size: 25px;
     transition: 0.3s;
-    height: 30px; 
+    height: 25px; 
 }
 
 .nav-center a:hover {
@@ -109,7 +106,7 @@ body {
 }
 
 .navbar.shrink .nav-center a {
-    font-size: 14px;
+    font-size: 16px;
     height: 15px;    
 }
 
@@ -186,7 +183,7 @@ body {
 
 /* ===== TIPOGRAFIA ===== */
 h1, h2, h3 {
-    font-family: 'swap'; /* Fonte para textos */
+    font-family: 'UnifrakturMaguntia', serif;
     color: var(--text);
     transition: all 0.5s ease;
     letter-spacing: 1px;
@@ -217,19 +214,46 @@ h1 { font-size: 65px; margin-bottom: 20px; letter-spacing: 2px; }
 }
 
 .tat-h1 {
+    letter-spacing: 6px;
+    font-size: 110px;
     filter: brightness(1) invert(0) drop-shadow(0 0 8px rgb(255, 255, 255));
     filter: brightness(1) invert(0) drop-shadow(0 0 18px rgb(255, 255, 255));
 }
 
+.tat-h2 {
+    font-size: 50px;    
+    filter: brightness(1) invert(0) drop-shadow(0 0 8px rgb(255, 255, 255));
+    filter: brightness(1) invert(0) drop-shadow(0 0 18px rgb(255, 255, 255));    
+
+}
+
+.tat-h3 {
+    font-size: 55px;    
+    letter-spacing: 3px;    
+    filter: brightness(1) invert(0) drop-shadow(0 0 8px rgb(255, 255, 255));
+    filter: brightness(1) invert(0) drop-shadow(0 0 18px rgb(255, 255, 255));    
+}
+
+.tat-h4 {
+    letter-spacing: 3px;
+    font-size: 55px;    
+    filter: brightness(1) invert(0) drop-shadow(0 0 8px rgb(255, 255, 255));
+    filter: brightness(1) invert(0) drop-shadow(0 0 18px rgb(255, 255, 255));    
+}
+
 .trabre-h1 {
+    font-size: 110px;
     filter: brightness(1) invert(0) drop-shadow(0 0 8px rgb(255, 255, 255));
     filter: brightness(1) invert(0) drop-shadow(0 0 18px rgb(255, 255, 255));
 }
 
 .ava-h1 {
+    font-size: 110px;    
+    letter-spacing: 6px;    
     filter: brightness(1) invert(0) drop-shadow(0 0 8px rgb(255, 255, 255));
     filter: brightness(1) invert(0) drop-shadow(0 0 18px rgb(255, 255, 255));
 }
+
 
 /* ===== CONTAINER ===== */
 .container {
@@ -293,6 +317,7 @@ p {
 
 .prev { left: 10px; }
 .next { right: 10px; }
+
 
 
 /* ===== VIDEO ===== */
@@ -453,7 +478,7 @@ body:not(.dark) .card section a img:hover {
 
 /* Modo escuro — inverte a imagem para branco, sombra branca */
 body.dark .card section a img {
-    filter: brightness(0) invert(1) drop-shadow(0 0 8px rgba(255, 255, 255, 0.3));
+    filter: brightness(0) invert(1) drop-shadow(0 0 8px rgba(255, 255, 255, 0.603));
 }
 
 body.dark .card section a img:hover {
@@ -583,13 +608,15 @@ body.dark .logo-escura {
 }
 
 body.dark {
-    --bg: linear-gradient(180deg, #000000, #111111);
+    --bg: linear-gradient(180deg, #000000, #000000);
     --text: #e0e0e0;
     --card: #111111;
     --accent: #ffffff;
 }
 
 /* ===== AVALIAÇÕES ===== */
+
+
 .h1 {
     font-size: 39px;
     margin-bottom: 6px;
@@ -638,7 +665,7 @@ body.dark {
     background: var(--background);
     color: var(--text);
     font-size: 15px;
-    font-family: 'Unifraktu';
+    font-family: 'UnifrakturMaguntia', serif;
     letter-spacing: 1px;
     cursor: pointer;
     transition: 0.2s;
@@ -744,7 +771,7 @@ body.dark {
 
 .av-nome {
     filter: drop-shadow(0 0 18px rgba(255, 255, 255, 0.85));
-    font-family: 'swap';
+    font-family: 'TrajanPro', serif ;
     letter-spacing: 1px;
     font-size: 21px;
     color: var(--text);
@@ -756,12 +783,13 @@ body.dark {
 }
 
 .av-data {
+    font-family: 'TrajanPro', serif ;    
     font-size: 12px;
     color: #6b6b6b;
 }
 
 .av-texto {
-    font-family: 'swap';
+    font-family: 'TrajanPro', serif ;
     font-size: 15px;
     line-height: 1.6;
     margin: 0;
@@ -794,7 +822,7 @@ body.dark {
 
 .nota-numero {
     filter: drop-shadow(0 0 18px rgba(255, 255, 255, 0.85));
-    font-family: 'Anton', sans-serif;
+    font-family: 'TrajanPro', sans-serif;
     font-size: 52px;
     letter-spacing: 2px;
     color: var(--text);
@@ -810,7 +838,7 @@ body.dark {
 .nota-total {
     font-size: 13px;
     color: #888;
-    font-family: 'Roboto', sans-serif;
+    font-family: 'TrajanPro', sans-serif;
 }
 
 /* ===== MENU DE OPÇÕES DA AVALIAÇÃO ===== */
@@ -913,7 +941,7 @@ body.dark {
 
 
 .modal-texto {
-    font-family: 'swap';
+    font-family: 'UnifrakturMaguntia', serif;
     font-size: 20px;
     letter-spacing: 1px;
     color: var(--text);
@@ -963,6 +991,7 @@ footer p {
 }
 
 .ft-title {
+    font-family: 'UnifrakturMaguntia', serif;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -1061,25 +1090,29 @@ footer p {
 
 /* ===== CELULAR (galaxy e xr) ===== */
 @media (max-width: 414px) {
-    
+
+
+    /* CORPO */
+
+    .body {
+    font-family: 'UnifrakturMaguntia', serif;
+    }
+
     :root {
-    --bg: linear-gradient(180deg, #fafafa, #fafafa);
+    --bg: linear-gradient(180deg, #fdfdfd, #fdfdfd);
     --text: #000000;
     --card: #ffffff;
     --accent: #000000;
-}
-
-body.dark {
-    --bg: linear-gradient(180deg, #0f0f0f, #1a1a1a);
-    --text: #e0e0e0;
-    --card: #1e1e1e;
-    --accent: #ffffff;
-}
-
-
-    .body {
-        font-family: 'Unifraktu';
     }
+
+    body.dark {
+    --bg: linear-gradient(180deg, #000000, #111111);
+    --text: #e0e0e0;
+    --card: #111111;
+    --accent: #ffffff;
+    }
+
+    /* NAVBAR */
 
     .navbar {
         flex-wrap: wrap;
@@ -1133,36 +1166,69 @@ body.dark {
     /* TIPOGRAFIA  */  
 
     h1, h2, h3 {
-    font-family: 'swap';
-    }
-
-    .ava-h1 {
-        font-size: 36px;
-    }
-
-    .tat-h1 {
-        font-size: 36px;
-    }
-
-    .tat-h3 {
-        font-size: 22px;
+    font-family: 'UnifrakturMaguntia', serif;
     }
 
     .tat-p {
         font-size: 16px;
-        letter-spacing: normal;
+        letter-spacing: normal;        
+        font-family: 'TrajanPro', serif ;
     }
 
-    .trabre-h1{
+    .tat-h1 {
         font-size: 38px;
     }
-  
+
+    .tat-h2 {
+        font-size: 35px;
+    }
+
+    .tat-h3 {
+        font-size: 33px;
+    }
+
+    .tat-h4 {
+        font-size: 28px;
+    }    
+
+    .trabre-h1{
+        font-size: 50px;
+    }
+
+    .ava-h1 {
+        font-size: 44px;
+    }
+
+    /* CARDS */
+
     .card {
         padding: 15px 16px;
     }
+
+    .card img {
+        border-radius: 5px;
+    }    
+
+    .redes-card {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+    }
+
+    .container {
+        padding: 10px;
+        max-width: 100%;
+    }    
+
     
     /* GALERIA E CARROSSEL */
 
+    .galeria {
+        border-radius: 5px;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+    }
 
     .galeria img {
         width: 100%;
@@ -1172,28 +1238,27 @@ body.dark {
         border-radius: 10px;        
     }
 
-    .card img {
-        border-radius: 5px;
-    }
 
     .slides img {
         height: 650px;
         border-radius: 0;
     }
 
-    .redes-card {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 100%;
+    .lightbox-img {
+        border-radius: 5px;
+        max-width: 95%;
+        max-height: 80%;
     }
-
 
     /* Footer */
     
+    footer {
+        padding: 32px 20px 20px;
+    }
+
     footer p {
     border-left: none;
-}
+    }
 
     .banner {
         height: 270px;
@@ -1209,32 +1274,6 @@ body.dark {
         flex-direction: column;
         align-items: center;
         text-align: center;
-    }
-
-    footer {
-        padding: 32px 20px 20px;
-    }
-
-
-    .container {
-        padding: 10px;
-        max-width: 100%;
-    }
-
-    .card {
-        padding: 15px 16px;
-    }
-
-    .galeria {
-        border-radius: 5px;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 8px;
-    }
-
-    .lightbox-img {
-        border-radius: 5px;
-        max-width: 95%;
-        max-height: 80%;
     }
 
     .fechar {
@@ -1260,213 +1299,27 @@ body.dark {
 /* ===== CELULAR (galaxy e xr) ===== */
 @media (max-width: 402px) {
 
-        :root {
-    --bg: linear-gradient(180deg, #fafafa, #fafafa);
-    --text: #000000;
-    --card: #ffffff;
-    --accent: #000000;
-}
-
-body.dark {
-    --bg: linear-gradient(180deg, #0f0f0f, #1a1a1a);
-    --text: #e0e0e0;
-    --card: #1e1e1e;
-    --accent: #ffffff;
-}
-
-
+    /* CORPO */
 
     .body {
-        font-family: 'Unifraktu';
+    font-family: 'UnifrakturMaguntia', serif;
     }
-
-    .navbar {
-        flex-wrap: wrap;
-        height: auto;
-        padding: 10px 16px;
-        gap: 4px;
-        align-items: center;
-    }
-
-    .navbar.shrink {
-        height: auto;
-        padding: 8px 16px;
-    }
-
-
-
-    .nav-center {
-        order: 3;
-        position: static;
-        transform: none;
-        width: 100%;
-        justify-items: center;
-        justify-content: center;
-        gap: 18px;
-        flex-wrap: wrap;
-        padding: 4px 0 6px;
-    }
-
-    .nav-center a {
-        font-size: 13px;
-    }
-
-    .dropdown {
-        order: 4;
-        position: static;
-        width: 100%;
-        border-radius: 8px;
-        box-shadow: none;
-        padding: 10px 0;
-        justify-content: center;
-    }
-
-    .dropdown.aberto {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 10px;
-    }
-
-    /* TIPOGRAFIA  */  
-
-    h1, h2, h3 {
-    font-family: 'swap';
-    }
-
-    .tat-h1 {
-        font-size: 35px;
-    }
-
-    .tat-h3 {
-        font-size: 22px;
-    }
-
-    .tat-p {
-        font-size: 16px;
-        letter-spacing: normal;
-    }
-  
-
-    .card {
-        padding: 15px 16px;
-    }
-    
-    /* GALERIA E CARROSSEL */
-
-
-    .galeria img {
-        width: 100%;
-        aspect-ratio: 1 / 1;
-        height: 260px;
-        object-fit: cover;
-        border-radius: 10px;        
-    }
-
-    .card img {
-        border-radius: 5px;
-    }
-
-    .slides img {
-        height: 320px;
-        border-radius: 0;
-    }
-
-    .redes-card {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 100%;
-    }
-
-    .ava-h1 {
-        font-size: 30px;
-    }
-
-    /* Footer */
-    
-    footer p {
-    border-left: none;
-}
-
-    .ft-grid {
-        grid-template-columns: 1fr;
-        gap: 24px;
-        text-align: center;
-    }
-
-    .ft-bottom {
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
-    }
-
-    footer {
-        padding: 32px 20px 20px;
-    }
-
-
-    .container {
-        padding: 10px;
-        max-width: 100%;
-    }
-
-    .card {
-        padding: 15px 16px;
-    }
-
-    .galeria {
-        border-radius: 5px;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 8px;
-    }
-
-    .lightbox-img {
-        border-radius: 5px;
-        max-width: 95%;
-        max-height: 80%;
-    }
-
-    .fechar {
-        top: 10px;
-        right: 15px;
-        font-size: 30px;
-    }
-
-    .prev-img,
-    .next-img {
-        display: none;
-    }
-}
-
-@media (max-width: 600px) {
-    h1 { font-size: 30px; }
-    h2 { font-size: 24px; }
-    h3 { font-size: 17px; }
-    p  { font-size: 15px; }
-}
-
-/* ===== CELULAR (iphone 14, 15, 16 iOS, galaxys10) ===== */
-@media (max-width: 393px) {
 
     :root {
-    --bg: linear-gradient(180deg, #fafafa, #fafafa);
+    --bg: linear-gradient(180deg, #fdfdfd, #fdfdfd);
     --text: #000000;
     --card: #ffffff;
     --accent: #000000;
-}
-
-body.dark {
-    --bg: linear-gradient(180deg, #0f0f0f, #1a1a1a);
-    --text: #e0e0e0;
-    --card: #1e1e1e;
-    --accent: #ffffff;
-}
-
-
-    .body {
-        font-family: 'Unifraktu';
     }
+
+    body.dark {
+    --bg: linear-gradient(180deg, #000000, #111111);
+    --text: #e0e0e0;
+    --card: #111111;
+    --accent: #ffffff;
+    }
+
+    /* NAVBAR */
 
     .navbar {
         flex-wrap: wrap;
@@ -1520,51 +1373,48 @@ body.dark {
     /* TIPOGRAFIA  */  
 
     h1, h2, h3 {
-    font-family: 'swap';
-    }
-
-    .tat-h1 {
-        font-size: 30px;
-    }
-
-    .tat-h2 {
-        font-size: 21px;
-    }
-
-    .tat-h3 {
-        font-size: 22px;
-    }
-
-    .trabre-h1{
-        font-size: 35px;
+    font-family: 'UnifrakturMaguntia', serif;
     }
 
     .tat-p {
         font-size: 16px;
-        letter-spacing: normal;
+        letter-spacing: normal;        
+        font-family: 'TrajanPro', serif ;
     }
-  
+
+    .tat-h1 {
+        font-size: 38px;
+    }
+
+    .tat-h2 {
+        font-size: 31px;
+    }
+
+    .tat-h3 {
+        font-size: 33px;
+    }
+
+    .tat-h4 {
+        font-size: 32px;
+    }    
+
+    .trabre-h1{
+        font-size: 50px;
+    }
+
     .ava-h1 {
-        font-size: 30px;
+        font-size: 44px;
     }
+
+    /* CARDS */
 
     .card {
         padding: 15px 16px;
     }
-    
-    /* GALERIA E CARROSSEL */
 
-
-    .galeria img {
-        width: 100%;
-        aspect-ratio: 1 / 1;
-        height: 260px;
-        object-fit: cover;      
-    }
-
-    .slides img {
-        height: 400px;
-    }
+    .card img {
+        border-radius: 5px;
+    }    
 
     .redes-card {
         display: flex;
@@ -1573,19 +1423,53 @@ body.dark {
         width: 100%;
     }
 
+    .container {
+        padding: 10px;
+        max-width: 100%;
+    }    
+
+    
+    /* GALERIA E CARROSSEL */
+
+    .galeria {
+        border-radius: 5px;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+    }
+
+    .galeria img {
+        width: 100%;
+        aspect-ratio: 1 / 1;
+        height: 260px;
+        object-fit: cover;
+        border-radius: 10px;        
+    }
+
+
+    .slides img {
+        height: 650px;
+        border-radius: 0;
+    }
+
+    .lightbox-img {
+        border-radius: 5px;
+        max-width: 95%;
+        max-height: 80%;
+    }
+
     /* Footer */
     
+    footer {
+        padding: 32px 20px 20px;
+    }
+
     footer p {
     border-left: none;
-}
+    }
 
-   .banner {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 100%;
-   }
-
+    .banner {
+        height: 270px;
+    }
 
     .ft-grid {
         grid-template-columns: 1fr;
@@ -1597,32 +1481,6 @@ body.dark {
         flex-direction: column;
         align-items: center;
         text-align: center;
-    }
-
-    footer {
-        padding: 32px 20px 20px;
-    }
-
-
-    .container {
-        padding: 10px;
-        max-width: 100%;
-    }
-
-    .card {
-        padding: 15px 16px;
-    }
-
-    .galeria {
-        border-radius: 5px;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 8px;
-    }
-
-    .lightbox-img {
-        border-radius: 5px;
-        max-width: 95%;
-        max-height: 80%;
     }
 
     .fechar {
@@ -1644,6 +1502,214 @@ body.dark {
     p  { font-size: 15px; }
 }
 
+/* ===== CELULAR (iphone 14, 15, 16 iOS, galaxys10) ===== */
+@media (max-width: 393px) {
+
+    /* CORPO */
+
+    .body {
+    font-family: 'UnifrakturMaguntia', serif;
+    }
+
+    :root {
+    --bg: linear-gradient(180deg, #fdfdfd, #fdfdfd);
+    --text: #000000;
+    --card: #ffffff;
+    --accent: #000000;
+    }
+
+    body.dark {
+    --bg: linear-gradient(180deg, #000000, #111111);
+    --text: #e0e0e0;
+    --card: #111111;
+    --accent: #ffffff;
+    }
+
+    /* NAVBAR */
+
+    .navbar {
+        flex-wrap: wrap;
+        height: auto;
+        padding: 10px 16px;
+        gap: 4px;
+        align-items: center;
+    }
+
+    .navbar.shrink {
+        height: auto;
+        padding: 8px 16px;
+    }
+
+    .nav-left  { order: 1; flex-shrink: 0; }
+    .nav-right { order: 2; flex-shrink: 0; }
+
+    .nav-center {
+        order: 3;
+        position: static;
+        transform: none;
+        width: 100%;
+        justify-items: center;
+        justify-content: center;
+        gap: 18px;
+        flex-wrap: wrap;
+        padding: 4px 0 6px;
+    }
+
+    .nav-center a {
+        font-size: 13px;
+    }
+
+    .dropdown {
+        order: 4;
+        position: static;
+        width: 100%;
+        border-radius: 8px;
+        box-shadow: none;
+        padding: 10px 0;
+        justify-content: center;
+    }
+
+    .dropdown.aberto {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+    }
+
+    /* TIPOGRAFIA  */  
+
+    h1, h2, h3 {
+    font-family: 'UnifrakturMaguntia', serif;
+    }
+
+    .tat-p {
+        font-size: 16px;
+        letter-spacing: normal;        
+        font-family: 'TrajanPro', serif ;
+    }
+
+    .tat-h1 {
+        font-size: 38px;
+    }
+
+    .tat-h2 {
+        font-size: 31px;
+    }
+
+    .tat-h3 {
+        font-size: 33px;
+    }
+
+    .tat-h4 {
+        font-size: 32px;
+    }    
+
+    .trabre-h1{
+        font-size: 50px;
+    }
+
+    .ava-h1 {
+        font-size: 44px;
+    }
+
+    /* CARDS */
+
+    .card {
+        padding: 15px 16px;
+    }
+
+    .card img {
+        border-radius: 5px;
+    }    
+
+    .redes-card {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+    }
+
+    .container {
+        padding: 10px;
+        max-width: 100%;
+    }    
+
+    
+    /* GALERIA E CARROSSEL */
+
+    .galeria {
+        border-radius: 5px;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+    }
+
+    .galeria img {
+        width: 100%;
+        aspect-ratio: 1 / 1;
+        height: 260px;
+        object-fit: cover;
+        border-radius: 10px;        
+    }
+
+
+    .slides img {
+        height: 650px;
+        border-radius: 0;
+    }
+
+    .lightbox-img {
+        border-radius: 5px;
+        max-width: 95%;
+        max-height: 80%;
+    }
+
+    /* Footer */
+    
+    footer {
+        padding: 32px 20px 20px;
+    }
+
+    footer p {
+    border-left: none;
+    }
+
+    .banner {
+        height: 270px;
+    }
+
+    .ft-grid {
+        grid-template-columns: 1fr;
+        gap: 24px;
+        text-align: center;
+    }
+
+    .ft-bottom {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .fechar {
+        top: 10px;
+        right: 15px;
+        font-size: 30px;
+    }
+
+    .prev-img,
+    .next-img {
+        display: none;
+    }
+}
+
+@media (max-width: 600px) {
+    h1 { font-size: 30px; }
+    h2 { font-size: 24px; }
+    h3 { font-size: 17px; }
+    p  { font-size: 15px; }
+}
+
+
+
 /* ===== MOBILE NAVBAR ===== */
 .mobile-navbar,
 .mobile-drawer,
@@ -1664,13 +1730,10 @@ body.dark {
     .navbar {
         height: 70px;
         padding: 0;
-        /* Sem background nem filtros quando no topo — o site "respira" */
-        background: transparent;
         box-shadow: none;
         transition: background 0.3s ease, box-shadow 0.3s ease, height 0.3s ease;
     }
 
-    /* Quando rola a página, mostra o fundo */
     .navbar.scrolled {
         background: var(--card);
         box-shadow: 0 2px 12px rgba(0,0,0,0.2);
@@ -1691,7 +1754,7 @@ body.dark {
         position: relative;
     }
 
-    /* Logo centralizada absolutamente */
+    /* Logo centralizada */
     .mobile-logo {
         position: absolute;
         left: 50%;
@@ -1702,13 +1765,16 @@ body.dark {
     }
 
     .mobile-logo img {
-        height: 52px;
+        height: 60px;
         width: auto;
         transition: height 0.3s ease;
+        image-rendering: -webkit-optimize-contrast;
+        backface-visibility: hidden;
+        transform: translateZ(0);
     }
 
     .navbar.shrink .mobile-logo img {
-        height: 40px;
+        height: 50px;
     }
 
     /* Botão ☰ */
@@ -1727,7 +1793,7 @@ body.dark {
 
     .mobile-menu-btn:active { transform: scale(0.9); }
 
-    /* Botão 👤 (ícone SVG) */
+    /* Botão user (ícone SVG) */
     .mobile-user-btn {
         background: transparent;
         border: none;
@@ -1749,8 +1815,8 @@ body.dark {
         position: fixed;
         top: 0;
         left: 0;
-        width: 72vw;
-        max-width: 280px;
+        width: 150vw;
+        max-width: 330px;
         height: 100dvh;
         background: var(--card);
         z-index: 2000;
@@ -1783,61 +1849,99 @@ body.dark {
         transform: translateX(0);
     }
 
-    .entrarsvg {
-        width: 20px;
-    }
-
-    .criarcontasvg {
-        width: 20px;
-    }
-
-
     /* Inner de ambas as gavetas */
     .mobile-drawer-inner {
         display: flex;
         flex-direction: column;
         padding: 80px 0 32px;
         height: 100%;
+        font-size: 250px;        
     }
 
-    /* Links das gavetas */
+    /* ===== LINKS DA GAVETA ESQUERDA ===== */
     .drawer-link {
-        font-family: 'swap';
-        font-size: 18px;
+        white-space: nowrap;
+        font-family: 'UnifrakturMaguntia', serif;
+        font-size: 25px;
         letter-spacing: 2px;
         color: var(--text);
         text-decoration: none;
         padding: 18px 28px;
         border-bottom: 1px solid rgba(128,128,128,0.15);
-        transition: background 0.2s, padding-left 0.2s;
+        transition: background 0.2s;
         -webkit-tap-highlight-color: transparent;
-        text-align: left;
-        display: block;
+        display: flex;
+        align-items: center;
+        gap: 12px;
     }
 
-    /* Botões da gaveta user */
-    .drawer-user-link {
-        background: none;
-        border: none;
-        border-bottom: 1px solid rgba(128,128,128,0.15);
-        cursor: pointer;
-        width: 100%;
-        font-family: 'swap';
-        font-size: 18px;
-        letter-spacing: 2px;
-        color: var(--text);
-        padding: 18px 28px;
-        text-align: left;
+    .drawer-link:last-of-type {
+        border-bottom: none;
     }
 
     .drawer-link:active,
-    .drawer-link:hover,
+    .drawer-link:hover {
+        background: rgba(128,128,128,0.1);
+    }
+
+    /* Ícone dentro dos links */
+    .drawer-icon {
+        width: 18px;
+        height: 18px;
+        flex-shrink: 0;
+        filter: brightness(0) invert(1);
+    }
+
+    body:not(.dark) .drawer-icon {
+        filter: brightness(0);
+    }
+
+    /* ===== BOTÕES DA GAVETA DIREITA (user) ===== */
+    .drawer-user-link {
+    font-family: 'UnifrakturMaguntia', serif;
+        font-size: 25px;
+        letter-spacing: 2px;
+        color: var(--text);
+        padding: 18px 28px;
+        border-bottom: 1px solid rgba(128,128,128,0.15);
+        transition: background 0.2s;
+        -webkit-tap-highlight-color: transparent;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        background: none;
+        border-left: none;
+        border-right: none;
+        border-top: none;
+        cursor: pointer;
+        width: 100%;
+        text-align: left;
+    }
+
+    .drawer-user-link:last-of-type {
+        border-bottom: 1px solid rgba(128,128,128,0.15);
+    }
+
     .drawer-user-link:active,
     .drawer-user-link:hover {
         background: rgba(128,128,128,0.1);
     }
 
-    /* Toggle modo escuro dentro da gaveta */
+    /* Ícones da gaveta user */
+    .entrarsvg,
+    .criarcontasvg {
+        width: 18px;
+        height: 18px;
+        flex-shrink: 0;
+        filter: brightness(0) invert(1);
+    }
+
+    body:not(.dark) .entrarsvg,
+    body:not(.dark) .criarcontasvg {
+        filter: brightness(0);
+    }
+
+    /* ===== TOGGLE MODO ESCURO ===== */
     .drawer-tema {
         display: flex;
         align-items: center;
@@ -1848,13 +1952,13 @@ body.dark {
     }
 
     .drawer-tema span {
-        font-size: 13px;
+        white-space: nowrap;
+        font-size: 21px;
         color: var(--text);
         opacity: 0.7;
-        font-family: 'swap';
+        font-family: 'UnifrakturMaguntia', serif;
     }
 
-    /* Trilho dentro da gaveta */
     .drawer-tema .trilho {
         width: 80px;
         height: 50px;
@@ -1873,7 +1977,6 @@ body.dark {
     }
 
     /* ===== OVERLAY ===== */
-    /* O overlay cobre TODO o site, bloqueando cliques */
     .mobile-drawer-overlay {
         display: block;
         position: fixed;
@@ -1883,15 +1986,13 @@ body.dark {
         opacity: 0;
         pointer-events: none;
         transition: opacity 0.3s ease;
-        /* Sem backdrop-filter aqui — o blur era incompleto quando não no topo */
     }
 
     .mobile-drawer-overlay.aberto {
         opacity: 1;
-        pointer-events: all; /* bloqueia TODOS os cliques no site */
+        pointer-events: all;
     }
 
-    /* Padding top do body para compensar a navbar fixa */
     body {
         padding-top: 70px;
     }
