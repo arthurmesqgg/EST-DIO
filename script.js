@@ -1,3 +1,4 @@
+cat > /mnt/user-data/outputs/script.js << 'ENDOFFILE'
 // ===== FIREBASE SETUP =====
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
@@ -16,7 +17,7 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db   = getFirestore(app);
 
-// ===== TOGGLE MENU =====
+// ===== TOGGLE MENU DESKTOP =====
 const menuBtn  = document.getElementById('menu-btn');
 const dropdown = document.getElementById('dropdown');
 
@@ -39,8 +40,6 @@ const mobileOverlay    = document.getElementById('mobile-drawer-overlay');
 const drawerLinks      = document.querySelectorAll('.drawer-link');
 const trilhoMobile     = document.getElementById('trilho-mobile');
 
-
-// ----- Abrir/fechar gavetas -----
 function fecharTodasGavetas() {
     mobileDrawer?.classList.remove('aberto');
     mobileUserDrawer?.classList.remove('aberto');
@@ -69,42 +68,37 @@ mobileUserBtn?.addEventListener('click', (e) => {
         : abrirGaveta(mobileUserDrawer);
 });
 
-// Overlay fecha qualquer gaveta
 mobileOverlay?.addEventListener('click', fecharTodasGavetas);
 
-// Links fecham a gaveta e navegam
 drawerLinks.forEach(link => {
     link.addEventListener('click', fecharTodasGavetas);
 });
 
-// ----- Botões de login/cadastro na gaveta user -----
+// Botões da gaveta user
 document.getElementById('drawer-ir-login')?.addEventListener('click', () => {
     fecharTodasGavetas();
-document.getElementById('drawer-sair')?.addEventListener('click', async () => {
-    fecharTodasGavetas();
-    await signOut(auth);
-});
-    // Garante que a caixa de login está visível
     const loginBox    = document.getElementById('login-box');
     const cadastroBox = document.getElementById('cadastro-box');
     if (loginBox)    loginBox.style.display    = 'flex';
     if (cadastroBox) cadastroBox.style.display = 'none';
-    // Rola até avaliações
     document.getElementById('avaliacoes')?.scrollIntoView({ behavior: 'smooth' });
 });
 
 document.getElementById('drawer-ir-cadastro')?.addEventListener('click', () => {
     fecharTodasGavetas();
-    // Garante que a caixa de cadastro está visível
     const loginBox    = document.getElementById('login-box');
     const cadastroBox = document.getElementById('cadastro-box');
     if (loginBox)    loginBox.style.display    = 'none';
     if (cadastroBox) cadastroBox.style.display = 'flex';
-    // Rola até avaliações
     document.getElementById('avaliacoes')?.scrollIntoView({ behavior: 'smooth' });
 });
 
-// ----- Trilho mobile (modo escuro) -----
+document.getElementById('drawer-sair')?.addEventListener('click', async () => {
+    fecharTodasGavetas();
+    await signOut(auth);
+});
+
+// Trilho mobile
 if (trilhoMobile) {
     if (localStorage.getItem('tema') === 'dark') {
         trilhoMobile.classList.add('dark');
@@ -112,49 +106,80 @@ if (trilhoMobile) {
     trilhoMobile.addEventListener('click', () => {
         const isDark = document.body.classList.toggle('dark');
         trilhoMobile.classList.toggle('dark', isDark);
-        // Sincroniza trilho desktop
         const trilhoDesktop = document.getElementById('trilho');
         trilhoDesktop?.classList.toggle('dark', isDark);
         localStorage.setItem('tema', isDark ? 'dark' : 'light');
     });
 }
 
-// ----- Navbar: transparente no topo, com fundo ao rolar -----
-// (só aplica em mobile — a classe .scrolled é adicionada pelo scroll)
+// Navbar scrolled (mobile)
 const navbarEl = document.querySelector('.navbar');
 function atualizarNavbarScroll() {
     if (window.innerWidth <= 768) {
         navbarEl?.classList.toggle('scrolled', window.scrollY > 10);
+        navbarEl?.classList.toggle('shrink', window.scrollY > 35);
     } else {
+        navbarEl?.classList.toggle('shrink', window.scrollY > 50);
         navbarEl?.classList.remove('scrolled');
     }
 }
 window.addEventListener('scroll', atualizarNavbarScroll, { passive: true });
 window.addEventListener('resize', atualizarNavbarScroll);
-atualizarNavbarScroll(); // roda na carga
+atualizarNavbarScroll();
 
-// ===== CARROSSEL =====
-let index = 0;
-const slides = document.querySelector('.slides');
-const totalSlides = document.querySelectorAll('.slides img').length;
+// ===== CARROSSEL COM SWIPE =====
+let carrosselIndex = 0;
+const slidesEl     = document.querySelector('.slides');
+const totalSlides  = document.querySelectorAll('.slides img').length;
+let carrosselAuto;
+let cTouchStartX = 0;
+let cTouchDeltaX = 0;
+let isDraggingCarrossel = false;
 
-document.querySelector('.next').onclick = () => {
-    index = (index + 1) % totalSlides;
-    updateSlide();
-};
-document.querySelector('.prev').onclick = () => {
-    index = (index - 1 + totalSlides) % totalSlides;
-    updateSlide();
-};
-function updateSlide() {
-    slides.style.transform = `translateX(-${index * 100}%)`;
+function irParaSlide(n, animado = true) {
+    carrosselIndex = (n + totalSlides) % totalSlides;
+    slidesEl.style.transition = animado
+        ? 'transform 0.45s cubic-bezier(0.4,0,0.2,1)'
+        : 'none';
+    slidesEl.style.transform = `translateX(-${carrosselIndex * 100}%)`;
+    reiniciarAuto();
 }
-setInterval(() => {
-    index = (index + 1) % totalSlides;
-    updateSlide();
-}, 3000);
 
-// ===== MODO ESCURO / CLARO =====
+function reiniciarAuto() {
+    clearInterval(carrosselAuto);
+    carrosselAuto = setInterval(() => irParaSlide(carrosselIndex + 1), 4000);
+}
+
+document.querySelector('.next')?.addEventListener('click', () => irParaSlide(carrosselIndex + 1));
+document.querySelector('.prev')?.addEventListener('click', () => irParaSlide(carrosselIndex - 1));
+
+const carrosselEl = document.querySelector('.carousel');
+if (carrosselEl) {
+    carrosselEl.addEventListener('touchstart', (e) => {
+        cTouchStartX = e.touches[0].clientX;
+        isDraggingCarrossel = true;
+        slidesEl.style.transition = 'none';
+    }, { passive: true });
+
+    carrosselEl.addEventListener('touchmove', (e) => {
+        if (!isDraggingCarrossel) return;
+        cTouchDeltaX = e.touches[0].clientX - cTouchStartX;
+        const base = -carrosselIndex * carrosselEl.offsetWidth;
+        slidesEl.style.transform = `translateX(${base + cTouchDeltaX}px)`;
+    }, { passive: true });
+
+    carrosselEl.addEventListener('touchend', () => {
+        isDraggingCarrossel = false;
+        if      (cTouchDeltaX < -50) irParaSlide(carrosselIndex + 1);
+        else if (cTouchDeltaX >  50) irParaSlide(carrosselIndex - 1);
+        else                          irParaSlide(carrosselIndex);
+        cTouchDeltaX = 0;
+    });
+}
+
+reiniciarAuto();
+
+// ===== MODO ESCURO / CLARO (desktop) =====
 let trilho = document.getElementById('trilho');
 let body   = document.body;
 
@@ -171,49 +196,6 @@ if (localStorage.getItem('tema') === 'dark') {
     if (trilho) trilho.classList.add('dark');
 }
 
-// ===== NAVBAR =====
-const navbar = document.querySelector(".navbar");
-
-let ultimoEstado = false;
-
-function atualizarNavbar() {
-
-    const scrollado = window.scrollY > 35;
-
-    // Evita ficar adicionando/removendo classes a cada pixel
-    if (scrollado === ultimoEstado) return;
-
-    ultimoEstado = scrollado;
-
-    navbar.classList.toggle("scrolled", scrollado);
-    navbar.classList.toggle("shrink", scrollado);
-}
-
-let ticking = false;
-
-window.addEventListener("scroll", () => {
-
-    if (!ticking) {
-
-        requestAnimationFrame(() => {
-
-            atualizarNavbar();
-            ticking = false;
-
-        });
-
-        ticking = true;
-    }
-
-});
-
-// Estado inicial
-atualizarNavbar();
-
-window.addEventListener("scroll", atualizarNavbar);
-navbar.classList.toggle('shrink', window.scrollY > 50);
-atualizarNavbar();
-
 // ===== LIGHTBOX =====
 const galerias    = document.querySelectorAll('.galeria');
 const lightbox    = document.getElementById('lightbox');
@@ -224,12 +206,14 @@ const prevBtn     = document.querySelector('.prev-img');
 
 let indexAtual     = 0;
 let listaImagens   = [];
+let galeriaAtual   = null;
 let scrollCooldown = false;
 
 galerias.forEach(galeria => {
     const imgs = galeria.querySelectorAll('img');
     imgs.forEach((img, i) => {
         img.addEventListener('click', () => {
+            galeriaAtual = galeria;
             listaImagens = Array.from(imgs).map(im => im.src);
             indexAtual   = i;
             abrirImagem();
@@ -237,15 +221,13 @@ galerias.forEach(galeria => {
     });
 });
 
-// ===== ZOOM + PAN (pc: scroll | mobile: pinça + arrastar) =====
+// ===== ZOOM + PAN =====
 const isTouchDevice = () => window.matchMedia('(hover: none) and (pointer: coarse)').matches;
 
 let scaleAtual  = 1;
 let pinchDist   = null;
-let panX        = 0;
-let panY        = 0;
-let panStartX   = 0;
-let panStartY   = 0;
+let panX = 0, panY = 0;
+let panStartX = 0, panStartY = 0;
 let isPanning   = false;
 let lastTapTime = 0;
 
@@ -254,9 +236,7 @@ function aplicarTransform() {
 }
 
 function resetarZoom(animado = true) {
-    scaleAtual = 1;
-    panX       = 0;
-    panY       = 0;
+    scaleAtual = 1; panX = 0; panY = 0;
     if (animado) {
         lightboxImg.style.transition = 'transform 0.3s ease';
         aplicarTransform();
@@ -280,32 +260,25 @@ function getDistancia(touches) {
 }
 
 if (lightboxImg) {
-    // ----- SCROLL (pc) -----
     lightboxImg.addEventListener('wheel', (e) => {
         if (isTouchDevice()) return;
         e.preventDefault();
-        const fator    = e.deltaY < 0 ? 1.12 : 0.88;
+        const fator = e.deltaY < 0 ? 1.12 : 0.88;
         const novoScale = Math.min(Math.max(scaleAtual * fator, 1), 5);
-
         if (novoScale === 1) { resetarZoom(true); return; }
-
-        const rect    = lightboxImg.getBoundingClientRect();
-        const mouseX  = e.clientX - rect.left - rect.width  / 2;
-        const mouseY  = e.clientY - rect.top  - rect.height / 2;
-        panX += mouseX * (1 - novoScale / scaleAtual);
-        panY += mouseY * (1 - novoScale / scaleAtual);
+        const rect = lightboxImg.getBoundingClientRect();
+        panX += (e.clientX - rect.left - rect.width  / 2) * (1 - novoScale / scaleAtual);
+        panY += (e.clientY - rect.top  - rect.height / 2) * (1 - novoScale / scaleAtual);
         scaleAtual = novoScale;
         lightboxImg.style.transition = '';
         aplicarTransform();
     });
 
-    // ----- DUPLO CLIQUE (pc) -----
     lightboxImg.addEventListener('dblclick', () => {
         if (isTouchDevice()) return;
         resetarZoom(true);
     });
 
-    // ----- ARRASTAR (pc) -----
     lightboxImg.addEventListener('mousedown', (e) => {
         if (isTouchDevice() || scaleAtual <= 1) return;
         e.preventDefault();
@@ -329,12 +302,10 @@ if (lightboxImg) {
         lightboxImg.style.cursor = scaleAtual > 1 ? 'grab' : 'zoom-in';
     });
 
-    // ----- PINÇA + DUPLO TOQUE + PAN (mobile) -----
-    let pinchMidX = 0;
-    let pinchMidY = 0;
-    let panTouchStartX = 0;
-    let panTouchStartY = 0;
-    let panTouchAtivo  = false;
+    let pinchMidX = 0, pinchMidY = 0;
+    let panTouchStartX = 0, panTouchStartY = 0;
+    let panTouchAtivo = false;
+    let lbTouchStartX = 0, lbTouchDeltaX = 0;
 
     lightboxImg.addEventListener('touchstart', (e) => {
         if (e.touches.length === 2) {
@@ -344,7 +315,6 @@ if (lightboxImg) {
             pinchMidY  = (e.touches[0].clientY + e.touches[1].clientY) / 2;
             panTouchAtivo = false;
         } else if (e.touches.length === 1) {
-            // Duplo toque
             const agora = Date.now();
             if (agora - lastTapTime < 300 && scaleAtual > 1) {
                 e.preventDefault();
@@ -353,8 +323,8 @@ if (lightboxImg) {
                 return;
             }
             lastTapTime = agora;
-
-            // Pan com um dedo (só se tiver zoom)
+            lbTouchStartX = e.touches[0].clientX;
+            lbTouchDeltaX = 0;
             if (scaleAtual > 1) {
                 e.preventDefault();
                 panTouchAtivo  = true;
@@ -370,46 +340,55 @@ if (lightboxImg) {
             const novaDist  = getDistancia(e.touches);
             const ratio     = novaDist / pinchDist;
             const novoScale = Math.min(Math.max(scaleAtual * ratio, 1), 5);
-
-            const midX   = (e.touches[0].clientX + e.touches[1].clientX) / 2;
-            const midY   = (e.touches[0].clientY + e.touches[1].clientY) / 2;
-            const rect   = lightboxImg.getBoundingClientRect();
-            const centroX = midX - rect.left - rect.width  / 2;
-            const centroY = midY - rect.top  - rect.height / 2;
-
-            panX += centroX * (1 - ratio) + (midX - pinchMidX);
-            panY += centroY * (1 - ratio) + (midY - pinchMidY);
-
-            pinchMidX  = midX;
-            pinchMidY  = midY;
-            pinchDist  = novaDist;
-            scaleAtual = novoScale;
-
+            const midX = (e.touches[0].clientX + e.touches[1].clientX) / 2;
+            const midY = (e.touches[0].clientY + e.touches[1].clientY) / 2;
+            const rect = lightboxImg.getBoundingClientRect();
+            panX += (midX - rect.left - rect.width  / 2) * (1 - ratio) + (midX - pinchMidX);
+            panY += (midY - rect.top  - rect.height / 2) * (1 - ratio) + (midY - pinchMidY);
+            pinchMidX = midX; pinchMidY = midY;
+            pinchDist = novaDist; scaleAtual = novoScale;
             lightboxImg.style.transition = '';
             aplicarTransform();
-
-        } else if (e.touches.length === 1 && panTouchAtivo) {
-            e.preventDefault();
-            panX = e.touches[0].clientX - panTouchStartX;
-            panY = e.touches[0].clientY - panTouchStartY;
-            lightboxImg.style.transition = '';
-            aplicarTransform();
+        } else if (e.touches.length === 1) {
+            lbTouchDeltaX = e.touches[0].clientX - lbTouchStartX;
+            if (panTouchAtivo) {
+                e.preventDefault();
+                panX = e.touches[0].clientX - panTouchStartX;
+                panY = e.touches[0].clientY - panTouchStartY;
+                lightboxImg.style.transition = '';
+                aplicarTransform();
+            } else if (scaleAtual <= 1) {
+                // Arrasta para swipe de navegação
+                lightboxImg.style.transition = 'none';
+                lightboxImg.style.transform = `translateX(${lbTouchDeltaX}px) scale(1)`;
+            }
         }
     }, { passive: false });
 
     lightboxImg.addEventListener('touchend', (e) => {
-        if (e.touches.length < 2) {
-            pinchDist = null;
-        }
+        if (e.touches.length < 2) pinchDist = null;
         if (e.touches.length === 0) {
             panTouchAtivo = false;
-            // Se o scale voltou para 1 ou menos, reseta tudo
-            if (scaleAtual <= 1) resetarZoom(false);
+            if (scaleAtual <= 1) {
+                lightboxImg.style.transition = 'transform 0.3s ease';
+                if      (lbTouchDeltaX < -60) proximaImagem();
+                else if (lbTouchDeltaX >  60) imagemAnterior();
+                else lightboxImg.style.transform = 'scale(1)';
+                lbTouchDeltaX = 0;
+            } else if (scaleAtual <= 1) {
+                resetarZoom(false);
+            }
         }
     });
 }
 
 // ===== ABRIR / FECHAR IMAGEM =====
+function atualizarSetas() {
+    if (!nextBtn || !prevBtn) return;
+    prevBtn.style.visibility = indexAtual === 0 ? 'hidden' : 'visible';
+    nextBtn.style.visibility = indexAtual === listaImagens.length - 1 ? 'hidden' : 'visible';
+}
+
 function abrirImagem() {
     destruirPanzoom();
 
@@ -421,6 +400,7 @@ function abrirImagem() {
 
     lightbox.style.display = 'flex';
     fechar.style.display   = 'block';
+    atualizarSetas();
 
     lightboxImg.onload = () => {
         requestAnimationFrame(() => {
@@ -430,7 +410,6 @@ function abrirImagem() {
             setTimeout(() => { lightboxImg.style.transition = ''; }, 260);
         });
     };
-
     lightboxImg.src = listaImagens[indexAtual];
 }
 
@@ -438,49 +417,68 @@ function fecharImagem() {
     lightbox.style.display = 'none';
     fechar.style.display   = 'none';
     destruirPanzoom();
+    galeriaAtual = null;
 }
 
 function proximaImagem() {
-    indexAtual = (indexAtual + 1) % listaImagens.length;
+    if (indexAtual >= listaImagens.length - 1) return;
+    indexAtual++;
     abrirImagem();
 }
 
 function imagemAnterior() {
-    indexAtual = (indexAtual - 1 + listaImagens.length) % listaImagens.length;
+    if (indexAtual <= 0) return;
+    indexAtual--;
     abrirImagem();
 }
 
-if (fechar)  fechar.addEventListener('click', fecharImagem);
-if (nextBtn) nextBtn.addEventListener('click', proximaImagem);
-if (prevBtn) prevBtn.addEventListener('click', imagemAnterior);
+fechar?.addEventListener('click', fecharImagem);
+nextBtn?.addEventListener('click', proximaImagem);
+prevBtn?.addEventListener('click', imagemAnterior);
 
-if (lightbox) {
-    lightbox.addEventListener('click', (e) => {
-        if (e.target === lightbox) fecharImagem();
-    });
+lightbox?.addEventListener('click', (e) => {
+    if (e.target === lightbox) fecharImagem();
+});
 
-    lightbox.addEventListener('wheel', (e) => {
-        if (lightbox.style.display !== 'flex') return;
-        const rect = lightboxImg.getBoundingClientRect();
-        const dentroDaImagem =
-            e.clientX >= rect.left && e.clientX <= rect.right &&
-            e.clientY >= rect.top  && e.clientY <= rect.bottom;
-        if (dentroDaImagem) return;
-        e.preventDefault();
-        if (scrollCooldown) return;
-        scrollCooldown = true;
-        e.deltaY > 0 ? proximaImagem() : imagemAnterior();
-        setTimeout(() => { scrollCooldown = false; }, 400);
-    });
-}
+lightbox?.addEventListener('wheel', (e) => {
+    if (lightbox.style.display !== 'flex') return;
+    const rect = lightboxImg.getBoundingClientRect();
+    const dentro = e.clientX >= rect.left && e.clientX <= rect.right &&
+                   e.clientY >= rect.top  && e.clientY <= rect.bottom;
+    if (dentro) return;
+    e.preventDefault();
+    if (scrollCooldown) return;
+    scrollCooldown = true;
+    e.deltaY > 0 ? proximaImagem() : imagemAnterior();
+    setTimeout(() => { scrollCooldown = false; }, 400);
+});
 
 document.addEventListener('keydown', (e) => {
-    if (lightbox && lightbox.style.display === 'flex') {
+    if (lightbox?.style.display === 'flex') {
         if (e.key === 'Escape')     fecharImagem();
         if (e.key === 'ArrowRight') proximaImagem();
         if (e.key === 'ArrowLeft')  imagemAnterior();
     }
 });
+
+// ===== VÍDEO OVERLAY (touch) =====
+const videoWrapper = document.querySelector('.video-wrapper');
+const videoOverlay = document.querySelector('.video-overlay');
+
+if (videoWrapper && videoOverlay) {
+    videoWrapper.addEventListener('touchstart', (e) => {
+        if (!videoOverlay.classList.contains('touch-visivel')) {
+            e.preventDefault();
+            videoOverlay.classList.add('touch-visivel');
+        }
+    }, { passive: false });
+
+    document.addEventListener('touchstart', (e) => {
+        if (!videoWrapper.contains(e.target)) {
+            videoOverlay.classList.remove('touch-visivel');
+        }
+    }, { passive: true });
+}
 
 // ===== AVALIAÇÕES (FIREBASE) =====
 let usuarioAtual       = null;
@@ -488,7 +486,6 @@ let estrelaSelecionada = 5;
 let idxParaExcluir     = null;
 let modoAviso          = false;
 
-// ----- MODAL DE AVISO -----
 function mostrarAviso(mensagem) {
     modoAviso = true;
     document.querySelector('#modal-excluir .modal-texto').textContent = mensagem;
@@ -510,7 +507,6 @@ function fecharModal() {
     }
 }
 
-// ----- BOTÕES DO MODAL -----
 document.getElementById('modal-confirmar').onclick = async () => {
     if (!idxParaExcluir) return;
     try {
@@ -528,7 +524,6 @@ document.getElementById('modal-excluir').addEventListener('click', (e) => {
     if (e.target === document.getElementById('modal-excluir')) fecharModal();
 });
 
-// ----- AUTH STATE -----
 onAuthStateChanged(auth, (user) => {
     if (user) {
         usuarioAtual = { uid: user.uid, nome: user.displayName || user.email };
@@ -539,7 +534,6 @@ onAuthStateChanged(auth, (user) => {
     carregarAvaliacoes();
 });
 
-// ----- RENDER AUTH -----
 function renderAuth() {
     const loginBox     = document.getElementById('login-box');
     const cadastroBox  = document.getElementById('cadastro-box');
@@ -569,7 +563,6 @@ document.getElementById('btn-ir-login').onclick = () => {
     document.getElementById('login-box').style.display    = 'block';
 };
 
-// ----- CADASTRO -----
 document.getElementById('btn-cadastrar').onclick = async () => {
     const nome  = document.getElementById('cad-nome').value.trim();
     const email = document.getElementById('cad-email').value.trim();
@@ -592,12 +585,10 @@ document.getElementById('btn-cadastrar').onclick = async () => {
     }
 };
 
-// ----- LOGIN -----
 document.getElementById('btn-entrar').onclick = async () => {
     const email = document.getElementById('login-email').value.trim();
     const senha = document.getElementById('login-senha').value;
     const erro  = document.getElementById('login-erro');
-
     try {
         await signInWithEmailAndPassword(auth, email, senha);
         erro.textContent = '';
@@ -606,12 +597,10 @@ document.getElementById('btn-entrar').onclick = async () => {
     }
 };
 
-// ----- LOGOUT -----
 document.getElementById('btn-sair').onclick = async () => {
     await signOut(auth);
 };
 
-// ----- ESTRELAS DO FORMULÁRIO -----
 document.querySelectorAll('#estrelas-input .estrela-sel').forEach(el => {
     el.addEventListener('click', () => {
         estrelaSelecionada = parseInt(el.dataset.val);
@@ -621,15 +610,12 @@ document.querySelectorAll('#estrelas-input .estrela-sel').forEach(el => {
     });
 });
 
-// ----- ENVIAR AVALIAÇÃO -----
 document.getElementById('btn-enviar-comentario').onclick = async () => {
     const texto = document.getElementById('novo-comentario').value.trim();
     if (!texto || !usuarioAtual) return;
-
     const btn = document.getElementById('btn-enviar-comentario');
     btn.disabled = true;
     btn.textContent = 'Publicando...';
-
     try {
         const jaExiste = await getDocs(
             query(collection(db, 'avaliacoes'), where('uid', '==', usuarioAtual.uid))
@@ -640,55 +626,39 @@ document.getElementById('btn-enviar-comentario').onclick = async () => {
             btn.textContent = 'Publicar avaliação';
             return;
         }
-
         await addDoc(collection(db, 'avaliacoes'), {
-            uid:      usuarioAtual.uid,
-            nome:     usuarioAtual.nome,
-            texto,
+            uid: usuarioAtual.uid, nome: usuarioAtual.nome, texto,
             estrelas: estrelaSelecionada,
-            data:     new Date().toLocaleDateString('pt-BR'),
+            data: new Date().toLocaleDateString('pt-BR'),
             createdAt: serverTimestamp()
         });
         document.getElementById('novo-comentario').value = '';
         estrelaSelecionada = 5;
-        document.querySelectorAll('#estrelas-input .estrela-sel').forEach((e) => {
-            e.classList.add('ativa');
-        });
+        document.querySelectorAll('#estrelas-input .estrela-sel').forEach(e => e.classList.add('ativa'));
         carregarAvaliacoes();
     } catch (e) {
         mostrarAviso('Erro ao publicar avaliação. Tente novamente.');
     }
-
     btn.disabled = false;
     btn.textContent = 'Publicar avaliação';
 };
 
-// ----- CARREGAR AVALIAÇÕES DO FIRESTORE -----
 async function carregarAvaliacoes() {
     const lista = document.getElementById('lista-avaliacoes');
     lista.innerHTML = '<p class="sem-avaliacoes">Carregando avaliações...</p>';
-
     try {
         const q = query(collection(db, 'avaliacoes'), orderBy('createdAt', 'desc'));
         const snapshot = await getDocs(q);
-
         if (snapshot.empty) {
             lista.innerHTML = '<p class="sem-avaliacoes">Nenhuma avaliação ainda. Seja o primeiro!</p>';
             return;
         }
-
         lista.innerHTML = '';
-
-        // ----- NOTA MÉDIA -----
         let totalEstrelas = 0;
         const docs = [];
-        snapshot.forEach(docSnap => {
-            docs.push(docSnap);
-            totalEstrelas += docSnap.data().estrelas || 0;
-        });
+        snapshot.forEach(docSnap => { docs.push(docSnap); totalEstrelas += docSnap.data().estrelas || 0; });
         const media = (totalEstrelas / docs.length).toFixed(1);
         const mediaInteira = Math.round(totalEstrelas / docs.length);
-
         const resumo = document.getElementById('resumo-avaliacoes');
         if (resumo) {
             resumo.innerHTML = `
@@ -696,15 +666,12 @@ async function carregarAvaliacoes() {
                     <span class="nota-numero">${media}</span>
                     <div class="nota-estrelas">${'★'.repeat(mediaInteira)}${'☆'.repeat(5 - mediaInteira)}</div>
                     <span class="nota-total">baseado em ${docs.length} avaliações</span>
-                </div>
-            `;
+                </div>`;
         }
-
         docs.forEach(docSnap => {
-            const av    = docSnap.data();
+            const av = docSnap.data();
             const docId = docSnap.id;
             const ehDono = usuarioAtual && usuarioAtual.uid === av.uid;
-
             const item = document.createElement('div');
             item.className = 'avaliacao-item';
             item.id = `av-item-${docId}`;
@@ -722,72 +689,51 @@ async function carregarAvaliacoes() {
                         </div>
                     </div>` : ''}
                 </div>
-                <div id="av-texto-${docId}">
-                    <p class="av-texto">${av.texto}</p>
-                </div>
+                <div id="av-texto-${docId}"><p class="av-texto">${av.texto}</p></div>
                 <div id="av-edit-${docId}" style="display:none;">
                     <textarea class="comentario-input av-edit-input" id="av-edit-campo-${docId}">${av.texto}</textarea>
                     <div class="av-edit-estrelas" id="av-edit-estrelas-${docId}">
-                        ${[1,2,3,4,5].map(n => `
-                            <span class="estrela-sel ${n <= av.estrelas ? 'ativa' : ''}"
-                                  data-idx="${docId}" data-val="${n}">★</span>
-                        `).join('')}
+                        ${[1,2,3,4,5].map(n => `<span class="estrela-sel ${n <= av.estrelas ? 'ativa' : ''}" data-idx="${docId}" data-val="${n}">★</span>`).join('')}
                     </div>
                     <div class="auth-btns" style="margin-top:8px;">
                         <button class="btn-auth" data-salvar="${docId}">Salvar</button>
                         <button class="btn-auth btn-secondary" data-cancelar="${docId}">Cancelar</button>
                     </div>
-                </div>
-            `;
+                </div>`;
             lista.appendChild(item);
         });
-
         lista.querySelectorAll('.av-opcoes-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 e.stopPropagation();
-                const id   = btn.dataset.id;
-                const menu = document.getElementById(`av-menu-${id}`);
+                const menu = document.getElementById(`av-menu-${btn.dataset.id}`);
                 const aberto = menu.classList.contains('aberto');
                 fecharTodosMenus();
                 if (!aberto) menu.classList.add('aberto');
             });
         });
-
-        lista.querySelectorAll('[data-editar]').forEach(btn => {
-            btn.addEventListener('click', () => editarAvaliacao(btn.dataset.editar));
-        });
-        lista.querySelectorAll('[data-excluir]').forEach(btn => {
-            btn.addEventListener('click', () => excluirAvaliacao(btn.dataset.excluir));
-        });
-        lista.querySelectorAll('[data-salvar]').forEach(btn => {
-            btn.addEventListener('click', () => salvarEdicao(btn.dataset.salvar));
-        });
-        lista.querySelectorAll('[data-cancelar]').forEach(btn => {
-            btn.addEventListener('click', () => cancelarEdicao(btn.dataset.cancelar));
-        });
+        lista.querySelectorAll('[data-editar]').forEach(btn => btn.addEventListener('click', () => editarAvaliacao(btn.dataset.editar)));
+        lista.querySelectorAll('[data-excluir]').forEach(btn => btn.addEventListener('click', () => excluirAvaliacao(btn.dataset.excluir)));
+        lista.querySelectorAll('[data-salvar]').forEach(btn => btn.addEventListener('click', () => salvarEdicao(btn.dataset.salvar)));
+        lista.querySelectorAll('[data-cancelar]').forEach(btn => btn.addEventListener('click', () => cancelarEdicao(btn.dataset.cancelar)));
         lista.querySelectorAll('.av-edit-estrelas .estrela-sel').forEach(el => {
             el.addEventListener('click', () => {
-                const idx = el.dataset.idx;
                 const val = parseInt(el.dataset.val);
-                document.querySelectorAll(`#av-edit-estrelas-${idx} .estrela-sel`).forEach((e, i) => {
+                document.querySelectorAll(`#av-edit-estrelas-${el.dataset.idx} .estrela-sel`).forEach((e, i) => {
                     e.classList.toggle('ativa', i < val);
                 });
             });
         });
-
     } catch (e) {
         lista.innerHTML = '<p class="sem-avaliacoes">Erro ao carregar avaliações.</p>';
         console.error(e);
     }
 }
 
-// ----- MENU ⋯ -----
 function fecharTodosMenus() {
     document.querySelectorAll('.av-menu.aberto').forEach(m => m.classList.remove('aberto'));
 }
 document.addEventListener('click', fecharTodosMenus);
 
-// ----- EDITAR -----
 function editarAvaliacao(docId) {
     fecharTodosMenus();
     document.getElementById(`av-texto-${docId}`).style.display = 'none';
@@ -803,12 +749,9 @@ async function salvarEdicao(docId) {
     const novoTexto = document.getElementById(`av-edit-campo-${docId}`).value.trim();
     if (!novoTexto) return;
     const estrelasAtivas = document.querySelectorAll(`#av-edit-estrelas-${docId} .estrela-sel.ativa`).length;
-
     try {
         await updateDoc(doc(db, 'avaliacoes', docId), {
-            texto:    novoTexto,
-            estrelas: estrelasAtivas || 5,
-            editado:  true
+            texto: novoTexto, estrelas: estrelasAtivas || 5, editado: true
         });
         carregarAvaliacoes();
     } catch (e) {
@@ -816,7 +759,6 @@ async function salvarEdicao(docId) {
     }
 }
 
-// ----- EXCLUIR (modal) -----
 function excluirAvaliacao(docId) {
     fecharTodosMenus();
     idxParaExcluir = docId;
@@ -826,3 +768,4 @@ function excluirAvaliacao(docId) {
     document.getElementById('modal-cancelar').textContent = 'Cancelar';
     document.getElementById('modal-excluir').classList.add('aberto');
 }
+ENDOFFILE
