@@ -8,11 +8,6 @@
     scroll-margin-top: 80px;
 }
 
-@font-face {
-    font-family: 'UnifrakturMaguntia';
-    src: url('https://fonts.google.com/specimen/UnifrakturMaguntia?preview.script=Latn') format('truetype');
-    font-display: swap; /* melhora performance no celular */
-}
 
 html {
     scroll-behavior: smooth;
@@ -20,7 +15,7 @@ html {
 
 body {
     margin: 0;
-    font-family: 'UnifraktuMaguntia', serif;
+    font-family: 'UnifrakturMaguntia', serif;
     letter-spacing: 0.5px;
     color: var(--text);
     text-align: center;
@@ -213,6 +208,10 @@ h1 { font-size: 65px; margin-bottom: 20px; letter-spacing: 2px; }
     transition: color 0.5s ease;
 }
 
+.tat-p {
+    font-family: 'TrajanPro', serif;
+}
+
 .tat-h1 {
     letter-spacing: 6px;
     font-size: 110px;
@@ -254,6 +253,19 @@ h1 { font-size: 65px; margin-bottom: 20px; letter-spacing: 2px; }
     filter: brightness(1) invert(0) drop-shadow(0 0 18px rgb(255, 255, 255));
 }
 
+.form-h4 {
+    display: none !important;
+    filter: brightness(1) invert(0) drop-shadow(0 0 8px rgb(255, 255, 255));
+    filter: brightness(1) invert(0) drop-shadow(0 0 18px rgb(255, 255, 255));    
+}
+
+/* Texto */
+p {
+    line-height: 1.6;
+    font-size: 16px;
+    padding-left: 10px;
+    border-left: 3px solid var(--accent);
+}
 
 /* ===== CONTAINER ===== */
 .container {
@@ -268,15 +280,6 @@ h1 { font-size: 65px; margin-bottom: 20px; letter-spacing: 2px; }
 
 .container-pequeno {
     max-width: 1700px;
-}
-
-
-/* Texto */
-p {
-    line-height: 1.6;
-    font-size: 16px;
-    padding-left: 10px;
-    border-left: 3px solid var(--accent);
 }
 
 /* ===== CARROSSEL ===== */
@@ -1176,19 +1179,22 @@ footer p {
     }
 
     .tat-h1 {
-        font-size: 38px;
+        letter-spacing: 2px;
+        font-size: 50px;
     }
 
     .tat-h2 {
-        font-size: 35px;
+        font-size: 38px;
     }
 
     .tat-h3 {
+        letter-spacing: 1px;
         font-size: 33px;
     }
 
-    .tat-h4 {
-        font-size: 28px;
+    .form-h4 {
+        display: block !important;
+        font-size: 48px;
     }    
 
     .trabre-h1{
@@ -1196,8 +1202,13 @@ footer p {
     }
 
     .ava-h1 {
-        font-size: 44px;
+        letter-spacing: 2px;
+        font-size: 50px;
     }
+
+    .tat-h4 {
+        display: none !important;
+    }    
 
     /* CARDS */
 
@@ -1589,7 +1600,8 @@ footer p {
     }
 
     .tat-h1 {
-        font-size: 38px;
+        letter-spacing: 3px;
+        font-size: 46px;
     }
 
     .tat-h2 {
@@ -1597,11 +1609,11 @@ footer p {
     }
 
     .tat-h3 {
-        font-size: 33px;
+        font-size: 31px;
     }
 
     .tat-h4 {
-        font-size: 32px;
+        font-size: 35px;
     }    
 
     .trabre-h1{
@@ -1609,7 +1621,7 @@ footer p {
     }
 
     .ava-h1 {
-        font-size: 44px;
+        font-size: 40px;
     }
 
     /* CARDS */
