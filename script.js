@@ -2,7 +2,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import { getFirestore, collection, addDoc, getDocs, doc, deleteDoc, updateDoc, query, orderBy, where, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
- 
+
 const firebaseConfig = {
     apiKey: "AIzaSyATn1yWqgYFj0c_9ShfEN_QFIM0a79LG6E",
     authDomain: "estudio-da-praca.firebaseapp.com",
@@ -11,14 +11,14 @@ const firebaseConfig = {
     messagingSenderId: "169699076157",
     appId: "1:169699076157:web:0f56f081cbaad77d182254"
 };
- 
+
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
- 
+
 // ===== SCROLL REVEAL =====
 // Anima qualquer elemento com class="reveal" ao entrar na tela,
- 
+
 const revealObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
         if (entry.isIntersecting) {
@@ -30,7 +30,7 @@ const revealObserver = new IntersectionObserver((entries) => {
     threshold: 0.15,
     rootMargin: '0px 0px -50px 0px'
 });
- 
+
 function ativarReveal(elementos) {
     const grupos = new Map();
     elementos.forEach(el => {
@@ -45,28 +45,26 @@ function ativarReveal(elementos) {
         });
     });
 }
- 
+
 // Itens já presentes no HTML no carregamento da página
 ativarReveal(document.querySelectorAll('.reveal'));
- 
- 
- 
+
+
+
 // ===== TOGGLE MENU =====
 const menuBtn = document.getElementById('menu-btn');
 const dropdown = document.getElementById('dropdown');
- 
+
 if (menuBtn) {
     menuBtn.addEventListener('click', (e) => {
         e.stopPropagation();
-        menuBtn.classList.toggle('open');
         dropdown.classList.toggle('aberto');
     });
 }
 document.addEventListener('click', () => {
     if (dropdown) dropdown.classList.remove('aberto');
-    if (menuBtn) menuBtn.classList.remove('open');
 });
- 
+
 // ===== MOBILE NAVBAR =====
 const mobileMenuBtn = document.getElementById('mobile-menu-btn');
 const mobileUserBtn = document.getElementById('mobile-user-btn');
@@ -75,8 +73,8 @@ const mobileUserDrawer = document.getElementById('mobile-user-drawer');
 const mobileOverlay = document.getElementById('mobile-drawer-overlay');
 const drawerLinks = document.querySelectorAll('.drawer-link');
 const trilhoMobile = document.getElementById('trilho-mobile');
- 
- 
+
+
 // ----- Abrir/fechar gavetas -----
 function fecharTodasGavetas() {
     mobileDrawer?.classList.remove('aberto');
@@ -84,36 +82,36 @@ function fecharTodasGavetas() {
     mobileOverlay?.classList.remove('aberto');
     document.body.style.overflow = '';
 }
- 
+
 function abrirGaveta(gaveta) {
     fecharTodasGavetas();
     gaveta.classList.add('aberto');
     mobileOverlay.classList.add('aberto');
     document.body.style.overflow = 'hidden';
 }
- 
+
 mobileMenuBtn?.addEventListener('click', (e) => {
     e.stopPropagation();
     mobileDrawer.classList.contains('aberto')
         ? fecharTodasGavetas()
         : abrirGaveta(mobileDrawer);
 });
- 
+
 mobileUserBtn?.addEventListener('click', (e) => {
     e.stopPropagation();
     mobileUserDrawer.classList.contains('aberto')
         ? fecharTodasGavetas()
         : abrirGaveta(mobileUserDrawer);
 });
- 
+
 // Overlay fecha qualquer gaveta
 mobileOverlay?.addEventListener('click', fecharTodasGavetas);
- 
+
 // Links fecham a gaveta e navegam
 drawerLinks.forEach(link => {
     link.addEventListener('click', fecharTodasGavetas);
 });
- 
+
 // ----- Botões de login/cadastro na gaveta user -----
 document.getElementById('drawer-ir-login')?.addEventListener('click', () => {
     fecharTodasGavetas();
@@ -125,12 +123,12 @@ document.getElementById('drawer-ir-login')?.addEventListener('click', () => {
     // Rola até avaliações
     document.getElementById('avaliacoes')?.scrollIntoView({ behavior: 'smooth' });
 });
- 
+
 document.getElementById('drawer-sair')?.addEventListener('click', async () => {
     fecharTodasGavetas();
     await signOut(auth);
 });
- 
+
 document.getElementById('drawer-ir-cadastro')?.addEventListener('click', () => {
     fecharTodasGavetas();
     // Garante que a caixa de cadastro está visível
@@ -141,7 +139,7 @@ document.getElementById('drawer-ir-cadastro')?.addEventListener('click', () => {
     // Rola até avaliações
     document.getElementById('avaliacoes')?.scrollIntoView({ behavior: 'smooth' });
 });
- 
+
 // ----- Trilho mobile (modo escuro) -----
 if (trilhoMobile) {
     if (localStorage.getItem('tema') === 'dark') {
@@ -156,9 +154,23 @@ if (trilhoMobile) {
         localStorage.setItem('tema', isDark ? 'dark' : 'light');
     });
 }
- 
+
+// ----- Navbar: transparente no topo, com fundo ao rolar -----
+// (só aplica em mobile — a classe .scrolled é adicionada pelo scroll)
+const navbarEl = document.querySelector('.navbar');
+function atualizarNavbarScroll() {
+    if (window.innerWidth <= 768) {
+        navbarEl?.classList.toggle('scrolled', window.scrollY > 10);
+    } else {
+        navbarEl?.classList.remove('scrolled');
+    }
+}
+window.addEventListener('scroll', atualizarNavbarScroll, { passive: true });
+window.addEventListener('resize', atualizarNavbarScroll);
+atualizarNavbarScroll(); // roda na carga
+
 document.addEventListener('DOMContentLoaded', () => {
- 
+
     // ===== CARROSSEL COM SWIPE SUAVE =====
     let carrosselIndex = 0;
     const slidesEl = document.querySelector('.slides');
@@ -167,7 +179,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let touchStartX = 0;
     let touchDeltaX = 0;
     let isDraggingCarrossel = false;
- 
+
     const dotsContainer = document.getElementById('carousel-dots');
     for (let i = 0; i < totalSlides; i++) {
         const dot = document.createElement('button');
@@ -176,13 +188,13 @@ document.addEventListener('DOMContentLoaded', () => {
         dot.addEventListener('click', () => irParaSlide(i));
         dotsContainer.appendChild(dot);
     }
- 
+
     function atualizarDots() {
         document.querySelectorAll('.carousel-dot').forEach((dot, i) => {
             dot.classList.toggle('ativo', i === carrosselIndex);
         });
     }
- 
+
     function irParaSlide(n, animado = true) {
         carrosselIndex = (n + totalSlides) % totalSlides;
         slidesEl.style.transition = animado
@@ -192,15 +204,15 @@ document.addEventListener('DOMContentLoaded', () => {
         atualizarDots();
         reiniciarAuto();
     }
- 
+
     function reiniciarAuto() {
         clearInterval(carrosselAuto);
         carrosselAuto = setInterval(() => irParaSlide(carrosselIndex + 1), 7000);
     }
- 
+
     document.querySelector('.next')?.addEventListener('click', () => irParaSlide(carrosselIndex + 1));
     document.querySelector('.prev')?.addEventListener('click', () => irParaSlide(carrosselIndex - 1));
- 
+
     const carrosselEl = document.querySelector('.carousel');
     if (carrosselEl) {
         carrosselEl.addEventListener('touchstart', (e) => {
@@ -208,14 +220,14 @@ document.addEventListener('DOMContentLoaded', () => {
             isDraggingCarrossel = true;
             slidesEl.style.transition = 'none';
         }, { passive: true });
- 
+
         carrosselEl.addEventListener('touchmove', (e) => {
             if (!isDraggingCarrossel) return;
             touchDeltaX = e.touches[0].clientX - touchStartX;
             const base = -carrosselIndex * 100;
             slidesEl.style.transform = `translateX(calc(${base}% + ${touchDeltaX}px))`;
         }, { passive: true });
- 
+
         carrosselEl.addEventListener('touchend', () => {
             isDraggingCarrossel = false;
             if (touchDeltaX < -50) irParaSlide(carrosselIndex + 1);
@@ -224,15 +236,15 @@ document.addEventListener('DOMContentLoaded', () => {
             touchDeltaX = 0;
         });
     }
- 
+
     reiniciarAuto();
- 
+
 }); // fim DOMContentLoaded
- 
+
 // ===== MODO ESCURO / CLARO =====
 let trilho = document.getElementById('trilho');
 let body = document.body;
- 
+
 if (trilho) {
     trilho.addEventListener('click', () => {
         trilho.classList.toggle('dark');
@@ -240,51 +252,55 @@ if (trilho) {
         localStorage.setItem('tema', body.classList.contains('dark') ? 'dark' : 'light');
     });
 }
- 
+
 if (localStorage.getItem('tema') === 'dark') {
     document.body.classList.add('dark');
     if (trilho) trilho.classList.add('dark');
 }
- 
-// ===== NAVBAR (sombra + encolher ao rolar) =====
+
+// ===== NAVBAR =====
 const navbar = document.querySelector(".navbar");
- 
+
 let ultimoEstado = false;
- 
+
 function atualizarNavbar() {
- 
+
     const scrollado = window.scrollY > 35;
- 
+
     // Evita ficar adicionando/removendo classes a cada pixel
     if (scrollado === ultimoEstado) return;
- 
+
     ultimoEstado = scrollado;
- 
+
     navbar.classList.toggle("scrolled", scrollado);
     navbar.classList.toggle("shrink", scrollado);
 }
- 
+
 let ticking = false;
- 
+
 window.addEventListener("scroll", () => {
- 
+
     if (!ticking) {
- 
+
         requestAnimationFrame(() => {
- 
+
             atualizarNavbar();
             ticking = false;
- 
+
         });
- 
+
         ticking = true;
     }
- 
+
 });
- 
+
 // Estado inicial
 atualizarNavbar();
- 
+
+window.addEventListener("scroll", atualizarNavbar);
+navbar.classList.toggle('shrink', window.scrollY > 50);
+atualizarNavbar();
+
 // ===== LIGHTBOX =====
 const galerias = document.querySelectorAll('.galeria');
 const lightbox = document.getElementById('lightbox');
@@ -292,14 +308,14 @@ const lightboxImg = document.getElementById('lightbox-img');
 const fechar = document.querySelector('.fechar');
 const nextBtn = document.querySelector('.next-img');
 const prevBtn = document.querySelector('.prev-img');
- 
+
 let indexAtual = 0;
 let listaImagens = [];
 let scrollCooldown = false;
- 
+
 // Guarda a galeria dona das imagens abertas (limitador)
 let galeriaAtual = null;
- 
+
 galerias.forEach(galeria => {
     const imgs = galeria.querySelectorAll('img');
     imgs.forEach((img, i) => {
@@ -311,10 +327,10 @@ galerias.forEach(galeria => {
         });
     });
 });
- 
+
 // ===== ZOOM + PAN (pc: scroll | mobile: pinça + arrastar) =====
 const isTouchDevice = () => window.matchMedia('(hover: none) and (pointer: coarse)').matches;
- 
+
 let scaleAtual = 1;
 let pinchDist = null;
 let panX = 0;
@@ -323,11 +339,11 @@ let panStartX = 0;
 let panStartY = 0;
 let isPanning = false;
 let lastTapTime = 0;
- 
+
 function aplicarTransform() {
     lightboxImg.style.transform = `scale(${scaleAtual}) translate(${panX / scaleAtual}px, ${panY / scaleAtual}px)`;
 }
- 
+
 function resetarZoom(animado = true) {
     scaleAtual = 1;
     panX = 0;
@@ -341,32 +357,32 @@ function resetarZoom(animado = true) {
         aplicarTransform();
     }
 }
- 
+
 function destruirPanzoom() {
     resetarZoom(false);
     pinchDist = null;
     isPanning = false;
 }
- 
+
 function getDistancia(touches) {
     const dx = touches[0].clientX - touches[1].clientX;
     const dy = touches[0].clientY - touches[1].clientY;
     return Math.sqrt(dx * dx + dy * dy);
 }
- 
+
 if (lightboxImg) {
- 
+
 // ===== SWIPE ENTRE IMAGENS NO CELULAR =====
- 
+
     // Swipe mobile no lightbox
     let lbTouchStartX = 0, lbTouchDeltaX = 0;
- 
+
     lightbox?.addEventListener('touchstart', (e) => {
         if (scaleAtual > 1) return; // não swipa se estiver com zoom
         lbTouchStartX = e.touches[0].clientX;
         lbTouchDeltaX = 0;
     }, { passive: true });
- 
+
     lightbox?.addEventListener('touchmove', (e) => {
         if (scaleAtual > 1) return;
         lbTouchDeltaX = e.touches[0].clientX - lbTouchStartX;
@@ -375,7 +391,7 @@ if (lightboxImg) {
             lightboxImg.style.transform = `translateX(${lbTouchDeltaX}px) scale(1)`;
         }
     }, { passive: true });
- 
+
     lightbox?.addEventListener('touchend', () => {
         if (scaleAtual > 1) return;
         lightboxImg.style.transition = 'transform 0.3s ease';
@@ -384,7 +400,7 @@ if (lightboxImg) {
         else lightboxImg.style.transform = 'scale(1)';
         lbTouchDeltaX = 0;
     });
- 
+
     document.addEventListener('keydown', (e) => {
         if (lightbox?.style.display === 'flex') {
             if (e.key === 'Escape') fecharImagem();
@@ -392,17 +408,17 @@ if (lightboxImg) {
             if (e.key === 'ArrowLeft') imagemAnterior();
         }
     });
- 
- 
+
+
     // ----- SCROLL (pc) -----
     lightboxImg.addEventListener('wheel', (e) => {
         if (isTouchDevice()) return;
         e.preventDefault();
         const fator = e.deltaY < 0 ? 1.12 : 0.88;
         const novoScale = Math.min(Math.max(scaleAtual * fator, 1), 5);
- 
+
         if (novoScale === 1) { resetarZoom(true); return; }
- 
+
         const rect = lightboxImg.getBoundingClientRect();
         const mouseX = e.clientX - rect.left - rect.width / 2;
         const mouseY = e.clientY - rect.top - rect.height / 2;
@@ -412,13 +428,13 @@ if (lightboxImg) {
         lightboxImg.style.transition = '';
         aplicarTransform();
     });
- 
+
     // ----- DUPLO CLIQUE (pc) -----
     lightboxImg.addEventListener('dblclick', () => {
         if (isTouchDevice()) return;
         resetarZoom(true);
     });
- 
+
     // ----- ARRASTAR (pc) -----
     lightboxImg.addEventListener('mousedown', (e) => {
         if (isTouchDevice() || scaleAtual <= 1) return;
@@ -428,7 +444,7 @@ if (lightboxImg) {
         panStartY = e.clientY - panY;
         lightboxImg.style.cursor = 'grabbing';
     });
- 
+
     document.addEventListener('mousemove', (e) => {
         if (!isPanning) return;
         panX = e.clientX - panStartX;
@@ -436,20 +452,20 @@ if (lightboxImg) {
         lightboxImg.style.transition = '';
         aplicarTransform();
     });
- 
+
     document.addEventListener('mouseup', () => {
         if (!isPanning) return;
         isPanning = false;
         lightboxImg.style.cursor = scaleAtual > 1 ? 'grab' : 'zoom-in';
     });
- 
+
     // ----- PINÇA + DUPLO TOQUE + PAN (mobile) -----
     let pinchMidX = 0;
     let pinchMidY = 0;
     let panTouchStartX = 0;
     let panTouchStartY = 0;
     let panTouchAtivo = false;
- 
+
     lightboxImg.addEventListener('touchstart', (e) => {
         if (e.touches.length === 2) {
             e.preventDefault();
@@ -467,7 +483,7 @@ if (lightboxImg) {
                 return;
             }
             lastTapTime = agora;
- 
+
             // Pan com um dedo (só se tiver zoom)
             if (scaleAtual > 1) {
                 e.preventDefault();
@@ -477,31 +493,31 @@ if (lightboxImg) {
             }
         }
     }, { passive: false });
- 
+
     lightboxImg.addEventListener('touchmove', (e) => {
         if (e.touches.length === 2 && pinchDist !== null) {
             e.preventDefault();
             const novaDist = getDistancia(e.touches);
             const ratio = novaDist / pinchDist;
             const novoScale = Math.min(Math.max(scaleAtual * ratio, 1), 5);
- 
+
             const midX = (e.touches[0].clientX + e.touches[1].clientX) / 2;
             const midY = (e.touches[0].clientY + e.touches[1].clientY) / 2;
             const rect = lightboxImg.getBoundingClientRect();
             const centroX = midX - rect.left - rect.width / 2;
             const centroY = midY - rect.top - rect.height / 2;
- 
+
             panX += centroX * (1 - ratio) + (midX - pinchMidX);
             panY += centroY * (1 - ratio) + (midY - pinchMidY);
- 
+
             pinchMidX = midX;
             pinchMidY = midY;
             pinchDist = novaDist;
             scaleAtual = novoScale;
- 
+
             lightboxImg.style.transition = '';
             aplicarTransform();
- 
+
         } else if (e.touches.length === 1 && panTouchAtivo) {
             e.preventDefault();
             panX = e.touches[0].clientX - panTouchStartX;
@@ -510,7 +526,7 @@ if (lightboxImg) {
             aplicarTransform();
         }
     }, { passive: false });
- 
+
     lightboxImg.addEventListener('touchend', (e) => {
         if (e.touches.length < 2) {
             pinchDist = null;
@@ -522,20 +538,20 @@ if (lightboxImg) {
         }
     });
 }
- 
+
 // ===== ABRIR / FECHAR IMAGEM =====
 function abrirImagem() {
     destruirPanzoom();
- 
+
     lightboxImg.style.transition = 'none';
     lightboxImg.style.opacity = '0';
     lightboxImg.style.transform = 'scale(0.92)';
     lightboxImg.style.transformOrigin = 'center';
     lightboxImg.style.cursor = 'zoom-in';
- 
+
     lightbox.style.display = 'flex';
     fechar.style.display = 'block';
- 
+
     lightboxImg.onload = () => {
         requestAnimationFrame(() => {
             lightboxImg.style.transition = 'opacity 0.25s ease, transform 0.25s ease';
@@ -544,35 +560,35 @@ function abrirImagem() {
             setTimeout(() => { lightboxImg.style.transition = ''; }, 260);
         });
     };
- 
+
     lightboxImg.src = listaImagens[indexAtual];
 }
- 
+
 function fecharImagem() {
     lightbox.style.display = 'none';
     fechar.style.display = 'none';
     destruirPanzoom();
 }
- 
+
 function proximaImagem() {
     indexAtual = (indexAtual + 1) % listaImagens.length;
     abrirImagem();
 }
- 
+
 function imagemAnterior() {
     indexAtual = (indexAtual - 1 + listaImagens.length) % listaImagens.length;
     abrirImagem();
 }
- 
+
 if (fechar) fechar.addEventListener('click', fecharImagem);
 if (nextBtn) nextBtn.addEventListener('click', proximaImagem);
 if (prevBtn) prevBtn.addEventListener('click', imagemAnterior);
- 
+
 if (lightbox) {
     lightbox.addEventListener('click', (e) => {
         if (e.target === lightbox) fecharImagem();
     });
- 
+
     lightbox.addEventListener('wheel', (e) => {
         if (lightbox.style.display !== 'flex') return;
         const rect = lightboxImg.getBoundingClientRect();
@@ -587,7 +603,7 @@ if (lightbox) {
         setTimeout(() => { scrollCooldown = false; }, 400);
     });
 }
- 
+
 document.addEventListener('keydown', (e) => {
     if (lightbox && lightbox.style.display === 'flex') {
         if (e.key === 'Escape') fecharImagem();
@@ -595,13 +611,13 @@ document.addEventListener('keydown', (e) => {
         if (e.key === 'ArrowLeft') imagemAnterior();
     }
 });
- 
+
 // ===== AVALIAÇÕES (FIREBASE) =====
 let usuarioAtual = null;
 let estrelaSelecionada = 5;
 let idxParaExcluir = null;
 let modoAviso = false;
- 
+
 // ----- MODAL DE AVISO -----
 function mostrarAviso(mensagem) {
     modoAviso = true;
@@ -610,7 +626,7 @@ function mostrarAviso(mensagem) {
     document.getElementById('modal-cancelar').textContent = 'OK';
     document.getElementById('modal-excluir').classList.add('aberto');
 }
- 
+
 function fecharModal() {
     document.getElementById('modal-excluir').classList.remove('aberto');
     if (modoAviso) {
@@ -623,7 +639,7 @@ function fecharModal() {
         idxParaExcluir = null;
     }
 }
- 
+
 // ----- BOTÕES DO MODAL -----
 document.getElementById('modal-confirmar').onclick = async () => {
     if (!idxParaExcluir) return;
@@ -635,13 +651,13 @@ document.getElementById('modal-confirmar').onclick = async () => {
     fecharModal();
     carregarAvaliacoes();
 };
- 
+
 document.getElementById('modal-cancelar').onclick = fecharModal;
- 
+
 document.getElementById('modal-excluir').addEventListener('click', (e) => {
     if (e.target === document.getElementById('modal-excluir')) fecharModal();
 });
- 
+
 // ----- AUTH STATE -----
 onAuthStateChanged(auth, (user) => {
     if (user) {
@@ -652,14 +668,14 @@ onAuthStateChanged(auth, (user) => {
     renderAuth();
     carregarAvaliacoes();
 });
- 
+
 // ----- RENDER AUTH -----
 function renderAuth() {
     const loginBox = document.getElementById('login-box');
     const cadastroBox = document.getElementById('cadastro-box');
     const logadoBox = document.getElementById('logado-box');
     const comentarArea = document.getElementById('comentar-area');
- 
+
     if (usuarioAtual) {
         loginBox.style.display = 'none';
         cadastroBox.style.display = 'none';
@@ -673,7 +689,7 @@ function renderAuth() {
         comentarArea.style.display = 'none';
     }
 }
- 
+
 document.getElementById('btn-ir-cadastro').onclick = () => {
     document.getElementById('login-box').style.display = 'none';
     document.getElementById('cadastro-box').style.display = 'block';
@@ -682,17 +698,17 @@ document.getElementById('btn-ir-login').onclick = () => {
     document.getElementById('cadastro-box').style.display = 'none';
     document.getElementById('login-box').style.display = 'block';
 };
- 
+
 // ----- CADASTRO -----
 document.getElementById('btn-cadastrar').onclick = async () => {
     const nome = document.getElementById('cad-nome').value.trim();
     const email = document.getElementById('cad-email').value.trim();
     const senha = document.getElementById('cad-senha').value;
     const erro = document.getElementById('cad-erro');
- 
+
     if (!nome || !email || !senha) { erro.textContent = 'Preencha todos os campos.'; return; }
     if (senha.length < 6) { erro.textContent = 'Senha deve ter ao menos 6 caracteres.'; return; }
- 
+
     try {
         const cred = await createUserWithEmailAndPassword(auth, email, senha);
         await updateProfile(cred.user, { displayName: nome });
@@ -705,13 +721,13 @@ document.getElementById('btn-cadastrar').onclick = async () => {
         else erro.textContent = 'Erro ao criar conta. Tente novamente.';
     }
 };
- 
+
 // ----- LOGIN -----
 document.getElementById('btn-entrar').onclick = async () => {
     const email = document.getElementById('login-email').value.trim();
     const senha = document.getElementById('login-senha').value;
     const erro = document.getElementById('login-erro');
- 
+
     try {
         await signInWithEmailAndPassword(auth, email, senha);
         erro.textContent = '';
@@ -719,12 +735,12 @@ document.getElementById('btn-entrar').onclick = async () => {
         erro.textContent = 'E-mail ou senha incorretos.';
     }
 };
- 
+
 // ----- LOGOUT -----
 document.getElementById('btn-sair').onclick = async () => {
     await signOut(auth);
 };
- 
+
 // ----- ESTRELAS DO FORMULÁRIO -----
 document.querySelectorAll('#estrelas-input .estrela-sel').forEach(el => {
     el.addEventListener('click', () => {
@@ -734,16 +750,16 @@ document.querySelectorAll('#estrelas-input .estrela-sel').forEach(el => {
         });
     });
 });
- 
+
 // ----- ENVIAR AVALIAÇÃO -----
 document.getElementById('btn-enviar-comentario').onclick = async () => {
     const texto = document.getElementById('novo-comentario').value.trim();
     if (!texto || !usuarioAtual) return;
- 
+
     const btn = document.getElementById('btn-enviar-comentario');
     btn.disabled = true;
     btn.textContent = 'Publicando...';
- 
+
     try {
         const jaExiste = await getDocs(
             query(collection(db, 'avaliacoes'), where('uid', '==', usuarioAtual.uid))
@@ -754,7 +770,7 @@ document.getElementById('btn-enviar-comentario').onclick = async () => {
             btn.textContent = 'Publicar avaliação';
             return;
         }
- 
+
         await addDoc(collection(db, 'avaliacoes'), {
             uid: usuarioAtual.uid,
             nome: usuarioAtual.nome,
@@ -772,27 +788,27 @@ document.getElementById('btn-enviar-comentario').onclick = async () => {
     } catch (e) {
         mostrarAviso('Erro ao publicar avaliação. Tente novamente.');
     }
- 
+
     btn.disabled = false;
     btn.textContent = 'Publicar avaliação';
 };
- 
+
 // ----- CARREGAR AVALIAÇÕES DO FIRESTORE -----
 async function carregarAvaliacoes() {
     const lista = document.getElementById('lista-avaliacoes');
     lista.innerHTML = '<p class="sem-avaliacoes">Carregando avaliações...</p>';
- 
+
     try {
         const q = query(collection(db, 'avaliacoes'), orderBy('createdAt', 'desc'));
         const snapshot = await getDocs(q);
- 
+
         if (snapshot.empty) {
             lista.innerHTML = '<p class="sem-avaliacoes">Nenhuma avaliação ainda. Seja o primeiro!</p>';
             return;
         }
- 
+
         lista.innerHTML = '';
- 
+
         // ----- NOTA MÉDIA -----
         let totalEstrelas = 0;
         const docs = [];
@@ -802,7 +818,7 @@ async function carregarAvaliacoes() {
         });
         const media = (totalEstrelas / docs.length).toFixed(1);
         const mediaInteira = Math.round(totalEstrelas / docs.length);
- 
+
         const resumo = document.getElementById('resumo-avaliacoes');
         if (resumo) {
             resumo.innerHTML = `
@@ -814,12 +830,12 @@ async function carregarAvaliacoes() {
             `;
             ativarReveal(resumo.querySelectorAll('.reveal'));
         }
- 
+
         docs.forEach(docSnap => {
             const av = docSnap.data();
             const docId = docSnap.id;
             const ehDono = usuarioAtual && usuarioAtual.uid === av.uid;
- 
+
             const item = document.createElement('div');
             item.className = 'avaliacao-item reveal';
             item.id = `av-item-${docId}`;
@@ -856,10 +872,10 @@ async function carregarAvaliacoes() {
             `;
             lista.appendChild(item);
         });
- 
+
         // Ativa o scroll reveal nos itens de avaliação recém-criados
         ativarReveal(lista.querySelectorAll('.avaliacao-item'));
- 
+
         lista.querySelectorAll('.av-opcoes-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 e.stopPropagation();
@@ -870,7 +886,7 @@ async function carregarAvaliacoes() {
                 if (!aberto) menu.classList.add('aberto');
             });
         });
- 
+
         lista.querySelectorAll('[data-editar]').forEach(btn => {
             btn.addEventListener('click', () => editarAvaliacao(btn.dataset.editar));
         });
@@ -892,36 +908,36 @@ async function carregarAvaliacoes() {
                 });
             });
         });
- 
+
     } catch (e) {
         lista.innerHTML = '<p class="sem-avaliacoes">Erro ao carregar avaliações.</p>';
         console.error(e);
     }
 }
- 
+
 // ----- MENU ⋯ -----
 function fecharTodosMenus() {
     document.querySelectorAll('.av-menu.aberto').forEach(m => m.classList.remove('aberto'));
 }
 document.addEventListener('click', fecharTodosMenus);
- 
+
 // ----- EDITAR -----
 function editarAvaliacao(docId) {
     fecharTodosMenus();
     document.getElementById(`av-texto-${docId}`).style.display = 'none';
     document.getElementById(`av-edit-${docId}`).style.display = 'block';
 }
- 
+
 function cancelarEdicao(docId) {
     document.getElementById(`av-texto-${docId}`).style.display = 'block';
     document.getElementById(`av-edit-${docId}`).style.display = 'none';
 }
- 
+
 async function salvarEdicao(docId) {
     const novoTexto = document.getElementById(`av-edit-campo-${docId}`).value.trim();
     if (!novoTexto) return;
     const estrelasAtivas = document.querySelectorAll(`#av-edit-estrelas-${docId} .estrela-sel.ativa`).length;
- 
+
     try {
         await updateDoc(doc(db, 'avaliacoes', docId), {
             texto: novoTexto,
@@ -933,7 +949,7 @@ async function salvarEdicao(docId) {
         mostrarAviso('Erro ao salvar edição.');
     }
 }
- 
+
 // ----- EXCLUIR (modal) -----
 function excluirAvaliacao(docId) {
     fecharTodosMenus();
@@ -944,4 +960,3 @@ function excluirAvaliacao(docId) {
     document.getElementById('modal-cancelar').textContent = 'Cancelar';
     document.getElementById('modal-excluir').classList.add('aberto');
 }
- 
