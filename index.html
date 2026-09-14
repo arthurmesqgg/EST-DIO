@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
- 
+
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta charset="UTF-8">
@@ -11,38 +11,40 @@
   <link href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
- 
-<!-- CORPO DO SITE -->
- 
-<body>
- 
-  <script>
-    if (localStorage.getItem('tema') === 'dark') {
-      document.body.classList.add('dark');
-    }
-  </script>
- 
-  <!-- LIGHTBOX GLOBAL -->
-  <div id="lightbox" class="lightbox">
-    <span class="fechar" id="fechar-lightbox">&times;</span>
-    <button class="prev-img">&#10094;</button>
-    <img class="lightbox-img" id="lightbox-img">
-    <button class="next-img">&#10095;</button>
-  </div>
- 
-  <!-- MODAL DE CONFIRMAÇÃO DE EXCLUSÃO -->
-  <div id="modal-excluir" class="modal-overlay">
-    <div class="modal-box">
-      <p class="modal-texto">Excluir esta avaliação?</p>
-      <div class="auth-btns">
-        <button class="btn-auth" id="modal-confirmar">Excluir</button>
-        <button class="btn-auth btn-secondary" id="modal-cancelar">Cancelar</button>
-      </div>
+
+<!-- LIGHTBOX GLOBAL -->
+<div id="lightbox" class="lightbox">
+  <span class="fechar" id="fechar-lightbox">&times;</span>
+  <button class="prev-img">&#10094;</button>
+  <img class="lightbox-img" id="lightbox-img">
+  <button class="next-img">&#10095;</button>
+</div>
+
+<!-- MODAL DE CONFIRMAÇÃO DE EXCLUSÃO -->
+<div id="modal-excluir" class="modal-overlay">
+  <div class="modal-box">
+    <p class="modal-texto">Excluir esta avaliação?</p>
+    <div class="auth-btns">
+      <button class="btn-auth" id="modal-confirmar">Excluir</button>
+      <button class="btn-auth btn-secondary" id="modal-cancelar">Cancelar</button>
     </div>
   </div>
- 
+</div>
+
+
+<!-- CORPO DO SITE -->
+
+<body>
+
+
+  <script>
+    if (localStorage.getItem('tema') === 'dark') {
+      document.documentElement.classList.add('dark');
+    }
+  </script>
+
   <nav class="navbar">
- 
+
     <!-- PC: esquerda (menu ☰) -->
     <div class="nav-left">
       <button class="menu-btn" id="menu-btn">☰</button>
@@ -53,7 +55,7 @@
         <span>Modo escuro/claro</span>
       </div>
     </div>
- 
+
     <!-- PC: centro (links a href) -->
     <div class="nav-center">
       <a href="#localizacao">Localização</a>
@@ -62,7 +64,7 @@
       <a href="#avaliacoes">Avaliações</a>
       <a href="#footer">Contato</a>
     </div>
- 
+
     <!-- PC: direita (logo) -->
     <div class="nav-right">
       <a href="#">
@@ -70,7 +72,7 @@
         <img src="logo-escura.png" class="logo-escura" alt="Logo">
       </a>
     </div>
- 
+
     <!-- MOBILE: barra fixa (☰ + logo + ícone user) -->
     <div class="mobile-navbar">
       <button class="mobile-menu-btn" id="mobile-menu-btn">☰</button>
@@ -86,10 +88,10 @@
         </svg>
       </button>
     </div>
- 
+
     <div class="mobile-drawer" id="mobile-drawer">
       <div class="mobile-drawer-inner">
- 
+
         <a href="#localizacao" class="drawer-link">
           <img class="drawer-icon" src="arrow-up-right-svgrepo-com.svg" alt="">
           Localização
@@ -110,51 +112,51 @@
           <img class="drawer-icon" src="arrow-up-right-svgrepo-com.svg" alt="">
           Contato
         </a>
- 
+
         <div class="drawer-tema">
           <div class="trilho" id="trilho-mobile">
             <div class="indicador"></div>
           </div>
           <span>Modo escuro/claro</span>
         </div>
- 
+
       </div>
     </div>
- 
+
     <!-- MOBILE: gaveta lateral direita (user) -->
     <div class="mobile-user-drawer" id="mobile-user-drawer">
       <div class="mobile-drawer-inner">
- 
+
         <button class="drawer-link drawer-user-link" id="drawer-ir-login">
           <img class="entrarsvg" src="arrow-up-right-svgrepo-com.svg" alt="">
           Entrar
         </button>
- 
+
         <button class="drawer-link drawer-user-link" id="drawer-ir-cadastro">
           <img class="criarcontasvg" src="arrow-right-from-bracket-svgrepo-com.svg" alt="">
           Criar Conta
         </button>
- 
+
         <button class="drawer-link drawer-user-link" id="drawer-sair">
           <img class="entrarsvg" src="exit-door-svgrepo-com.svg" alt="">
           Sair
         </button>
- 
+
       </div>
     </div>
- 
+
     <!-- Overlay único compartilhado -->
     <div class="mobile-drawer-overlay" id="mobile-drawer-overlay"></div>
- 
+
   </nav>
- 
+
   <br class="br"><br class="br"><br class="br"><br class="br"><br class="br"><br class="br">
- 
+
   <!-- CARROSSEL -->
- 
+
   <div class="carousel">
     <div class="slides">
- 
+
       <!-- SLIDE 1 -->
       <picture>
         <source media="(min-width: 769px)" srcset="pcimg1.jpg">
@@ -178,9 +180,9 @@
     <button class="next">&#10095;</button>
     <div class="carousel-dots" id="carousel-dots"></div>
   </div>
- 
+
   <br><br>
- 
+
   <!-- SEÇÃO LOCALIZAÇÃO / CONHEÇA O ESPAÇO ---->
   <div class="container container-pequeno">
     <div class="card" id="localizacao">
@@ -188,7 +190,7 @@
         <h1 class="loc-h1 reveal">-- Conheça o Espaço --</h1> <br><br>
         <p class="tat-p reveal">Um ambiente pensado pra sua experiência, do primeiro esboço à última hachura, confira as
           imagens:</p> <br>
- 
+
         <div class="espaco-grid">
           <div class="espaco-galeria">
             <div class="galeria">
@@ -198,7 +200,7 @@
             <img src="estudio4.jpeg" loading="lazy" class="reveal" alt="Ambiente do estúdio">
             </div>
           </div>
- 
+
           <div class="espaco-info reveal">
             <h3 class="tat-h3">⚲ Onde estamos</h3>
             <p class="tat-p">
@@ -218,9 +220,9 @@
       </section>
     </div>
   </div>
- 
+
   <br><br><br>
- 
+
   <div class="container">
     <div class="card" id="tatuadores">
       <section>
@@ -253,9 +255,9 @@
           </a>
         </div>
       </section>
- 
+
       <br><br>
- 
+
       <section>
         <h3 class="tat-h2 reveal">☪ 𝓐leatória 𝓐rte ☪</h3>
         <p class="tat-p reveal">➣ Trabalho a 5 anos com tatuagem e uma vida toda com arte. Trabalho com diversos
@@ -284,7 +286,7 @@
           </a>
         </div>
       </section>
- 
+
       <section>
         <h3 class="tat-h2 reveal">❀ ℬett𝓎 Tattoo ❀</h3>
         <p class="tat-p reveal"> </p>
@@ -310,13 +312,13 @@
         </div>
       </section>
     </div>
- 
- 
- 
+
+
+
   </div>
- 
+
   <br><br><br>
- 
+
   <div class="container container-pequeno">
     <div class="card" id="recentes">
       <section>
@@ -336,39 +338,39 @@
       </section>
     </div>
   </div>
- 
+
   <br><br>
- 
+
   <section class="video-estudio-section">
- 
- 
+
+
     <div class="video-wrapper reveal">
- 
+
       <video class="video-estudio" autoplay muted loop playsinline>
         <source src="video-estudio.mp4" type="video/mp4">
       </video>
- 
+
       <div class="video-overlay">
         <h3>Conheça Nosso Estúdio</h3>
- 
+
         <a href="https://instagram.com/henripsy" target="_blank" class="instagram-btn">
           ▶ VER NO INSTAGRAM
         </a>
       </div>
- 
+
     </div>
- 
+
   </section>
- 
+
   <br><br><br>
- 
+
   <div class="container">
     <div class="card" id="avaliacoes">
       <section>
         <h1 class="ava-h1">⛧𝓐valiações⛧</h1>
         <h3>-O que nossos clientes dizem-</h3>
         <div id="resumo-avaliacoes"></div>
- 
+
         <div id="auth-area">
           <div id="login-box" class="auth-box">
             <h4 class="h4" >Entre para comentar</h4> <br>
@@ -382,9 +384,9 @@
             </div>
             <p id="login-erro" class="auth-erro"></p>
           </div>
- 
+
           <div id="cadastro-box" class="auth-box" style="display:none;">
- 
+
             <h3>Criar conta</h3>
             <input type="text" id="cad-nome" placeholder="Seu nome" class="auth-input"> <br><br>
             <input type="email" id="cad-email" placeholder="E-mail" class="auth-input"> <br><br>
@@ -395,13 +397,13 @@
             </div>
             <p id="cad-erro" class="auth-erro"></p>
           </div>
- 
+
           <div id="logado-box" class="auth-box" style="display:none;">
             <p id="bem-vindo" class="bem-vindo"></p>
             <button class="btn-auth btn-secondary" id="btn-sair">Sair</button>
           </div>
         </div>
- 
+
         <div id="comentar-area" style="display:none;">
           <textarea id="novo-comentario" class="comentario-input" placeholder="Escreva sua avaliação..."></textarea>
           <div class="estrelas-input" id="estrelas-input">
@@ -413,23 +415,23 @@
           </div>
           <button class="btn-auth" id="btn-enviar-comentario">Publicar avaliação</button>
         </div>
- 
+
         <div id="lista-avaliacoes" class="lista-avaliacoes"></div>
         <p class="av-texto"></p>
       </section>
     </div>
   </div>
- 
+
   <br><br><br>
- 
+
   <script src="script.js" type="module" defer></script>
- 
+
   <!-- FOOTER -->
- 
+
   <img src="bannerpretoebranco.png" class="banner" id="banner">
   <footer id="footer">
     <div class="ft-grid">
- 
+
       <div>
         <p class="ft-label">Estúdio</p>
         <h2 class="ft-title">HENRIPSY</h2>
@@ -438,7 +440,7 @@
           Sala 305 — Rio de Janeiro
         </p>
       </div>
- 
+
       <div>
         <p class="ft-label">Contato</p>
         <p class="ft-sub">
@@ -447,7 +449,7 @@
           @betty.tattoo
         </p>
       </div>
- 
+
       <div>
         <p class="ft-label">Desenvolvido com</p>
         <div class="ft-tools">
@@ -461,11 +463,11 @@
           <strong class="ft-strong">arthurmesq.gg@gmail.com</strong>
         </p>
       </div>
- 
+
     </div>
- 
+
     <hr class="ft-divider">
- 
+
     <div class="ft-bottom">
       <span class="ft-dev">© 2026 ESTÚDIO DA PRAÇA</span>
       <div class="ft-icons">
@@ -478,9 +480,9 @@
       </div>
     </div>
   </footer>
- 
- 
- 
+
+
+
 </body>
- 
+
 </html>
