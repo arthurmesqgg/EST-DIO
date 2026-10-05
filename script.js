@@ -140,20 +140,28 @@ document.getElementById('drawer-ir-cadastro')?.addEventListener('click', () => {
     document.getElementById('avaliacoes')?.scrollIntoView({ behavior: 'smooth' });
 });
 
-// ----- Trilho mobile (modo escuro) -----
-if (trilhoMobile) {
-    if (localStorage.getItem('tema') === 'dark') {
-        trilhoMobile.classList.add('dark');
-    }
-    trilhoMobile.addEventListener('click', () => {
-        const isDark = document.body.classList.toggle('dark');
-        trilhoMobile.classList.toggle('dark', isDark);
-        // Sincroniza trilho desktop
-        const trilhoDesktop = document.getElementById('trilho');
-        trilhoDesktop?.classList.toggle('dark', isDark);
-        localStorage.setItem('tema', isDark ? 'dark' : 'light');
-    });
+// ===== MODO ESCURO / CLARO =====
+
+function aplicarTema(dark) {
+    document.body.classList.toggle('dark', dark);
+    document.getElementById('trilho')?.classList.toggle('dark', dark);
+    document.getElementById('trilho-mobile')?.classList.toggle('dark', dark);
+    localStorage.setItem('tema', dark ? 'dark' : 'light');
 }
+
+document.getElementById('trilho')?.addEventListener('click', () => {
+    aplicarTema(!document.body.classList.contains('dark'));
+});
+
+document.getElementById('trilho-mobile')?.addEventListener('click', () => {
+    aplicarTema(!document.body.classList.contains('dark'));
+});
+
+// Aplica tema salvo ao carregar
+aplicarTema(localStorage.getItem('tema') === 'dark');
+
+// Aplica tema salvo ao carregar
+aplicarTema(localStorage.getItem('tema') === 'dark');
 
 // ----- Navbar: transparente no topo, com fundo ao rolar -----
 // (só aplica em mobile — a classe .scrolled é adicionada pelo scroll)
@@ -241,22 +249,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
 }); // fim DOMContentLoaded
 
-// ===== MODO ESCURO / CLARO =====
-let trilho = document.getElementById('trilho');
-let body = document.body;
-
-if (trilho) {
-    trilho.addEventListener('click', () => {
-        trilho.classList.toggle('dark');
-        body.classList.toggle('dark');
-        localStorage.setItem('tema', body.classList.contains('dark') ? 'dark' : 'light');
-    });
-}
-
-if (localStorage.getItem('tema') === 'dark') {
-    document.body.classList.add('dark');
-    if (trilho) trilho.classList.add('dark');
-}
 
 // ===== NAVBAR =====
 const navbar = document.querySelector(".navbar");
