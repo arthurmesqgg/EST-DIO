@@ -237,20 +237,20 @@ h1 {
 
 .tat-h1 {
     letter-spacing: 6px;
-    font-size: 110px;
+    font-size: 120px;
     filter: brightness(1) invert(0) drop-shadow(0 0 8px rgb(255, 255, 255));
     filter: brightness(1) invert(0) drop-shadow(0 0 18px rgb(255, 255, 255));
 }
 
 .tat-h2 {
-    font-size: 50px;
+    font-size: 60px;
     filter: brightness(1) invert(0) drop-shadow(0 0 8px rgb(255, 255, 255));
     filter: brightness(1) invert(0) drop-shadow(0 0 18px rgb(255, 255, 255));
 
 }
 
 .tat-h3 {
-    font-size: 55px;
+    font-size: 65px;
     letter-spacing: 3px;
     filter: brightness(1) invert(0) drop-shadow(0 0 8px rgb(255, 255, 255));
     filter: brightness(1) invert(0) drop-shadow(0 0 18px rgb(255, 255, 255));
@@ -308,6 +308,25 @@ p {
 
 
 /* ===== SEÇÃO LOCALIZAÇÃO ===== */
+
+.card {
+    max-width: 100%;
+    background: var(--card);
+    padding: 30px 40px;
+    border-radius: 15px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transition: background 0.5s ease, color 0.5s ease;
+}
+
+.card p {
+    color: var(--text);
+    font-size: 18px;
+    line-height: 1.6;
+    margin-top: 12px;
+    transition: color 0.5s ease;
+}
+
 .tat-p {
     font-family: 'TrajanPro', serif;
     font-size: 18px;
@@ -416,7 +435,7 @@ p {
 
 .slides img {
     width: 100%;
-    height: clamp(850px, 50vw, 700px);
+    height: clamp(860px, 50vw, 700px);
     object-fit: cover;
     object-position: center;
     flex-shrink: 0;
@@ -464,7 +483,7 @@ p {
     width: 20px;
     height: 20px;
     border-radius: 70px;
-    background: rgba(255, 255, 255, 0.329);
+    background: rgba(126, 126, 126, 0.973);
     border: none;
     cursor: pointer;
     transition: background 0.3s, width 0.3s;
@@ -723,19 +742,19 @@ body.dark .card section a img:hover {
 .logo-clara {
     display: block;
 }
-
+ 
 .logo-escura {
     display: none;
 }
-
+ 
 body.dark .logo-clara {
     display: none;
 }
-
+ 
 body.dark .logo-escura {
     display: block;
 }
-
+ 
 .trilho {
     width: 100px;
     height: 50px;
@@ -744,7 +763,7 @@ body.dark .logo-escura {
     cursor: pointer;
     flex-shrink: 0;
 }
-
+ 
 .trilho .indicador {
     width: 50px;
     height: 50px;
@@ -753,28 +772,28 @@ body.dark .logo-escura {
     transform: scale(.9);
     transition: all 0.4s ease;
 }
-
+ 
 .trilho.dark {
     background-color: rgb(122, 122, 122);
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
-
+ 
 .trilho.dark .indicador {
     transform: translateX(50px) scale(.9);
     background-color: rgb(192, 192, 192);
 }
-
+ 
 :root {
-    --bg: linear-gradient(180deg, #c2c2c2, #c9c7c7);
+    --bg: linear-gradient(180deg, #d4d4d4, #c9c7c7);
     --text: #000000;
     --card: #ffffff;
     --accent: #000000;
 }
-
+ 
 body.dark {
-    --bg: linear-gradient(180deg, #0a0a0a, #000000);
+    --bg: linear-gradient(180deg, #1b1b1b, #000000);
     --text: #e0e0e0;
-    --card: #111111;
+    --card: #0e0e0e;
     --accent: #ffffff;
 }
 
@@ -1343,6 +1362,78 @@ footer p {
         gap: 10px;
     }
 
+/* ===== LOCALIZAÇÃO — MOBILE ===== */
+
+    .espaco-grid {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        max-width: 100%;
+        gap: 16px;
+        margin-top: 15px;
+        box-sizing: border-box;
+    }
+
+    .espaco-galeria {
+        display: grid;
+        grid-template-columns: 1fr;
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+        gap: 8px;
+        box-sizing: border-box;
+    }
+
+    .espaco-galeria img {
+        display: block;
+        width: 100%;
+        max-width: 100%;
+        height: auto;
+        aspect-ratio: 4 / 3;
+        object-fit: cover;
+        border-radius: 8px;
+        box-sizing: border-box;
+    }
+
+    .espaco-info {
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+        box-sizing: border-box;
+        padding: 18px;
+        order: -1;
+    }
+
+    .estudiof {
+        display: block;
+        width: 100%;
+        max-width: 100%;
+        height: auto;
+        aspect-ratio: 16 / 10;
+        object-fit: cover;
+        border-radius: 8px;
+        box-sizing: border-box;
+    }
+
+    .loc-h1 {
+        font-size: 44px;
+        letter-spacing: 2px;
+        max-width: 100%;
+        word-break: break-word;
+    }
+
+    .tat-p {
+        font-size: 16px;
+        line-height: 1.5;
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+
+    .espaco-info .instagram-btn {
+        align-self: center;
+        max-width: 100%;
+    }
+    
     /* TIPOGRAFIA  */
 
     h1,
@@ -1588,6 +1679,89 @@ footer p {
         gap: 10px;
     }
 
+/* ===== SEÇÃO LOCALIZAÇÃO ===== */
+.tat-p {
+    font-family: 'TrajanPro', serif;
+    font-size: 18px;
+    line-height: 1.6;
+    margin-top: 12px;
+    transition: color 0.5s ease;
+    border-left: none;
+}
+
+.loc-h1 {
+    letter-spacing: 6px;
+    font-size: 110px;
+    filter: brightness(1) invert(0) drop-shadow(0 0 18px rgb(255, 255, 255));
+}
+
+.espaco-grid {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 24px;
+    margin-top: 20px;
+    text-align: left;
+}
+
+.espaco-galeria {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: 8px;
+}
+
+.espaco-galeria img {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+.espaco-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 6px;
+    padding: 24px;
+    border-radius: 12px;
+    border: 2px solid #444;
+}
+
+.estudiof {
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    object-fit: cover;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+.espaco-info .instagram-btn {
+    align-self: flex-start;
+    color: var(--text);
+    margin-top: 12px;
+    font-family: 'TrajanPro', serif;
+    height: auto;
+}
+
+.espaco-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+    text-align: center;
+}
+
+.espaco-info {
+    order: -1;
+    padding: 18px;
+}
+
+.espaco-info .instagram-btn {
+    align-self: center;
+}
+
+.loc-h1 {
+     font-size: 44px;
+    letter-spacing: 2px;
+}
+
     /* TIPOGRAFIA  */
 
     h1,
@@ -1825,6 +1999,89 @@ footer p {
         align-items: center;
         gap: 10px;
     }
+
+/* ===== SEÇÃO LOCALIZAÇÃO ===== */
+.tat-p {
+    font-family: 'TrajanPro', serif;
+    font-size: 18px;
+    line-height: 1.6;
+    margin-top: 12px;
+    transition: color 0.5s ease;
+    border-left: none;
+}
+
+.loc-h1 {
+    letter-spacing: 6px;
+    font-size: 110px;
+    filter: brightness(1) invert(0) drop-shadow(0 0 18px rgb(255, 255, 255));
+}
+
+.espaco-grid {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 24px;
+    margin-top: 20px;
+    text-align: left;
+}
+
+.espaco-galeria {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: 8px;
+}
+
+.espaco-galeria img {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+.espaco-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 6px;
+    padding: 24px;
+    border-radius: 12px;
+    border: 2px solid #444;
+}
+
+.estudiof {
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    object-fit: cover;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+.espaco-info .instagram-btn {
+    align-self: flex-start;
+    color: var(--text);
+    margin-top: 12px;
+    font-family: 'TrajanPro', serif;
+    height: auto;
+}
+
+.espaco-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+    text-align: center;
+}
+
+.espaco-info {
+    order: -1;
+    padding: 18px;
+}
+
+.espaco-info .instagram-btn {
+    align-self: center;
+}
+
+.loc-h1 {
+     font-size: 44px;
+    letter-spacing: 2px;
+}
 
     /* TIPOGRAFIA  */
 
@@ -2066,6 +2323,89 @@ footer p {
         align-items: center;
         gap: 10px;
     }
+
+/* ===== SEÇÃO LOCALIZAÇÃO ===== */
+.tat-p {
+    font-family: 'TrajanPro', serif;
+    font-size: 18px;
+    line-height: 1.6;
+    margin-top: 12px;
+    transition: color 0.5s ease;
+    border-left: none;
+}
+
+.loc-h1 {
+    letter-spacing: 6px;
+    font-size: 110px;
+    filter: brightness(1) invert(0) drop-shadow(0 0 18px rgb(255, 255, 255));
+}
+
+.espaco-grid {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 24px;
+    margin-top: 20px;
+    text-align: left;
+}
+
+.espaco-galeria {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: 8px;
+}
+
+.espaco-galeria img {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+.espaco-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 6px;
+    padding: 24px;
+    border-radius: 12px;
+    border: 2px solid #444;
+}
+
+.estudiof {
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    object-fit: cover;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+.espaco-info .instagram-btn {
+    align-self: flex-start;
+    color: var(--text);
+    margin-top: 12px;
+    font-family: 'TrajanPro', serif;
+    height: auto;
+}
+
+.espaco-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+    text-align: center;
+}
+
+.espaco-info {
+    order: -1;
+    padding: 18px;
+}
+
+.espaco-info .instagram-btn {
+    align-self: center;
+}
+
+.loc-h1 {
+     font-size: 44px;
+    letter-spacing: 2px;
+}
 
     /* TIPOGRAFIA  */
 
@@ -2309,6 +2649,89 @@ footer p {
         gap: 10px;
     }
 
+/* ===== SEÇÃO LOCALIZAÇÃO ===== */
+.tat-p {
+    font-family: 'TrajanPro', serif;
+    font-size: 18px;
+    line-height: 1.6;
+    margin-top: 12px;
+    transition: color 0.5s ease;
+    border-left: none;
+}
+
+.loc-h1 {
+    letter-spacing: 6px;
+    font-size: 110px;
+    filter: brightness(1) invert(0) drop-shadow(0 0 18px rgb(255, 255, 255));
+}
+
+.espaco-grid {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 24px;
+    margin-top: 20px;
+    text-align: left;
+}
+
+.espaco-galeria {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: 8px;
+}
+
+.espaco-galeria img {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+.espaco-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 6px;
+    padding: 24px;
+    border-radius: 12px;
+    border: 2px solid #444;
+}
+
+.estudiof {
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    object-fit: cover;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+.espaco-info .instagram-btn {
+    align-self: flex-start;
+    color: var(--text);
+    margin-top: 12px;
+    font-family: 'TrajanPro', serif;
+    height: auto;
+}
+
+.espaco-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+    text-align: center;
+}
+
+.espaco-info {
+    order: -1;
+    padding: 18px;
+}
+
+.espaco-info .instagram-btn {
+    align-self: center;
+}
+
+.loc-h1 {
+     font-size: 44px;
+    letter-spacing: 2px;
+}
+
     /* TIPOGRAFIA  */
 
     h1,
@@ -2549,6 +2972,89 @@ footer p {
         align-items: center;
         gap: 10px;
     }
+
+/* ===== SEÇÃO LOCALIZAÇÃO ===== */
+.tat-p {
+    font-family: 'TrajanPro', serif;
+    font-size: 18px;
+    line-height: 1.6;
+    margin-top: 12px;
+    transition: color 0.5s ease;
+    border-left: none;
+}
+
+.loc-h1 {
+    letter-spacing: 6px;
+    font-size: 110px;
+    filter: brightness(1) invert(0) drop-shadow(0 0 18px rgb(255, 255, 255));
+}
+
+.espaco-grid {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 24px;
+    margin-top: 20px;
+    text-align: left;
+}
+
+.espaco-galeria {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: 8px;
+}
+
+.espaco-galeria img {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+.espaco-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 6px;
+    padding: 24px;
+    border-radius: 12px;
+    border: 2px solid #444;
+}
+
+.estudiof {
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    object-fit: cover;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+.espaco-info .instagram-btn {
+    align-self: flex-start;
+    color: var(--text);
+    margin-top: 12px;
+    font-family: 'TrajanPro', serif;
+    height: auto;
+}
+
+.espaco-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+    text-align: center;
+}
+
+.espaco-info {
+    order: -1;
+    padding: 18px;
+}
+
+.espaco-info .instagram-btn {
+    align-self: center;
+}
+
+.loc-h1 {
+     font-size: 44px;
+    letter-spacing: 2px;
+}
 
     /* TIPOGRAFIA  */
 
@@ -3045,4 +3551,4 @@ footer p {
     body {
         padding-top: 70px;
     }
-}
+    }
