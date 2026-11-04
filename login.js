@@ -1,0 +1,2872 @@
+/* =====================================================
+   ESTÚDIO DA PRAÇA — style.css (versão consolidada e corrigida)
+
+   • O tema é controlado pela classe "dark" no <html> (:root.dark).
+   • Todas as cores que mudam com o tema ficam nas variáveis abaixo.
+     NÃO redefina variáveis dentro de media queries.
+   ===================================================== */
+
+/* ===== VARIÁVEIS DE TEMA ===== */
+:root {
+    color-scheme: light;
+
+    --bg: linear-gradient(180deg, #f0f0f0, #f5f5f5);
+    --text: #000000;
+    --card: #ffffff;
+    --accent: #000000;
+    --borda: #444444;
+    --hover-suave: rgba(0, 0, 0, 0.08);
+
+    /* interruptor de tema */
+    --trilho-bg: rgb(51, 51, 51);
+    --trilho-knob: #7a7a7a;
+}
+
+:root.dark {
+    color-scheme: dark;
+
+    --bg: linear-gradient(180deg, #1b1b1b, #000000);
+    --text: #e0e0e0;
+    --card: #0e0e0e;
+    --accent: #ffffff;
+    --hover-suave: rgba(255, 255, 255, 0.1);
+
+    --trilho-bg: rgb(122, 122, 122);
+    --trilho-knob: rgb(192, 192, 192);
+}
+
+/* ===== BASE ===== */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+}
+
+[id] {
+    scroll-margin-top: 80px;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    padding-top: 0;
+    min-height: 100vh;
+    font-family: 'UnifrakturMaguntia', serif;
+    letter-spacing: 0.5px;
+    color: var(--text);
+    background: var(--bg);
+    text-align: center;
+    overflow-x: hidden;
+    transition: background 0.5s ease, color 0.5s ease;
+}
+
+/* ===== NAVBAR (PC) ===== */
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 24px;
+    z-index: 1000;
+    background: var(--card);
+    box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+    transition:
+        background-color .45s ease,
+        box-shadow .45s ease,
+        height .35s ease,
+        padding .35s ease;
+}
+
+.navbar.shrink {
+    height: 70px;
+    padding: 0 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, .3);
+}
+
+.navbar.scrolled {
+    box-shadow: 0 10px 35px rgba(0, 0, 0, .35);
+}
+
+/* esquerda */
+.nav-left {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+/* centro */
+.nav-center {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 25px;
+    align-items: center;
+    letter-spacing: 2px;
+    max-height: 95px;
+}
+
+.nav-center a {
+    filter: drop-shadow(0 0 18px rgba(255, 255, 255, 0.85));
+    font-family: 'UnifrakturMaguntia', serif;
+    font-size: 25px;
+    height: 25px;
+    color: var(--text);
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.nav-center a:hover {
+    transform: scale(1.1);
+}
+
+.navbar.shrink .nav-center a {
+    font-size: 16px;
+    height: 15px;
+}
+
+/* direita */
+.nav-right {
+    display: flex;
+    align-items: center;
+}
+
+.nav-right a {
+    display: flex;
+    align-items: center;
+    transition: 0.3s;
+}
+
+.nav-right a:hover {
+    transform: scale(1.1);
+}
+
+.nav-right img {
+    filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.85));
+    height: 90px;
+    width: auto;
+    transition: height 0.3s ease;
+}
+
+.navbar.shrink .nav-right img {
+    height: 65px;
+}
+
+/* botão ☰ */
+.menu-btn {
+    filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.85));
+    background: transparent;
+    border: none;
+    font-size: 32px;
+    cursor: pointer;
+    color: var(--text);
+    display: inline-block;
+    z-index: 1002;
+    transition: transform 0.4s ease, color 0.3s ease;
+}
+
+#menu-btn.open {
+    transform: rotate(90deg);
+}
+
+/* dropdown (PC): links em cima, interruptor embaixo */
+.dropdown {
+    display: none;
+    position: absolute;
+    top: 110%;
+    left: 0;
+    padding: 14px 18px;
+    font-size: 20px;
+    white-space: nowrap;
+    background: var(--card);
+    border-radius: 10px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+    z-index: 1001;
+}
+
+.dropdown.aberto {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 4px;
+    min-width: 280px;
+}
+
+.dropdown-link {
+    display: block;
+    width: 100%;
+    padding: 10px 12px;
+    border: none;
+    border-radius: 8px;
+    background: none;
+    color: var(--text);
+    font-family: 'UnifrakturMaguntia', serif;
+    font-size: 24px;
+    letter-spacing: 1px;
+    text-align: left;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.dropdown-link:hover {
+    background: rgba(128, 128, 128, 0.15);
+}
+
+.dropdown-tema {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    margin-top: 8px;
+    padding: 14px 12px 4px;
+    border-top: 1px solid rgba(128, 128, 128, 0.25);
+}
+
+/* ===== TIPOGRAFIA ===== */
+h1,
+h2,
+h3 {
+    font-family: 'UnifrakturMaguntia', serif;
+    font-weight: 400;
+    letter-spacing: 1px;
+    color: var(--text);
+    transition: color 0.5s ease;
+}
+
+h1 {
+    font-size: 65px;
+    margin-bottom: 20px;
+    letter-spacing: 2px;
+}
+
+h2 {
+    font-size: 28px;
+}
+
+h3 {
+    font-size: 25px;
+}
+
+p {
+    line-height: 1.6;
+    font-size: 16px;
+    padding-left: 10px;
+    border-left: 3px solid var(--accent);
+}
+
+/* Títulos de seção com brilho */
+.loc-h1,
+.loc-h2,
+.tat-h1,
+.trabre-h1,
+.ava-h1 {
+    filter: drop-shadow(0 0 18px rgb(255, 255, 255));
+}
+
+.loc-h1 {
+    font-size: clamp(44px, 9vw, 110px);
+    letter-spacing: 6px;
+}
+
+.loc-h2 {
+    display: none !important; /* versão de título só para celular */
+}
+
+.tat-h1 {
+    font-size: 120px;
+    letter-spacing: 6px;
+}
+
+.trabre-h1 {
+    font-size: clamp(50px, 9vw, 110px);
+}
+
+.ava-h1 {
+    font-size: 110px;
+    letter-spacing: 6px;
+}
+
+.tat-p {
+    font-family: 'TrajanPro', serif;
+    font-size: 18px;
+    line-height: 1.6;
+    margin-top: 12px;
+    border-left: none;
+    transition: color 0.5s ease;
+}
+
+/* ===== CONTAINER / CARDS ===== */
+.container {
+    width: min(100%, 1900px);
+    margin: 0 auto;
+    padding: 30px 40px;
+    min-height: 60vh;
+}
+
+.container-pequeno {
+    max-width: 1700px;
+}
+
+.card {
+    max-width: 100%;
+    padding: 30px 40px;
+    margin-bottom: 20px;
+    background: var(--card);
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transition: background 0.5s ease, color 0.5s ease;
+}
+
+.card p {
+    color: var(--text);
+    font-size: 18px;
+    line-height: 1.6;
+    margin-top: 12px;
+    transition: color 0.5s ease;
+}
+
+.card img {
+    max-width: 100%;
+    height: auto;
+    margin-top: 10px;
+    border-radius: 10px;
+}
+
+/* ===== ÍCONES SVG (tamanho acompanha a fonte) ===== */
+.ic {
+    width: 1em;
+    height: 1em;
+    flex-shrink: 0;
+    vertical-align: -0.125em;
+}
+
+/* ===== SCROLL REVEAL ===== */
+.reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+}
+
+.reveal.visivel {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* O atraso escalonado é aplicado via JS (ativarReveal em script.js) */
+@media (prefers-reduced-motion: reduce) {
+    .reveal {
+        opacity: 1;
+        transform: none;
+        transition: none;
+    }
+}
+
+/* ===== CARROSSEL ===== */
+.carousel {
+    position: relative;
+    max-width: 2000px;
+    margin: 0 auto;
+    overflow: hidden;
+}
+
+.slides {
+    display: flex;
+    transition: transform 0.5s ease;
+}
+
+.slides picture {
+    display: block;
+    width: 100%;
+    flex-shrink: 0;
+}
+
+.slides img {
+    width: 100%;
+    height: 860px;
+    object-fit: cover;
+    object-position: center;
+    flex-shrink: 0;
+}
+
+.prev,
+.next {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 50px;
+    height: 50px;
+    padding: 10px;
+    color: white;
+    background: rgba(0, 0, 0, 0.342);
+    border: 2px solid rgba(145, 145, 145, 0.178);
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 10;
+    filter: drop-shadow(0 0 5px rgb(255, 255, 255));
+}
+
+.prev {
+    left: 25px;
+}
+
+.next {
+    right: 25px;
+}
+
+/* Dots — ficam sobre as fotos, então têm as mesmas cores nos dois temas */
+.carousel-dots {
+    position: absolute;
+    bottom: 105px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    z-index: 10;
+}
+
+.carousel-dot {
+    width: 20px;
+    height: 20px;
+    padding: 0;
+    border: none;
+    border-radius: 70px;
+    background: rgba(126, 126, 126, 0.973);
+    cursor: pointer;
+    transition: background 0.3s, width 0.3s;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.carousel-dot.ativo {
+    width: 100px;
+    height: 22px;
+    background: rgba(255, 255, 255, 0.582);
+    border: 2px solid rgb(24, 24, 24);
+}
+
+/* ===== VÍDEO ===== */
+.video-estudio-section {
+    max-width: 1600px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+.video-wrapper {
+    position: relative;
+    overflow: hidden;
+    border-radius: 20px;
+    border: 2px solid rgba(203, 147, 255, .8);
+    box-shadow:
+        0 0 15px rgba(203, 147, 255, .8),
+        0 0 40px rgba(203, 147, 255, .5),
+        0 0 80px rgba(203, 147, 255, .3);
+    transition: .4s;
+}
+
+.video-wrapper:hover {
+    box-shadow:
+        0 0 25px rgba(203, 147, 255, 1),
+        0 0 60px rgba(203, 147, 255, .8),
+        0 0 120px rgba(203, 147, 255, .5);
+}
+
+.video-estudio {
+    display: block;
+    width: 100%;
+    height: 700px;
+    object-fit: cover;
+}
+
+.video-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: rgba(0, 0, 0, .45);
+    opacity: 0;
+    transition: .4s;
+}
+
+.video-wrapper:hover .video-overlay {
+    opacity: 1;
+}
+
+.video-overlay h3 {
+    margin-bottom: 20px;
+    font-size: 3rem;
+    color: white;
+    text-shadow: 0 0 20px rgba(255, 255, 255, .7);
+}
+
+/* Celular/tablet (sem hover): o botão do Instagram fica sempre visível */
+@media (hover: none) {
+    .video-overlay {
+        opacity: 1;
+        justify-content: flex-end;
+        padding-bottom: 24px;
+        background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent 60%);
+    }
+
+    .video-overlay h3 {
+        margin-bottom: 12px;
+        font-size: 1.6rem;
+    }
+}
+
+.instagram-btn {
+    height: auto;
+    padding: 15px 35px;
+    color: white;
+    font-family: 'TrajanPro', serif;
+    letter-spacing: 3px;
+    text-decoration: none;
+    background: rgba(255, 255, 255, .08);
+    border: 1px solid rgba(255, 255, 255, .5);
+    border-radius: 50px;
+    backdrop-filter: blur(10px);
+    transition: .3s;
+}
+
+.instagram-btn:hover {
+    transform: scale(1.08);
+    background: rgba(255, 255, 255, .15);
+    box-shadow:
+        0 0 15px rgba(255, 255, 255, .5),
+        0 0 30px rgba(203, 147, 255, .8);
+}
+
+/* ===== GALERIA (usada pelo lightbox) ===== */
+.galeria {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+    margin-top: 10px;
+    cursor: pointer;
+}
+
+.galeria img {
+    display: block;
+    width: 100%;
+    height: 200px;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border-radius: 10px;
+    cursor: zoom-in;
+    transition: transform 0.2s;
+}
+
+.galeria img:hover {
+    transform: scale(1.02);
+}
+
+/* ===== LIGHTBOX ===== */
+.lightbox {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    justify-content: center;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.9);
+}
+
+.lightbox-img {
+    display: block;
+    max-width: 90%;
+    max-height: 90%;
+    border-radius: 10px;
+    cursor: zoom-in;
+    transform-origin: center;
+    touch-action: none;
+    user-select: none;
+    -webkit-user-drag: none;
+    pointer-events: auto;
+}
+
+.fechar {
+    display: none;
+    position: fixed;
+    top: 20px;
+    right: 30px;
+    font-size: 40px;
+    color: white;
+    cursor: pointer;
+    z-index: 10000;
+}
+
+.prev-img,
+.next-img {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 60px;
+    height: 60px;
+    border: none;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(5px);
+    color: white;
+    font-size: 25px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.prev-img {
+    left: 20px;
+}
+
+.next-img {
+    right: 20px;
+}
+
+.prev-img:hover,
+.next-img:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-50%) scale(1.1);
+}
+
+/* ===== LOGO CLARA / ESCURA ===== */
+.logo-clara {
+    display: block;
+}
+
+.logo-escura {
+    display: none;
+}
+
+:root.dark .logo-clara {
+    display: none;
+}
+
+:root.dark .logo-escura {
+    display: block;
+}
+
+/* ===== INTERRUPTOR DE TEMA ===== */
+.trilho {
+    width: 100px;
+    height: 50px;
+    border-radius: 25px;
+    background-color: var(--trilho-bg);
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: background-color 0.4s ease, box-shadow 0.4s ease;
+}
+
+.trilho .indicador {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: var(--trilho-knob);
+    transform: scale(.9);
+    transition: all 0.4s ease;
+}
+
+.trilho.dark {
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.trilho.dark .indicador {
+    transform: translateX(50px) scale(.9);
+}
+
+/* =====================================================
+   SEÇÃO LOCALIZAÇÃO / CONHEÇA O ESPAÇO
+   ===================================================== */
+.loc-titulo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.25em;
+    text-align: center;
+}
+
+.loc-titulo .ic-porta {
+    width: 0.65em;
+    height: 0.65em;
+}
+
+/* ----- Divisores ornamentais ----- */
+.esp-divisor,
+.esp-divisortattoo {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    margin: 0 auto 8px;
+    color: var(--text);
+}
+
+.esp-divisor {
+    max-width: 420px;
+}
+
+.esp-divisortattoo {
+    max-width: 1050px;
+}
+
+.esp-divisor::before,
+.esp-divisor::after,
+.esp-divisortattoo::before,
+.esp-divisortattoo::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: currentColor;
+    opacity: 0.3;
+}
+
+.esp-divisor span,
+.esp-divisortattoo span {
+    font-size: 26px;
+    filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.9));
+}
+
+/* ----- Texto de introdução ----- */
+.card .esp-intro {
+    max-width: 640px;
+    margin: 8px auto 0;
+    padding-left: 0;
+    line-height: 1.7;
+}
+
+/* ----- Grade principal ----- */
+.esp-grid {
+    /* a borda é calculada aqui para acompanhar o tema */
+    --esp-borda: color-mix(in srgb, var(--text) 20%, transparent);
+
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;
+    gap: 28px;
+    align-items: stretch;
+    margin-top: 36px;
+    text-align: left;
+}
+
+/* ----- Galeria assimétrica (2 + 1 / 1 + 2) ----- */
+.esp-galeria.galeria {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-auto-rows: clamp(170px, 16vw, 270px);
+    gap: 14px;
+    margin-top: 0;
+    cursor: default;
+}
+
+.esp-galeria figure:nth-child(1),
+.esp-galeria figure:nth-child(4) {
+    grid-column: span 2;
+}
+
+.esp-galeria figure {
+    position: relative;
+    margin: 0;
+    overflow: hidden;
+    border-radius: 14px;
+    border: 1px solid var(--esp-borda);
+    background: #111;
+}
+
+.esp-galeria.galeria img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    aspect-ratio: auto;
+    border-radius: 0;
+    object-fit: cover;
+    cursor: zoom-in;
+    transition: transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.esp-galeria.galeria figure:hover img {
+    transform: scale(1.07);
+}
+
+.esp-galeria figcaption {
+    position: absolute;
+    inset: auto 0 0 0;
+    padding: 36px 16px 14px;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.78), transparent);
+    color: #fff;
+    font-family: 'TrajanPro', serif;
+    font-size: 14px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    text-align: left;
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity 0.35s ease, transform 0.35s ease;
+    pointer-events: none; /* não atrapalha o clique que abre o lightbox */
+}
+
+.esp-galeria figure:hover figcaption {
+    opacity: 1;
+    transform: none;
+}
+
+@media (hover: none) {
+    .esp-galeria figcaption {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+/* ----- Cartão "Localização" ----- */
+/* permite animar a troca de cor do fundo no hover */
+@property --painel {
+    syntax: '<color>';
+    inherits: true;
+    initial-value: transparent;
+}
+
+.esp-card {
+    --painel: color-mix(in srgb, var(--text) 1%, var(--card));
+
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border-radius: 14px;
+    border: 1px solid var(--esp-borda);
+    background: var(--painel);
+    box-shadow: 0 0 40px rgba(128, 128, 128, 0.12);
+    transition:
+        --painel 0.5s ease,
+        opacity 0.7s ease,
+        transform 0.7s ease,
+        box-shadow 0.4s ease;
+}
+
+.esp-card:hover {
+    --painel: #000000;
+    --text: #f2f2f2;
+    box-shadow: 0 0 55px rgba(128, 128, 128, 0.28);
+}
+
+.esp-foto {
+    position: relative;
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+}
+
+.esp-card .esp-foto img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    border-radius: 0;
+    object-fit: cover;
+    transition: transform 0.8s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.esp-card:hover .esp-foto img {
+    transform: scale(1.05);
+}
+
+.esp-foto::after {
+    content: '';
+    position: absolute;
+    inset: auto 0 0 0;
+    height: 45%;
+    background: linear-gradient(to top, var(--painel), transparent);
+    pointer-events: none;
+}
+
+.esp-selo {
+    position: absolute;
+    top: 14px;
+    left: 14px;
+    z-index: 1;
+    padding: 6px 14px;
+    border-radius: 50px;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(6px);
+    color: #fff;
+    font-family: 'TrajanPro', serif;
+    font-size: 12px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+.esp-corpo {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    gap: 14px;
+    padding: 8px 28px 30px;
+}
+
+.esp-titulo {
+    margin: 0;
+    font-size: clamp(44px, 3vw, 65px);
+    filter: drop-shadow(0 0 14px rgb(255, 255, 255));
+}
+
+.esp-endereco {
+    margin: 0;
+    font-style: normal;
+    font-family: 'TrajanPro', serif;
+    font-size: 18px;
+    line-height: 1.7;
+    color: var(--text);
+    transition: color 0.4s ease;
+}
+
+/* Botão Google Maps no mesmo estilo das pílulas do índice dos tatuadores */
+.esp-card .esp-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 6px;
+    padding: 10px 22px;
+    border: 1px solid color-mix(in srgb, var(--text) 20%, transparent);
+    border-radius: 50px;
+    background: transparent;
+    backdrop-filter: none;
+    font-family: 'TrajanPro', serif;
+    font-size: 24px;
+    letter-spacing: 1px;
+    text-transform: none;
+    color: var(--text);
+    text-decoration: none;
+    transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+/* no hover do cartão o fundo vira preto e --text vira claro,
+   por isso o texto do botão em hover usa preto fixo */
+.esp-card .esp-btn:hover {
+    transform: none;
+    box-shadow: none;
+    background: var(--text);
+    border-color: var(--text);
+    color: #000;
+}
+
+.esp-card .esp-btn .ic {
+    width: 0.8em;
+    height: 0.8em;
+}
+
+/* =====================================================
+   SEÇÃO TATUADORES
+   ===================================================== */
+#tatuadores {
+    /* a borda é calculada aqui para acompanhar o tema */
+    --tat-borda: color-mix(in srgb, var(--text) 20%, transparent);
+}
+
+.tat-titulo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.2em;
+    margin-bottom: 10px;
+    font-size: clamp(36px, 8vw, 150px);
+}
+
+.tat-titulo .ic-titulo {
+    width: 0.6em;
+    height: 0.6em;
+}
+
+/* ----- Índice (atalhos) ----- */
+.tat-indice {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+    margin: 18px 0 40px;
+}
+
+.tat-indice a {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 22px;
+    border: 1px solid var(--tat-borda);
+    border-radius: 50px;
+    font-family: 'UnifrakturMaguntia', serif;
+    font-size: 24px;
+    letter-spacing: 1px;
+    color: var(--text);
+    text-decoration: none;
+    transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+.tat-indice a:hover {
+    background: var(--text);
+    border-color: var(--text);
+    color: var(--card);
+}
+
+/* ----- Card do artista ----- */
+.tat-card {
+    display: grid;
+    grid-template-columns: 0.9fr 1.1fr;
+    overflow: hidden;
+    margin: 0 0 32px;
+    border-radius: 14px;
+    border: 1px solid var(--tat-borda);
+    background: color-mix(in srgb, var(--text) 4%, var(--card));
+    box-shadow: 0 0 40px rgba(128, 128, 128, 0.12);
+    text-align: left;
+    transition: opacity 0.7s ease, transform 0.7s ease, box-shadow 0.4s ease;
+}
+
+.tat-card:last-child {
+    margin-bottom: 0;
+}
+
+.tat-card:hover {
+    box-shadow: 0 0 55px rgba(128, 128, 128, 0.28);
+}
+
+/* ----- Capa (foto + nome) ----- */
+.tat-capa {
+    position: relative;
+    min-height: 480px;
+    overflow: hidden;
+    background: #111;
+}
+
+.tat-card .tat-capa img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    border-radius: 0;
+    object-fit: cover;
+    transition: transform 0.8s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.tat-card:hover .tat-capa img {
+    transform: scale(1.04);
+}
+
+/* escurece a base da foto (celular/tablet: nome embaixo) */
+.tat-capa::after {
+    content: '';
+    position: absolute;
+    inset: auto 0 0 0;
+    height: 55%;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.85), transparent);
+    pointer-events: none;
+}
+
+.tat-nome {
+    position: absolute;
+    inset: auto 0 0 0;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 10px 15px;
+    font-size: clamp(38px, 3.4vw, 60px);
+    color: #fff;
+    filter: drop-shadow(0 0 14px rgba(255, 255, 255, 0.55));
+}
+
+.tat-nome .ic {
+    width: 0.8em;
+    height: 0.8em;
+}
+
+/* PC: card invertido + nome no topo da foto */
+@media (min-width: 901px) {
+    .tat-card--inverso {
+        grid-template-columns: 1.1fr 0.9fr;
+    }
+
+    .tat-card--inverso .tat-capa {
+        order: 2;
+    }
+
+    .tat-nome {
+        inset: 0 0 auto 0;
+    }
+
+    /* o escurecimento também sobe para o topo */
+    .tat-capa::after {
+        inset: 0 0 auto 0;
+        height: 40%;
+        background: linear-gradient(to bottom, rgba(0, 0, 0, 0.85), transparent);
+    }
+
+    /* Aleatória Arte: nome no canto superior direito */
+    .tat-card--inverso .tat-nome {
+        justify-content: flex-end;
+        text-align: right;
+    }
+}
+
+/* ----- Conteúdo ----- */
+.tat-conteudo {
+    display: flex;
+    flex-direction: column;
+    padding: 32px 34px;
+}
+
+.tat-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 0 0 18px;
+    padding: 0;
+    list-style: none;
+}
+
+.tat-tags li {
+    padding: 6px 14px;
+    border: 1px solid var(--tat-borda);
+    border-radius: 50px;
+    font-family: 'TrajanPro', serif;
+    font-size: 13px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--text);
+}
+
+.card .tat-bio {
+    margin: 0 0 22px;
+    padding-left: 0;
+    border-left: none;
+    font-family: 'TrajanPro', serif;
+    font-size: 17px;
+    line-height: 1.75;
+    text-align: left;
+}
+
+/* Subtítulo "Trabalhos" com linhas e losangos */
+.tat-sub {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 4px 0 14px;
+    font-size: 26px;
+}
+
+.tat-sub::before,
+.tat-sub::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: currentColor;
+    opacity: 0.25;
+}
+
+.tat-sub .ic {
+    width: 0.5em;
+    height: 0.5em;
+}
+
+/* ----- Galeria (usa --cols definido no HTML) ----- */
+.tat-galeria.galeria {
+    grid-template-columns: repeat(var(--cols, 3), 1fr);
+    gap: 8px;
+    margin: 0 0 26px;
+    cursor: default;
+}
+
+.tat-galeria.galeria img {
+    width: 100%;
+    height: auto;
+    margin: 0;
+    aspect-ratio: 1 / 1;
+    border-radius: 10px;
+    object-fit: cover;
+    cursor: zoom-in;
+}
+
+/* ----- Botão do Instagram ----- */
+.tat-btn {
+    align-self: flex-start;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: auto;
+    padding: 14px 28px;
+    border: 1px solid color-mix(in srgb, var(--text) 40%, transparent);
+    border-radius: 50px;
+    font-family: 'TrajanPro', serif;
+    font-size: 15px;
+    letter-spacing: 2px;
+    color: var(--text);
+    text-decoration: none;
+    transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+.tat-btn:hover {
+    background: var(--text);
+    border-color: var(--text);
+    color: var(--card);
+}
+
+.tat-btn .ic {
+    width: 1.25em;
+    height: 1.25em;
+}
+
+/* =====================================================
+   AVALIAÇÕES
+   ===================================================== */
+.ava-titulo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.25em;
+    font-size: clamp(36px, 8vw, 110px);
+}
+
+.ava-titulo .ic-estrela {
+    width: 0.5em;
+    height: 0.5em;
+}
+
+.auth-box {
+    max-width: 420px;
+    margin: 20px auto;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    align-items: center;
+}
+
+.auth-input {
+    width: 100%;
+    padding: 12px 16px;
+    border-radius: 8px;
+    border: 2px solid var(--accent);
+    background: var(--card);
+    color: var(--text);
+    font-size: 15px;
+    font-family: 'Roboto', sans-serif;
+    outline: none;
+    transition: 0.3s;
+}
+
+.auth-input:focus {
+    border-color: #555;
+    box-shadow: 0 0 0 3px rgba(128, 128, 128, 0.3);
+}
+
+.auth-btns {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+    justify-content: center;
+}
+
+.btn-auth,
+.btn-secondary {
+    gap: 8px;
+    padding: 11px 28px;
+    border: 2px solid var(--borda);
+    border-radius: 8px;
+    background: var(--card);
+    color: var(--text);
+    font-size: 15px;
+    font-family: 'UnifrakturMaguntia', serif;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+a.btn-auth {
+    display: inline-block;
+    text-decoration: none;
+}
+
+.btn-auth:hover,
+.btn-secondary:hover {
+    background: var(--hover-suave);
+    transform: translateY(2px);
+}
+
+.auth-erro {
+    min-height: 18px;
+    margin: 0;
+    padding: 0;
+    border: none;
+    font-size: 13px;
+    color: #e74c3c;
+}
+
+.bem-vindo {
+    padding: 0;
+    border: none;
+    font-size: 16px;
+}
+
+.comentario-input {
+    display: block;
+    width: 100%;
+    max-width: 600px;
+    min-height: 100px;
+    margin: 10px auto;
+    padding: 12px 16px;
+    border-radius: 8px;
+    border: 2px solid var(--borda);
+    background: var(--card);
+    color: var(--text);
+    font-size: 15px;
+    font-family: 'Roboto', sans-serif;
+    resize: vertical;
+    outline: none;
+    transition: 0.3s;
+}
+
+.comentario-input:focus {
+    border-color: var(--accent);
+}
+
+.estrelas-input {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    margin: 6px 0;
+    font-size: 30px;
+    cursor: pointer;
+}
+
+.estrela-sel {
+    color: #555;
+    cursor: pointer;
+    transition: color 0.2s, transform 0.2s;
+}
+
+.estrela-sel:hover,
+.estrela-sel.ativa {
+    color: #f1c40f;
+    transform: scale(1.2);
+}
+
+.lista-avaliacoes {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 30px;
+    text-align: left;
+}
+
+.avaliacao-item {
+    padding: 16px 20px;
+    border-radius: 10px;
+    border: 2px solid var(--borda);
+    background: var(--card);
+    transition: background 0.3s;
+}
+
+.av-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.av-nome {
+    filter: drop-shadow(0 0 18px rgba(255, 255, 255, 0.85));
+    font-family: 'TrajanPro', serif;
+    font-size: 21px;
+    letter-spacing: 1px;
+    color: var(--text);
+}
+
+.av-estrelas {
+    font-size: 18px;
+    color: #f1c40f;
+}
+
+.av-data {
+    font-family: 'TrajanPro', serif;
+    font-size: 12px;
+    color: #6b6b6b;
+}
+
+.av-texto {
+    margin: 0;
+    padding: 0;
+    border: none;
+    font-family: 'TrajanPro', serif;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--text) !important;
+    overflow-wrap: anywhere;
+}
+
+.sem-avaliacoes {
+    padding: 20px 0;
+    border: none;
+    text-align: center;
+    font-size: 15px;
+    color: #888;
+}
+
+/* Nota média */
+.nota-media {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    max-width: 260px;
+    margin: 16px auto;
+    padding: 20px;
+    border-radius: 12px;
+    border: 2px solid var(--borda);
+    background: var(--card);
+}
+
+.nota-numero {
+    filter: drop-shadow(0 0 18px rgba(255, 255, 255, 0.85));
+    font-family: 'TrajanPro', sans-serif;
+    font-size: 52px;
+    letter-spacing: 2px;
+    line-height: 1;
+    color: var(--text);
+}
+
+.nota-estrelas {
+    font-size: 26px;
+    letter-spacing: 4px;
+    color: #f1c40f;
+}
+
+.nota-total {
+    font-family: 'TrajanPro', sans-serif;
+    font-size: 13px;
+    color: #888;
+}
+
+/* Menu ⋯ da avaliação */
+.av-opcoes-container {
+    position: relative;
+    margin-left: auto;
+}
+
+.av-opcoes-btn {
+    padding: 0 6px;
+    border: none;
+    border-radius: 50%;
+    background: none;
+    font-size: 22px;
+    line-height: 1;
+    color: var(--text);
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.av-opcoes-btn:hover {
+    background: var(--hover-suave);
+}
+
+.av-menu {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 110%;
+    min-width: 130px;
+    overflow: hidden;
+    background: var(--card);
+    border-radius: 8px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+    z-index: 100;
+}
+
+.av-menu.aberto {
+    display: flex;
+    flex-direction: column;
+}
+
+.av-menu button {
+    padding: 10px 16px;
+    border: none;
+    background: none;
+    text-align: left;
+    font-size: 14px;
+    font-family: 'Roboto', sans-serif;
+    color: var(--text);
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.av-menu button:hover {
+    background: var(--hover-suave);
+}
+
+.av-edit-input {
+    margin-top: 8px;
+}
+
+.av-edit-estrelas {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    margin: 6px 0;
+    font-size: 26px;
+}
+
+/* ===== MODAL DE CONFIRMAÇÃO ===== */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    justify-content: center;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+    z-index: 9998;
+}
+
+.modal-overlay.aberto {
+    display: flex;
+}
+
+.modal-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    max-width: 330px;
+    padding: 30px 36px;
+    background: var(--card);
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    animation: zoom 0.2s ease;
+}
+
+.modal-texto {
+    margin: 0;
+    padding: 0;
+    border: none;
+    font-family: 'UnifrakturMaguntia', serif;
+    font-size: 20px;
+    letter-spacing: 1px;
+    color: var(--text);
+}
+
+@keyframes zoom {
+    from {
+        transform: scale(0.9);
+        opacity: 0;
+    }
+
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* ===== RODAPÉ (cores fixas: igual nos dois temas) ===== */
+footer {
+    width: 100%;
+    padding: 48px 40px 24px;
+    background: #2a2a2a;
+    color: #e0e0e0;
+    border-top: 3px solid #444;
+    font-family: 'Anton', sans-serif;
+}
+
+footer p {
+    border-left: none;
+}
+
+.banner {
+    display: block;
+    width: 100%;
+    height: auto;
+    margin: 0;
+    padding: 0;
+}
+
+.ft-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 32px;
+    max-width: 900px;
+    margin: 0 auto 40px;
+    text-align: center;
+}
+
+.ft-label {
+    margin: 0 0 14px;
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    font-family: 'Roboto', sans-serif;
+    color: #888;
+}
+
+.ft-title {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin: 0 0 6px;
+    font-family: 'UnifrakturMaguntia', serif;
+    font-size: 22px;
+    font-weight: 400;
+    letter-spacing: 2px;
+    color: #fff;
+}
+
+.ft-sub {
+    margin: 0;
+    padding: 0;
+    border: none;
+    font-size: 13px;
+    line-height: 1.8;
+    letter-spacing: 0.5px;
+    font-family: 'Roboto', sans-serif;
+    color: #aaa;
+}
+
+.ft-strong {
+    color: #ccc;
+}
+
+.ft-tools {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 8px;
+}
+
+.ft-pill {
+    padding: 5px 12px;
+    border: 1px solid #444;
+    border-radius: 20px;
+    font-size: 11px;
+    letter-spacing: 0.5px;
+    font-family: 'Roboto', sans-serif;
+    color: #888;
+}
+
+.ft-divider {
+    max-width: 900px;
+    margin: 0 auto 20px;
+    border: none;
+    border-top: 1px solid #3a3a3a;
+}
+
+.ft-bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.ft-dev {
+    font-size: 12px;
+    letter-spacing: 0.5px;
+    font-family: 'Roboto', sans-serif;
+    color: #666;
+}
+
+.ft-icons {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.ft-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 46px;
+    height: 46px;
+    border: 1px solid #444;
+    border-radius: 50%;
+    text-decoration: none;
+    transition: border-color 0.2s;
+}
+
+.ft-icon:hover {
+    border-color: #aaa;
+}
+
+/* ===== NAVBAR MOBILE — elementos escondidos no PC ===== */
+.mobile-navbar,
+.mobile-drawer,
+.mobile-user-drawer,
+.mobile-drawer-overlay {
+    display: none;
+}
+
+/* =====================================================
+   RESPONSIVO
+   (somente layout — nenhuma cor/variável é redefinida aqui)
+   ===================================================== */
+
+/* ----- Seção localização / tatuadores: até 1100px ----- */
+@media (max-width: 1100px) {
+    .esp-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .esp-galeria.galeria {
+        grid-auto-rows: clamp(150px, 26vw, 260px);
+    }
+}
+
+/* ----- Tatuadores: até 900px ----- */
+@media (max-width: 900px) {
+    .tat-card {
+        grid-template-columns: 1fr;
+    }
+
+    .tat-capa {
+        min-height: 0;
+        aspect-ratio: 4 / 3;
+    }
+}
+
+/* ----- Tablet / mobile: navbar com gavetas (até 768px) ----- */
+@media (max-width: 768px) {
+
+    /* esconde navbar desktop */
+    .nav-left,
+    .nav-center,
+    .nav-right {
+        display: none !important;
+    }
+
+    body {
+        padding-top: 70px;
+    }
+
+    .navbar {
+        height: 70px;
+        padding: 0;
+        box-shadow: none;
+        transition: background 0.3s ease, box-shadow 0.3s ease, height 0.3s ease;
+    }
+
+    .navbar.scrolled {
+        background: var(--card);
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .navbar.shrink {
+        height: 56px;
+    }
+
+    /* barra mobile */
+    .mobile-navbar {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        height: 100%;
+        padding: 0 16px;
+    }
+
+    .mobile-logo {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        align-items: center;
+        text-decoration: none;
+    }
+
+    .mobile-logo img {
+        height: 60px;
+        width: auto;
+        transition: height 0.3s ease;
+        image-rendering: -webkit-optimize-contrast;
+        backface-visibility: hidden;
+        transform: translateZ(0);
+    }
+
+    .navbar.shrink .mobile-logo img {
+        height: 50px;
+    }
+
+    .mobile-menu-btn {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0;
+        padding: 8px;
+        border: none;
+        background: transparent;
+        font-size: 28px;
+        color: var(--text);
+        cursor: pointer;
+        z-index: 2001;
+        transition: transform 0.2s ease;
+    }
+
+    .mobile-user-btn {
+        display: flex;
+        align-items: center;
+        padding: 8px;
+        border: none;
+        background: transparent;
+        color: var(--text);
+        cursor: pointer;
+        z-index: 1;
+        transition: transform 0.2s ease;
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    .mobile-menu-btn:active,
+    .mobile-user-btn:active {
+        transform: scale(0.9);
+    }
+
+    /* gaveta esquerda (links) */
+    .mobile-drawer {
+        display: block;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 150vw;
+        max-width: 330px;
+        height: 100dvh;
+        background: var(--card);
+        box-shadow: 4px 0 24px rgba(0, 0, 0, 0.3);
+        z-index: 2000;
+        transform: translateX(-100%);
+        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .mobile-drawer.aberto {
+        transform: translateX(0);
+    }
+
+    /* gaveta direita (user) */
+    .mobile-user-drawer {
+        display: block;
+        position: fixed;
+        top: 0;
+        right: 0;
+        width: 72vw;
+        max-width: 280px;
+        height: 100dvh;
+        background: var(--card);
+        box-shadow: -4px 0 24px rgba(0, 0, 0, 0.3);
+        z-index: 2000;
+        transform: translateX(100%);
+        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .mobile-user-drawer.aberto {
+        transform: translateX(0);
+    }
+
+    .mobile-drawer-inner {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        padding: 80px 0 32px;
+    }
+
+    /* links das gavetas */
+    .drawer-link,
+    .drawer-user-link {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 18px 28px;
+        font-family: 'UnifrakturMaguntia', serif;
+        font-size: 25px;
+        letter-spacing: 2px;
+        color: var(--text);
+        text-decoration: none;
+        white-space: nowrap;
+        border-bottom: 1px solid rgba(128, 128, 128, 0.15);
+        transition: background 0.2s;
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    .drawer-link:last-of-type {
+        border-bottom: none;
+    }
+
+    .drawer-user-link {
+        width: 100%;
+        border-top: none;
+        border-left: none;
+        border-right: none;
+        background: none;
+        text-align: left;
+        cursor: pointer;
+    }
+
+    .drawer-user-link:last-of-type {
+        border-bottom: 1px solid rgba(128, 128, 128, 0.15);
+    }
+
+    .drawer-link:active,
+    .drawer-link:hover,
+    .drawer-user-link:active,
+    .drawer-user-link:hover {
+        background: rgba(128, 128, 128, 0.1);
+    }
+
+    /* ícones das gavetas: pretos no claro, brancos no escuro */
+    .drawer-icon,
+    .entrarsvg,
+    .criarcontasvg {
+        width: 18px;
+        height: 18px;
+        flex-shrink: 0;
+        filter: brightness(0);
+    }
+
+    :root.dark .drawer-icon,
+    :root.dark .entrarsvg,
+    :root.dark .criarcontasvg {
+        filter: brightness(0) invert(1);
+    }
+
+    /* interruptor de tema na gaveta */
+    .drawer-tema {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        margin-top: 8px;
+        padding: 20px 28px;
+        border-top: 1px solid rgba(128, 128, 128, 0.15);
+    }
+
+    .drawer-tema span {
+        font-family: 'UnifrakturMaguntia', serif;
+        font-size: 20px;
+        color: var(--text);
+        opacity: 0.7;
+        white-space: nowrap;
+        text-shadow: 0.2px 0 #555, -0.1px 0 #555, 0 0.1px #555, 0 -0.1px #555;
+    }
+
+    .drawer-tema .trilho {
+        width: 80px;
+        height: 50px;
+        border-radius: 25px;
+        flex-shrink: 0;
+    }
+
+    .drawer-tema .trilho.dark .indicador {
+        transform: translateX(30px) scale(0.9);
+    }
+
+    /* overlay compartilhado */
+    .mobile-drawer-overlay {
+        display: block;
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.55);
+        z-index: 1999;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s ease;
+    }
+
+    .mobile-drawer-overlay.aberto {
+        opacity: 1;
+        pointer-events: all;
+    }
+}
+
+/* ----- Textos pequenos (até 600px) ----- */
+@media (max-width: 600px) {
+    h1 {
+        font-size: 30px;
+    }
+
+    h2 {
+        font-size: 24px;
+    }
+
+    h3 {
+        font-size: 17px;
+    }
+
+    p {
+        font-size: 15px;
+    }
+
+    /* localização */
+    .esp-galeria.galeria {
+        grid-template-columns: repeat(2, 1fr);
+        grid-auto-rows: 150px;
+        gap: 10px;
+    }
+
+    .esp-galeria figure {
+        border-radius: 10px;
+    }
+
+    .esp-corpo {
+        padding: 6px 20px 24px;
+    }
+
+    .esp-titulo {
+        font-size: 36px;
+    }
+
+    .esp-endereco {
+        font-size: 16px;
+    }
+
+    /* tatuadores */
+    .tat-titulo {
+        font-size: 55px;
+    }
+
+    .tat-indice {
+        margin-bottom: 28px;
+    }
+
+    .tat-indice a {
+        padding: 8px 16px;
+        font-size: 20px;
+    }
+
+    .tat-nome {
+        padding: 0px 20px;
+        font-size: 40px;
+    }
+
+    .tat-conteudo {
+        padding: 22px 20px 24px;
+    }
+
+    .card .tat-bio {
+        font-size: 16px;
+    }
+
+    .tat-btn {
+        align-self: stretch;
+        justify-content: center;
+    }
+}
+
+/* ----- Celulares (até 414px) ----- */
+@media (max-width: 414px) {
+
+    .br {
+        display: none;
+    }
+
+    .container {
+        max-width: 100%;
+        padding: 10px;
+    }
+
+    .card {
+        padding: 15px 16px;
+    }
+
+    .card img {
+        border-radius: 5px;
+    }
+
+    /* títulos */
+    .loc-h1 {
+        display: none !important;
+    }
+
+    .loc-h2 {
+        display: block !important;
+        max-width: 100%;
+        font-size: 55px;
+        letter-spacing: 2px;
+        word-break: break-word;
+    }
+
+    .card .tat-p {
+        max-width: 100%;
+        font-size: 16px;
+        line-height: 1.5;
+        letter-spacing: normal;
+    }
+
+    .tat-h1 {
+        letter-spacing: 2px;
+        max-width: 100%;
+        font-size: 45px;
+        letter-spacing: 2px;
+        word-break: break-word;  
+    }
+
+    .ava-h1 {
+        letter-spacing: 2px;
+        max-width: 100%;
+        font-size: 45px;
+        letter-spacing: 2px;
+        word-break: break-word;        
+    }
+
+    /* localização */
+    .esp-card {
+        order: -1; /* o cartão de endereço vem primeiro */
+    }
+
+    .esp-titulo {
+        font-size: 42px;
+    }
+
+    /* galeria / carrossel / lightbox */
+    .galeria {
+        border-radius: 5px;
+        gap: 8px;
+    }
+
+    .galeria img {
+        height: 260px;
+    }
+
+    .slides img {
+        height: 836px;
+        border-radius: 0;
+    }
+
+    .prev,
+    .next,
+    .prev-img,
+    .next-img {
+        display: none;
+    }
+
+    .lightbox-img {
+        max-width: 95%;
+        max-height: 80%;
+        border-radius: 5px;
+    }
+
+    .fechar {
+        top: 10px;
+        right: 15px;
+        font-size: 30px;
+    }
+
+    /* rodapé */
+    footer {
+        padding: 32px 20px 20px;
+    }
+
+    .banner {
+        height: 270px;
+    }
+
+    .ft-grid {
+        grid-template-columns: 1fr;
+        gap: 24px;
+    }
+
+    .ft-bottom {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+}
+
+/* ----- Ajustes finos de altura do carrossel por largura ----- */
+@media (max-width: 402px) {
+    .slides img {
+        height: 805px;
+    }
+}
+
+@media (max-width: 393px) {
+    .slides img {
+        height: 600px;
+    }
+}
+
+@media (max-width: 390px) {
+    .slides img {
+        height: 775px;
+    }
+}
+
+@media (max-width: 375px) {
+    .slides img {
+        height: 600px;
+    }
+}
+
+:root {
+    /* fontes */
+    --f-gotica: 'UnifrakturMaguntia', 'Old English Text MT', serif;  /* títulos e nomes */
+    --f-ui: 'Cinzel', 'Trajan Pro', serif;                           /* menu, botões, etiquetas */
+    --f-texto: 'Cormorant Garamond', Georgia, serif;                 /* textos corridos */
+ 
+    /* cores de destaque */
+    --vinho: #8f1d2c;
+    --vinho-vivo: #b02a3c;
+    --ouro: #8a6a30;
+    --ouro-vivo: #a87c1f;
+ 
+    /* TEMA CLARO = pergaminho + tinta */
+    --bg: linear-gradient(180deg, #e8dfcc, #ddd2ba);
+    --text: #1b1512;
+    --card: #f1e9d8;
+    --accent: #7a5c2e;
+    --borda: #6b5a46;
+    --hover-suave: rgba(60, 40, 20, 0.10);
+    --texto-suave: #6b5d4f;
+    --linha-ouro: rgba(122, 92, 46, 0.45);
+    --trilho-bg: #4a3b30;
+    --trilho-knob: #c9b37e;
+ 
+    /* brilho dos títulos (no claro não há brilho) */
+    --glow: none;
+ 
+    /* textura */
+    --grao: 0.05;
+    --vinheta: none;
+ 
+    /* formas: para voltar aos botões arredondados use --r-btn: 50px */
+    --r-card: 6px;
+    --r-btn: 2px;
+    --r-img: 3px;
+ 
+    /* ornamentos de canto dos cards (tamanho e distância da borda) */
+    --cs: 34px;
+    --co: 10px;
+}
+ 
+:root.dark {
+    /* TEMA ESCURO = preto quente + osso + vinho */
+    --bg: radial-gradient(ellipse at 50% 0%, #1c1313 0%, #0c0a0a 55%, #060505 100%);
+    --text: #e9e2d6;
+    --card: #130f0f;
+    --accent: #b89b5e;
+    --borda: #4a3d36;
+    --hover-suave: rgba(233, 226, 214, 0.10);
+    --texto-suave: #9a9184;
+    --linha-ouro: rgba(184, 155, 94, 0.45);
+    --trilho-bg: #3a1a20;
+    --trilho-knob: #b89b5e;
+ 
+    --ouro: #b89b5e;
+    --ouro-vivo: #d4b366;
+ 
+    --glow: drop-shadow(0 0 14px rgba(176, 42, 60, 0.5));
+ 
+    --grao: 0.07;
+    --vinheta: radial-gradient(ellipse at center, transparent 50%, rgba(0, 0, 0, 0.6) 100%);
+}
+ 
+ 
+/* =====================================================
+   2) BASE: fontes, seleção, foco, barra de rolagem
+   ===================================================== */
+body {
+    font-family: var(--f-texto);
+    background: var(--bg);
+    background-attachment: fixed;
+}
+ 
+::selection {
+    background: var(--vinho);
+    color: #f3ece0;
+}
+ 
+:focus-visible {
+    outline: 2px solid var(--ouro-vivo);
+    outline-offset: 3px;
+}
+ 
+html {
+    scrollbar-color: var(--vinho) var(--card);
+}
+ 
+::-webkit-scrollbar {
+    width: 10px;
+}
+ 
+::-webkit-scrollbar-track {
+    background: var(--card);
+}
+ 
+::-webkit-scrollbar-thumb {
+    background: var(--vinho);
+    border-radius: 0;
+}
+ 
+ 
+/* =====================================================
+   3) TEXTURA: grão de papel + vinheta nas bordas
+   (camadas fixas, não atrapalham cliques)
+   ===================================================== */
+body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: 9988;
+    pointer-events: none;
+    opacity: var(--grao);
+    background-size: 220px 220px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+ 
+body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: 9987;
+    pointer-events: none;
+    background: var(--vinheta);
+}
+ 
+ 
+/* =====================================================
+   4) TIPOGRAFIA
+   Blackletter só em títulos e nomes; Cinzel nos elementos
+   de interface; Cormorant nos textos.
+   ===================================================== */
+ 
+/* títulos: brilho vinho (escuro) / sem brilho (claro) */
+.loc-h1,
+.loc-h2,
+.tat-h1,
+.trabre-h1,
+.ava-h1,
+.esp-titulo,
+.nota-numero,
+.av-nome,
+.menu-btn,
+.nav-right img,
+.esp-divisor span,
+.esp-divisortattoo span {
+    filter: var(--glow);
+}
+ 
+.nota-numero {
+    font-family: var(--f-gotica);
+}
+ 
+.av-nome {
+    font-family: var(--f-ui);
+    font-size: 17px;
+    letter-spacing: 0.08em;
+}
+ 
+/* textos corridos */
+.card p,
+.tat-p,
+.esp-endereco,
+.av-texto {
+    font-family: var(--f-texto);
+    font-size: 21px;
+    line-height: 1.6;
+}
+ 
+.card .tat-bio {
+    font-family: var(--f-texto);
+    font-size: 20px;
+    line-height: 1.65;
+}
+ 
+.av-texto {
+    font-size: 20px;
+}
+ 
+/* menu do PC */
+.nav-center a {
+    filter: none;
+    height: auto;
+    padding-bottom: 4px;
+    font-family: var(--f-ui);
+    font-size: 14px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    background: linear-gradient(var(--ouro-vivo), var(--ouro-vivo)) no-repeat left bottom / 0 1px;
+    transition: background-size 0.35s ease, color 0.3s ease;
+}
+ 
+.nav-center a:hover {
+    transform: none;
+    color: var(--ouro-vivo);
+    background-size: 100% 1px;
+}
+ 
+.navbar.shrink .nav-center a {
+    height: auto;
+    font-size: 13px;
+}
+ 
+/* menu ☰ (dropdown) e gavetas do celular */
+.dropdown-link,
+.drawer-link,
+.drawer-user-link {
+    font-family: var(--f-ui);
+    font-size: 15px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+}
+ 
+.dropdown-tema span,
+.drawer-tema span {
+    font-family: var(--f-ui);
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    text-shadow: none;
+}
+ 
+/* rótulos, etiquetas e botões */
+.tat-tags li,
+.tat-btn,
+.esp-card .esp-btn,
+.esp-selo,
+.esp-galeria figcaption,
+.btn-auth,
+.btn-secondary,
+.instagram-btn {
+    font-family: var(--f-ui);
+    text-transform: uppercase;
+}
+ 
+.tat-tags li {
+    font-size: 12px;
+    letter-spacing: 0.14em;
+}
+ 
+.tat-btn,
+.esp-card .esp-btn,
+.instagram-btn {
+    font-size: 13px;
+    letter-spacing: 0.18em;
+}
+ 
+.esp-selo,
+.esp-galeria figcaption {
+    font-size: 12px;
+    letter-spacing: 0.16em;
+}
+ 
+.btn-auth,
+.btn-secondary {
+    font-size: 13px;
+    letter-spacing: 0.14em;
+}
+ 
+.auth-input,
+.comentario-input,
+.av-menu button {
+    font-family: var(--f-texto);
+    font-size: 18px;
+}
+ 
+.nota-total,
+.sem-avaliacoes,
+.av-data {
+    font-family: var(--f-texto);
+    font-size: 16px;
+    color: var(--texto-suave);
+}
+ 
+ 
+/* =====================================================
+   5) FORMAS: cantos mais secos (gótico é anguloso)
+   ===================================================== */
+.card,
+.tat-card,
+.esp-card,
+.esp-galeria figure,
+.avaliacao-item,
+.nota-media,
+.modal-box,
+.dropdown,
+.av-menu {
+    border-radius: var(--r-card);
+}
+ 
+.video-wrapper {
+    border-radius: var(--r-card);
+}
+ 
+.tat-indice a,
+.tat-tags li,
+.tat-btn,
+.esp-card .esp-btn,
+.esp-selo,
+.btn-auth,
+.btn-secondary,
+.instagram-btn,
+.auth-input,
+.comentario-input {
+    border-radius: var(--r-btn);
+}
+ 
+.galeria img,
+.tat-galeria.galeria img {
+    border-radius: var(--r-img);
+    border: 1px solid var(--linha-ouro);
+}
+ 
+/* hover: vinho em vez de inverter as cores */
+.tat-indice a:hover,
+.tat-btn:hover,
+.esp-card .esp-btn:hover,
+.btn-auth:hover,
+.btn-secondary:hover {
+    background: var(--vinho);
+    border-color: var(--vinho);
+    color: #f3ece0;
+}
+ 
+.instagram-btn:hover {
+    box-shadow: 0 0 18px rgba(176, 42, 60, 0.55);
+}
+ 
+/* bordas douradas */
+.tat-indice a,
+.tat-tags li,
+.tat-btn,
+.btn-auth,
+.btn-secondary {
+    border-color: var(--linha-ouro);
+}
+ 
+ 
+/* =====================================================
+   6) MOLDURA E ORNAMENTOS DOS CARDS GRANDES
+   moldura dupla + cantos decorados em dourado
+   ===================================================== */
+.card {
+    --c-tl: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Cpath d='M2 38V12Q2 2 12 2H38' fill='none' stroke='%23a88b50' stroke-opacity='.8' stroke-width='1.4'/%3E%3Ccircle cx='2' cy='2' r='1.8' fill='%23a88b50'/%3E%3C/svg%3E");
+    --c-tr: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Cpath d='M2 2H28Q38 2 38 12V38' fill='none' stroke='%23a88b50' stroke-opacity='.8' stroke-width='1.4'/%3E%3Ccircle cx='38' cy='2' r='1.8' fill='%23a88b50'/%3E%3C/svg%3E");
+    --c-bl: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Cpath d='M2 2V28Q2 38 12 38H38' fill='none' stroke='%23a88b50' stroke-opacity='.8' stroke-width='1.4'/%3E%3Ccircle cx='2' cy='38' r='1.8' fill='%23a88b50'/%3E%3C/svg%3E");
+    --c-br: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Cpath d='M38 2V28Q38 38 28 38H2' fill='none' stroke='%23a88b50' stroke-opacity='.8' stroke-width='1.4'/%3E%3Ccircle cx='38' cy='38' r='1.8' fill='%23a88b50'/%3E%3C/svg%3E");
+ 
+    background:
+        var(--c-tl) left var(--co) top var(--co) / var(--cs) var(--cs) no-repeat,
+        var(--c-tr) right var(--co) top var(--co) / var(--cs) var(--cs) no-repeat,
+        var(--c-bl) left var(--co) bottom var(--co) / var(--cs) var(--cs) no-repeat,
+        var(--c-br) right var(--co) bottom var(--co) / var(--cs) var(--cs) no-repeat,
+        var(--card);
+    border: 1px solid var(--linha-ouro);
+    outline: 1px solid var(--linha-ouro);
+    outline-offset: -8px;
+}
+ 
+/* cards internos: borda dourada fina */
+.tat-card,
+.esp-card,
+.avaliacao-item,
+.nota-media {
+    border-color: var(--linha-ouro);
+}
+ 
+/* barra de navegação: filete dourado embaixo */
+.navbar {
+    border-bottom: 1px solid var(--linha-ouro);
+}
+ 
+ 
+/* =====================================================
+   7) DIVISORES: linhas douradas que somem nas pontas
+   ===================================================== */
+.esp-divisor::before,
+.esp-divisortattoo::before {
+    background: linear-gradient(90deg, transparent, var(--ouro));
+    opacity: 1;
+}
+ 
+.esp-divisor::after,
+.esp-divisortattoo::after {
+    background: linear-gradient(270deg, transparent, var(--ouro));
+    opacity: 1;
+}
+ 
+.esp-divisor span,
+.esp-divisortattoo span {
+    color: var(--ouro);
+}
+ 
+.tat-sub {
+    color: var(--ouro-vivo);
+}
+ 
+.tat-sub::before {
+    background: linear-gradient(90deg, transparent, var(--ouro));
+    opacity: 1;
+}
+ 
+.tat-sub::after {
+    background: linear-gradient(270deg, transparent, var(--ouro));
+    opacity: 1;
+}
+ 
+ 
+/* =====================================================
+   8) CAPAS DOS TATUADORES
+   PC: cantos superiores chanfrados (corte em ângulo)
+   Celular/tablet: janela em ARCO de catedral
+   ===================================================== */
+.tat-nome {
+    filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.85));
+}
+
+ 
+@media (max-width: 900px) {
+    .tat-capa {
+        border: 1px solid var(--linha-ouro);
+    }
+}
+ 
+ 
+/* =====================================================
+   9) CARROSSEL: pontos em losango
+   ===================================================== */
+.carousel-dots {
+    gap: 18px;
+}
+ 
+.carousel-dot,
+.carousel-dot.ativo {
+    width: 14px;
+    height: 14px;
+    border-radius: 0;
+    transform: rotate(45deg);
+    transition: background 0.3s, transform 0.3s;
+}
+ 
+.carousel-dot {
+    background: transparent;
+    border: 1px solid rgba(233, 226, 214, 0.85);
+}
+ 
+.carousel-dot.ativo {
+    background: #d4b366;
+    border: 1px solid #d4b366;
+    transform: rotate(45deg) scale(1.15);
+}
+ 
+.prev,
+.next {
+    filter: none;
+    border: 1px solid rgba(212, 179, 102, 0.7);
+    color: #f3ece0;
+}
+ 
+.prev .ic,
+.next .ic {
+    width: 100%;
+    height: 100%;
+}
+ 
+.prev-img .ic,
+.next-img .ic {
+    width: 28px;
+    height: 28px;
+}
+ 
+ 
+/* =====================================================
+   10) VÍDEO: moldura em ouro e vinho (no lugar do roxo)
+   ===================================================== */
+:root:not(.dark) .video-wrapper {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+}
+ 
+.video-wrapper:hover {
+    box-shadow:
+        0 0 40px rgba(176, 42, 60, 0.7),
+        0 0 110px rgba(143, 29, 44, 0.4);
+}
+ 
+.video-overlay h3 {
+        font-size: 32px;    
+    font-family: var(--f-gotica);
+    text-shadow: 0 0 22px rgba(176, 42, 60, 0.8);
+}
+ 
+ 
+/* =====================================================
+   11) AVALIAÇÕES: estrelas douradas e citação de manuscrito
+   ===================================================== */
+.av-estrelas,
+.nota-estrelas,
+.estrela-sel.ativa,
+.estrela-sel:hover {
+    color: var(--ouro-vivo);
+}
+ 
+.estrela-sel {
+    color: var(--texto-suave);
+}
+ 
+.av-estrelas,
+.nota-estrelas {
+    display: inline-flex;
+    gap: 3px;
+    letter-spacing: 0;
+}
+ 
+.nota-estrelas {
+    justify-content: center;
+    font-size: 26px;
+    gap: 5px;
+}
+ 
+.avaliacao-item {
+    position: relative;
+    border-left: 3px solid var(--vinho);
+}
+ 
+/* aspas grandes em blackletter */
+.avaliacao-item::before {
+    content: '\201C';
+    position: absolute;
+    top: -4px;
+    right: 16px;
+    font-family: var(--f-gotica);
+    font-size: 96px;
+    line-height: 1;
+    color: var(--ouro);
+    opacity: 0.25;
+    pointer-events: none;
+}
+ 
+.av-menu button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+ 
+.av-opcoes-btn .ic {
+    width: 22px;
+    height: 22px;
+}
+ 
+.av-menu button:hover {
+    background: var(--vinho);
+    color: #f3ece0;
+}
+ 
+ 
+/* =====================================================
+   12) RODAPÉ: mais escuro, filete dourado, contraste melhor
+   ===================================================== */
+footer {
+    background: #070505;
+    border-top: 1px solid var(--ouro);
+    font-family: var(--f-texto);
+}
+ 
+.ft-label,
+.ft-pill,
+.ft-dev {
+    font-family: var(--f-ui);
+    letter-spacing: 0.16em;
+}
+ 
+.ft-label {
+    color: #a39a8c;
+}
+ 
+.ft-sub {
+    font-family: var(--f-texto);
+    font-size: 16px;
+    color: #c4baa9;
+}
+ 
+.ft-strong {
+    color: #e9e2d6;
+}
+ 
+.ft-pill {
+    border-color: rgba(184, 155, 94, 0.45);
+    color: #a39a8c;
+    text-transform: uppercase;
+    border-radius: var(--r-btn);
+}
+ 
+.ft-dev {
+    color: #8d8478;
+}
+ 
+.ft-icon {
+    border-color: rgba(184, 155, 94, 0.45);
+}
+ 
+.ft-icon:hover {
+    border-color: #d4b366;
+}
+ 
+ 
+/* =====================================================
+   13) CELULAR
+   ===================================================== */
+@media (max-width: 600px) {
+    :root {
+        --cs: 24px;
+        --co: 6px;
+    }
+ 
+    .card {
+        outline-offset: -5px;
+    }
+ 
+    .card p,
+    .tat-p,
+    .card .tat-p,
+    .esp-endereco {
+        font-size: 19px;
+    }
+ 
+    .card .tat-bio,
+    .av-texto {
+        font-size: 18px;
+    }
+ 
+    .ft-sub {
+        font-size: 15px;
+    }
+}
+
+/* ----- Galeria de Trabalhos Recentes (mesmo estilo da dos tatuadores) ----- */
+#recentes .galeria {
+    grid-template-columns: repeat(5, 1fr);
+    gap: 8px;
+    cursor: default;
+}
+
+#recentes .galeria img {
+    width: 100%;
+    height: auto;
+    margin: 0;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    cursor: zoom-in;
+}
+
+@media (max-width: 600px) {
+    #recentes .galeria {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
